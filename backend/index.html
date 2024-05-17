@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>SnapShop</title>
+  </head>
+  <body>
+    <input id="input" type="file"/>
+    <p id="result1"></p>
+    <p id="result2"></p>
+    <script>
+       const input = document.getElementById("input");
+       input.addEventListener("change", async (event) => {
+           const file = event.target.files[0];
+           const data = new FormData();
+           data.append("file", file);
+           const response = await fetch("/search",{
+               method:"post",
+               body:data
+           });
+           const result = await response.json()
+           const display1 = document.getElementById("result1")
+           display1.innerHTML = "Product name: " + result[0]
+           const display2 = document.getElementById("result2")
+           display2.innerHTML = "Products found online: " + result[1]
+           console.log(result)
+       })
+    </script>  
+  </body>
+</html>
