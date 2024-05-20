@@ -1,8 +1,18 @@
 # SnapShop
 
+## Tech Stack
+- Frontend:
+  - **React Native** (Expo)
+
+- Backend:
+  - **FastAPI** (Python)
+  - **Ultralytics YOLOv8**: Object Detection
+
 ## Getting Started 🛠️
 ### Prerequisites
+- Node.js
 - Python
+- npm
 - pip
 
 ### Setting up frontend app
