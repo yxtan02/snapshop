@@ -6,18 +6,22 @@
 - pip
 
 ### Setting up backend API
-1. Clone this repository and navigate to the project directory
+1. Navigate to the backend directory
+```bash
+cd backend
+```
 2. Create and activate a virtual environment:
 ```bash
 python -m venv .venv
+```
+```bash
 source .venv/bin/activate
 ```
 3. Install the required dependencies by using: 
 ```bash
 pip install -r requirements.txt
 ```
-4. Navigate to the backend directory and run the API
+4. Run the API:
 ```bash
-cd backend
 uvicorn main:app --reload
 ```
