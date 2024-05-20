@@ -1,5 +1,5 @@
 from fastapi import FastAPI, UploadFile
-from starlette.responses import FileResponse 
+from fastapi.middleware.cors import CORSMiddleware
 from ultralytics import YOLO
 import asyncio
 import httpx
@@ -8,6 +8,14 @@ import numpy
 
 app = FastAPI()
 model = YOLO("yolov8x.pt")
+
+# Configure CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 async def getProducts(product):
   products = {
@@ -64,10 +72,6 @@ async def getProducts(product):
     getEbayProducts()
   )
   return products
-
-@app.get("/")
-async def root():
-  return FileResponse('index.html')
 
 @app.post("/search")
 async def search(file: UploadFile):
