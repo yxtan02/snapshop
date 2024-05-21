@@ -1,8 +1,10 @@
 import { launchCameraAsync, launchImageLibraryAsync } from 'expo-image-picker';
+import { router } from 'expo-router';
 import { StatusBar } from "expo-status-bar";
 import { useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import Button from '../components/Button';
+
 
 export default function App() {
   const [image, setImage] = useState("")
@@ -34,17 +36,15 @@ export default function App() {
       // Post image to backend API
       const formData = new FormData();
       formData.append("file", file)
-      fetch('http://127.0.0.1:8000/search', {
+      fetch('http://127.0.0.1:8000/detectImage', {
         method: 'post',
         body: formData
       })
       .then(res => res.json())
       .then(data => {
-         console.log(data)
+        router.navigate({ pathname: 'result', params: { item: data } })
       })
-      .catch(error => {
-         console.error(error);
-      });
+      .catch(error => console.error(error));
     }
   }
 
