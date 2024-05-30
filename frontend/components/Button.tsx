@@ -7,7 +7,7 @@ export default function Button({ label , name, onPress } : any) {
       <Pressable style={styles.button} onPress={onPress}>
         <FontAwesome
           name={name}
-          size={18}
+          size={30}
           color="#25292e"
           style={styles.buttonIcon}
         />
@@ -19,15 +19,16 @@ export default function Button({ label , name, onPress } : any) {
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    width: 250,
+    width: 350,
     height: 68,
     margin: 10,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 3,
-    borderWidth: 3,
-    borderColor: '#000000',
     borderRadius: 18,
+    backgroundColor: "#B9046F",
+    elevation: 5,
+    shadowColor: '#52006A',
   },
   button: {
     borderRadius: 10,
@@ -41,7 +42,7 @@ const styles = StyleSheet.create({
     paddingRight: 8,
   },
   buttonLabel: {
-    color: '#000000',
-    fontSize: 16,
+    color: 'white',
+    fontSize: 30,
   },
 });

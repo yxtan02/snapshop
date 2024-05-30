@@ -10,7 +10,7 @@ import json
 app = FastAPI()
 model = YOLO("yolov8x.pt")
 
-# Configure CORS
+#Configure CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -20,7 +20,7 @@ app.add_middleware(
 
 @app.post("/detectImage")
 async def detectImage(file: UploadFile):
-  # Process the uploaded image
+  #Process the uploaded image
   image_bytes = await file.read()
   image = numpy.frombuffer(image_bytes, dtype=numpy.uint8)
   image = cv2.imdecode(image, cv2.IMREAD_COLOR)
@@ -33,6 +33,8 @@ async def detectImage(file: UploadFile):
     prob = box.conf[0].item()
     predictions.append([item, prob])
   predictions.sort(reverse=True, key=lambda x: x[1])
+  if not predictions:
+    return "No Detections"
   return predictions[0][0]
 
 @app.get("/search/{product}")
