@@ -35,7 +35,8 @@
     "react-native-screens": "3.31.1",
     "react-native-web": "~0.19.10",
     "@expo/metro-runtime": "~3.2.1",
-    "expo-image-picker": "~15.0.5"
+    "expo-image-picker": "~15.0.5",
+    "expo-linear-gradient": "~13.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

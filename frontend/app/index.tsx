@@ -1,68 +1,30 @@
-import { launchCameraAsync, launchImageLibraryAsync } from 'expo-image-picker';
 import { router } from 'expo-router';
 import { StatusBar } from "expo-status-bar";
-import { useState } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Text, StyleSheet, View } from 'react-native';
 import Button from '../components/Button';
-
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function App() {
-  const [image, setImage] = useState("")
-
-  async function getPhoto(func: any) {
-    let result = await func({
-      allowsEditing: true,
-      quality: 1
-    });
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-
-      // Convert image uri to file
-      const blob : BlobPart = await new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-          resolve(xhr.response);
-        };
-        xhr.onerror = function (e) {
-          reject(new TypeError("Network request failed"));
-        };
-        xhr.responseType = "blob";
-        xhr.open("GET", image, true);
-        xhr.send(null);
-      });
-      const file = new File([blob], "image.jpg", { type: "image/jpeg" })
-      
-      // Post image to backend API
-      const formData = new FormData();
-      formData.append("file", file)
-      fetch('http://127.0.0.1:8000/detectImage', {
-        method: 'post',
-        body: formData
-      })
-      .then(res => res.json())
-      .then(data => {
-        router.navigate({ pathname: 'result', params: { item: data } })
-      })
-      .catch(error => console.error(error));
-    }
-  }
-
-  async function takePhoto() {
-    return getPhoto(launchCameraAsync)
-  }
-
-  async function uploadPhoto() {
-    return getPhoto(launchImageLibraryAsync)
+  async function login() {
+    router.navigate({pathname: 'choose_photo'})
   }
 
   return (
     <View style={styles.container}>
+      <LinearGradient
+        // Background Linear Gradient
+        colors={['#F71199', '#FCEBF5']}
+        style={styles.headerContainer}
+        locations={[0.5, 0.8]}
+      >
+        <Text style={{fontSize:80, fontWeight: 'bold', color: 'white'}}>SnapShop</Text>
+      </LinearGradient>
+    
       <View style={styles.footerContainer}>
-        <Button label="Take a photo" name="picture-o" onPress={takePhoto}/>
-        <Button label="Upload a photo" name="camera" onPress={uploadPhoto}/>
+        <Button label="Log In" onPress={login}></Button>
+        <Button label="Sign Up"></Button>
       </View>
-      <Image source={{ uri: image }} style={styles.image} />
+      <View style={styles.filler} />
       <StatusBar style="auto" />
     </View>
   );
@@ -73,12 +35,21 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: '#FCEBF5'
+  },
+  headerContainer: {
+    flex: 2 ,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#F71199",
+    width: '100%',
+
   },
   footerContainer: {
     flex: 1 / 3,
     alignItems: 'center',
   },
-  image: {
+  filler: {
     width: 200,
     height: 200,
     marginTop: 50,
