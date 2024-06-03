@@ -89,8 +89,8 @@ async def search(product):
       print(f"HTTP Exception for {exc.request.url} - {exc}")
 
   await asyncio.gather(
-  #  getAmazonProducts(),
-  #  getLazadaProducts(),
+    getAmazonProducts(),
+    getLazadaProducts(),
     getEbayProducts()
   )
   return products
