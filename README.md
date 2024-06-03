@@ -28,9 +28,10 @@ npm install
 ```bash
 npx expo start
 ```
+4. Open http://localhost:8081 to run the app in the browser
 
 ### Setting up backend API
-1. Navigate to the backend directory
+1. Open a new command prompt and navigate to the backend directory
 ```bash
 cd backend
 ```
