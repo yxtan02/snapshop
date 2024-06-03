@@ -12,6 +12,7 @@ export default function Page() {
 
   useEffect(() => {
     // fetch('http://127.0.0.1:8000/search')
+    
     fetch(`http://127.0.0.1:8000/search/${item}`)
       .then(res => {
         if (!res.ok) {
