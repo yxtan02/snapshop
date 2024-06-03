@@ -11,8 +11,8 @@ export default function Page() {
   const [ebay, setEbay] = useState([])
 
   useEffect(() => {
-    // fetch(`http://127.0.0.1:8000/search/${item}`)
-    fetch('http://127.0.0.1:8000/search')
+    // fetch('http://127.0.0.1:8000/search')
+    fetch(`http://127.0.0.1:8000/search/${item}`)
       .then(res => {
         if (!res.ok) {
           console.log("Server Error")
