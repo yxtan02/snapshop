@@ -1,14 +1,10 @@
-from fastapi import FastAPI, UploadFile
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from ultralytics import YOLO
 import asyncio
 import httpx
-import cv2
-import numpy
 import json
 
 app = FastAPI()
-model = YOLO("yolov8x.pt")
 
 #Configure CORS
 app.add_middleware(
@@ -17,25 +13,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@app.post("/detectImage")
-async def detectImage(file: UploadFile):
-  #Process the uploaded image
-  image_bytes = await file.read()
-  image = numpy.frombuffer(image_bytes, dtype=numpy.uint8)
-  image = cv2.imdecode(image, cv2.IMREAD_COLOR)
- 
-  # Perform object detection
-  result = model.predict(image)[0]
-  predictions = []
-  for box in result.boxes:
-    item = result.names[box.cls[0].item()]
-    prob = box.conf[0].item()
-    predictions.append([item, prob])
-  predictions.sort(reverse=True, key=lambda x: x[1])
-  if not predictions:
-    return "No Detections"
-  return predictions[0][0]
 
 @app.get("/search/{product}")
 async def search(product):
