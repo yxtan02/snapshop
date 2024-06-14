@@ -1,19 +1,31 @@
 import { useEffect, useState } from 'react';
-import { Image, ActivityIndicator, StyleSheet, Text, View, ScrollView } from 'react-native';
+import { Image, ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-//import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { db } from '../firebaseConfig.js'
+import { addDoc, collection } from "firebase/firestore"; 
+import LikeButton from '../components/LikeButton';
 
-export default function Page() {
+function addToWishlist(userId : any, item : any) {
+  addDoc(collection(db, 'users', userId, 'wishlists'), item)
+    .then((res) => {
+      console.log(`Item added (id: ${res.id})`);
+    })
+    .catch((error) => {
+      console.error('Error adding item: ', error);
+    });
+}
+
+export default function result() {
   const { item } = useLocalSearchParams()
   const [amazon, setAmazon] = useState([])
   const [lazada, setLazada] = useState([])
   const [ebay, setEbay] = useState([])
 
   useEffect(() => {
-    // fetch('http://127.0.0.1:8000/search')
-    
-    fetch(`http://127.0.0.1:8000/search/${item}`)
+    // fetch(`http://127.0.0.1:8000/search/${item}`)
+
+    fetch('http://127.0.0.1:8000/search')
       .then(res => {
         if (!res.ok) {
           console.log("Server Error")
@@ -60,6 +72,7 @@ export default function Page() {
           <Text style={styles.price}>{obj["product_star_rating"] + " stars"}</Text>
           <Text style={styles.desc}>{obj["sales_volume"]}</Text>
           <Text style={styles.desc}>{obj["delivery"]}</Text>
+          <LikeButton />
         </View>)}
 
         <Text style={styles.header}>Lazada</Text>

@@ -5,10 +5,6 @@ import Button from '../components/Button';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function App() {
-  async function login() {
-    router.navigate({pathname: 'choose_photo'})
-  }
-
   return (
     <View style={styles.container}>
       <LinearGradient
@@ -21,8 +17,8 @@ export default function App() {
       </LinearGradient>
     
       <View style={styles.footerContainer}>
-        <Button label="Log In" onPress={login}></Button>
-        <Button label="Sign Up"></Button>
+        <Button title="Log In" onPress={() => router.navigate('/login')}></Button>
+        <Button title="Sign Up" onPress={() => router.navigate('/signup')}></Button>
       </View>
       <View style={styles.filler} />
       <StatusBar style="auto" />

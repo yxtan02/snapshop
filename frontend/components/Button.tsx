@@ -1,48 +1,51 @@
-import { StyleSheet, View, Pressable, Text } from 'react-native';
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity } from 'react-native'
 
-export default function Button({ label , name, onPress } : any) {
+export default function Button({ title, onPress, containerStyle, isLoading } : any) {
   return (
-    <View style={styles.buttonContainer}>
-      <Pressable style={styles.button} onPress={onPress}>
-        <FontAwesome
-          name={name}
-          size={30}
-          color="#25292e"
-          style={styles.buttonIcon}
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.7}
+      style={isLoading ? [styles.button, containerStyle, styles.buttonDisabled]
+                       : [styles.button, containerStyle]}
+      disabled={isLoading}
+    >
+      <Text style={styles.buttonText}>
+        {title}
+      </Text>
+
+      {isLoading && (
+        <ActivityIndicator
+          animating={isLoading}
+          size="small"
+          style={styles.activityIndicator}
         />
-        <Text style={styles.buttonLabel}>{label}</Text>
-      </Pressable>
-    </View>
-  );
+      )}
+    </TouchableOpacity>
+  )
 }
 
 const styles = StyleSheet.create({
-  buttonContainer: {
-    width: 350,
-    height: 68,
-    margin: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 3,
-    borderRadius: 18,
-    backgroundColor: "#B9046F",
-    elevation: 5,
-    shadowColor: '#52006A',
-  },
-  button: {
-    borderRadius: 10,
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  buttonIcon: {
-    paddingRight: 8,
-  },
-  buttonLabel: {
-    color: 'white',
-    fontSize: 30,
-  },
-});
+    button: {
+      backgroundColor: '#F7C5CC',
+      borderRadius: 12,
+      height: 45,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 8,
+    },
+    buttonDisabled: {
+      opacity: 0.5,
+    },
+    buttonText: {
+      fontFamily: 'regular',
+      fontSize: 18,
+    },
+    buttonLabel: {
+      color: 'white',
+      fontSize: 30,
+    },
+    activityIndicator: {
+      marginLeft: 8,
+    },
+  });

@@ -1,3 +1,5 @@
 import { Colors, SIZES, SHADOWS } from './theme'
+import icons from "./icons";
+import images from "./images";
 
-export { Colors, SIZES, SHADOWS }
+export { icons, images, Colors, SIZES, SHADOWS }
