@@ -1,27 +1,27 @@
 import { Link, router } from 'expo-router';
 import { useState } from 'react';
 import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { auth } from "../../firebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { icons } from '../../constants';
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { icons, images } from '../../constants';
 import Button from '../../components/Button';
 
-export default function login() {
+export default function signUp() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isSubmitting, setSubmitting] = useState(false);
 
-  async function login() {
+  async function signUp() {
     setSubmitting(true)
-    signInWithEmailAndPassword(auth, email, password)
+    createUserWithEmailAndPassword(auth, email, password)
       .then((res) => {
         console.log(res.user)
         router.replace('/snap')
       })
       .catch((error) => {
         console.error(error)
-        alert("Login failed!\n" + error.message)
+        alert("Sign up failed!\n" + error.message)
       })
       .finally(() => {
         setSubmitting(false)
@@ -32,16 +32,13 @@ export default function login() {
     <SafeAreaView style={styles.safeAreaContainer}>
       <ScrollView>
         <View style={styles.container}>
-          <View style={styles.headerContainer}>
-            <Image
-              source={icons.logo}
-              resizeMode='contain'
-              style={styles.logo}
-            />
-            <Text style={styles.logoText}>SnapShop</Text>
-          </View>
+          <Image
+            source={images.test}
+            resizeMode="contain"
+            style= {styles.image}
+          />
           <Text style={styles.header}>
-            Login to Snapshop!
+            Sign up for Snapshop!
           </Text>
           <KeyboardAvoidingView behavior='padding' style={styles.keyboardAvoidingView}>
             <Text style={styles.title}>Email</Text>
@@ -60,23 +57,23 @@ export default function login() {
               style={styles.textInput}
             />
             <Button
-              title="Login"
-              onPress={login}
+              title="Sign up"
+              onPress={signUp}
               isLoading={isSubmitting}
               containerStyle={styles.button}
             />
-            <View style={styles.footerContainer}>
+          </KeyboardAvoidingView>
+          <View style={styles.footerContainer}>
             <Text style={styles.footerText}>
-              Don't have an account?
+              Already have an account?
             </Text>
             <Link
-              href="/sign-up"
+              href="/login"
               style={styles.linkText}
             >
-              Sign up
+              Login
             </Link>
           </View>
-          </KeyboardAvoidingView>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -85,9 +82,8 @@ export default function login() {
 
 const styles = StyleSheet.create({
   safeAreaContainer :{
-    width: "100%",
     height: "100%",
-    backgroundColor: '#FBEAEB',
+    backgroundColor: '#F7C5CC',
   },
   container: {
     width: "100%",
@@ -95,21 +91,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 16,
-    marginVertical: 30,
+    marginVertical: 40,
   },
-  headerContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+  image: {
+    width: 270,
+    height: 74,
   },
-  logo: {
-    width: 43,
-    height: 43,
-  },
-  logoText: {
-    fontFamily: "kaushan",
-    fontSize: 44,
-    fontWeight: 600,
+  keyboardAvoidingView: {
+    width: "100%",
   },
   header: {
     fontFamily: "semiBold",
@@ -117,9 +106,6 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginTop: 28,
     marginBottom: 2,
-  },
-  keyboardAvoidingView: {
-    width: 350,
   },
   title: {
     fontSize: 18,
@@ -140,10 +126,8 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 30,
-    width: "100%",
   },
   footerContainer: {
-    alignItems: "center",
     justifyContent: "center",
     paddingTop: 20,
     flexDirection: "row",

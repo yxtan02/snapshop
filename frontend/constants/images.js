@@ -1,3 +1,5 @@
-import logo from "../assets/images/logo.png";
+import background from "../assets/images/background.jpg"
+import homeImage from "../assets/images/homeImage.png"
+import test from "../assets/images/testlogo.png"
 
-export default { logo }
+export default { background, homeImage, test }

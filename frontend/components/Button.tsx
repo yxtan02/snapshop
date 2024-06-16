@@ -1,15 +1,14 @@
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native'
 
-export default function Button({ title, onPress, containerStyle, isLoading } : any) {
+export default function Button({ title, onPress, containerStyle, textStyle, isLoading } : any) {
   return (
-    <TouchableOpacity
+    <Pressable
       onPress={onPress}
-      activeOpacity={0.7}
       style={isLoading ? [styles.button, containerStyle, styles.buttonDisabled]
                        : [styles.button, containerStyle]}
       disabled={isLoading}
     >
-      <Text style={styles.buttonText}>
+      <Text style={[styles.buttonText, textStyle]}>
         {title}
       </Text>
 
@@ -20,26 +19,26 @@ export default function Button({ title, onPress, containerStyle, isLoading } : a
           style={styles.activityIndicator}
         />
       )}
-    </TouchableOpacity>
+    </Pressable>
   )
 }
 
 const styles = StyleSheet.create({
     button: {
-      backgroundColor: '#F7C5CC',
-      borderRadius: 12,
+      backgroundColor: '#2F3C7E',
+      borderRadius: 25,
       height: 45,
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
-      marginTop: 8,
     },
     buttonDisabled: {
       opacity: 0.5,
     },
     buttonText: {
-      fontFamily: 'regular',
+      fontFamily: 'medium',
       fontSize: 18,
+      color: 'white',
     },
     buttonLabel: {
       color: 'white',

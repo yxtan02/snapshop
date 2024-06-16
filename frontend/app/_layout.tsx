@@ -14,6 +14,7 @@ export default function RootLayout() {
     regular: require("../assets/fonts/Poppins-Regular.ttf"),
     semiBold: require("../assets/fonts/Poppins-SemiBold.ttf"),
     thin: require("../assets/fonts/Poppins-Thin.ttf"),
+    kaushan: require("../assets/fonts/KaushanScript-Regular.ttf"),
   })
 
   useEffect(() => {
