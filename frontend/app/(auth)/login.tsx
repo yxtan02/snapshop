@@ -107,14 +107,12 @@ const styles = StyleSheet.create({
     height: 43,
   },
   logoText: {
-    fontFamily: "kaushan",
+    fontFamily: "brusher",
     fontSize: 44,
-    fontWeight: 600,
   },
   header: {
-    fontFamily: "semiBold",
+    fontFamily: "bold",
     fontSize: 28,
-    fontWeight: "600",
     marginTop: 28,
     marginBottom: 2,
   },

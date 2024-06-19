@@ -10,14 +10,6 @@ import { icons, images } from '../constants'
 export default function App() {
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
-      {/* <LinearGradient
-        // Background Linear Gradient
-        colors={['#F71199', '#FCEBF5']}
-        style={styles.headerContainer}
-        locations={[0.5, 0.8]}
-      >
-        <Text style={{fontSize:80, fontWeight: 'bold', color: 'white'}}>SnapShop</Text>
-      </LinearGradient> */}
       <ImageBackground
         source={images.background}
         resizeMode='contain'
@@ -81,9 +73,8 @@ const styles = StyleSheet.create({
     height: 45,
   },
   logoText: {
-    fontFamily: "kaushan",
-    fontSize: 58,
-    fontWeight: 600,
+    fontFamily: "brusher",
+    fontSize: 75,
   },
   homeImage: {
     width: 225,

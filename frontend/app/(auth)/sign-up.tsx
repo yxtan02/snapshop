@@ -101,9 +101,8 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   header: {
-    fontFamily: "semiBold",
+    fontFamily: "bold",
     fontSize: 28,
-    fontWeight: "600",
     marginTop: 28,
     marginBottom: 2,
   },
