@@ -1,14 +1,27 @@
 import { useState } from "react";
 import { Pressable } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { db } from '../firebaseConfig.js'
+import { addDoc, collection } from "firebase/firestore"; 
 
-export default function LikeButton() {
+function addToWishlist(userId : any, item : any) {
+  addDoc(collection(db, 'users', userId, 'wishlist'), item)
+    .then((res) => {
+      console.log(`Item added (id: ${res.id})`);
+    })
+    .catch((error) => {
+      console.error('Error adding item: ', error);
+    });
+}
+
+export default function LikeButton({ userId, item } : any) {
   const [liked, setLiked] = useState(false);
 
   return (
     <Pressable
       onPress={() => {
         setLiked((isLiked) => !isLiked)
+        addToWishlist(userId, item)
       }}
     >
       <MaterialCommunityIcons

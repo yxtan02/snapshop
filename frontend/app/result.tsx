@@ -2,25 +2,15 @@ import { useEffect, useState } from 'react';
 import { Image, ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { db } from '../firebaseConfig.js'
-import { addDoc, collection } from "firebase/firestore"; 
+import { auth } from '../firebaseConfig.js'
 import LikeButton from '../components/LikeButton';
-
-function addToWishlist(userId : any, item : any) {
-  addDoc(collection(db, 'users', userId, 'wishlists'), item)
-    .then((res) => {
-      console.log(`Item added (id: ${res.id})`);
-    })
-    .catch((error) => {
-      console.error('Error adding item: ', error);
-    });
-}
 
 export default function result() {
   const { item } = useLocalSearchParams()
   const [amazon, setAmazon] = useState([])
   const [lazada, setLazada] = useState([])
   const [ebay, setEbay] = useState([])
+  const [userId, setUserId] = useState<string | undefined>("")
 
   useEffect(() => {
     // fetch(`http://127.0.0.1:8000/search/${item}`)
@@ -39,6 +29,8 @@ export default function result() {
         setEbay(data.ebay)
       })
       .catch(error => console.error(error));
+      
+    setUserId(auth.currentUser?.uid)
   }, []);
 
   if (!(amazon || lazada || ebay)) {
@@ -62,7 +54,6 @@ export default function result() {
       </LinearGradient>
 
       <Text style={styles.header}>Amazon</Text>
-
       
       {amazon.map((obj, index) => 
         <View key={index} style={{marginLeft: 5}}>
@@ -72,7 +63,17 @@ export default function result() {
           <Text style={styles.price}>{obj["product_star_rating"] + " stars"}</Text>
           <Text style={styles.desc}>{obj["sales_volume"]}</Text>
           <Text style={styles.desc}>{obj["delivery"]}</Text>
-          <LikeButton />
+          <LikeButton 
+            userId={userId}
+            item={{
+              title: obj["product_title"],
+              image: obj["product_photo"],
+              price: obj["product_price"],
+              rating: obj["product_star_rating"] + " stars",
+              url: obj["product_url"],
+              others: obj["sales_volume"] + " | " + obj["delivery"]
+            }}
+          />
         </View>)}
 
         <Text style={styles.header}>Lazada</Text>
@@ -85,6 +86,17 @@ export default function result() {
           <Text style={styles.price}>{"S$" + obj["price"]}</Text>
           <Text style={styles.price}>{parseFloat(obj["review_info"]["average_score"]).toFixed(2) + " stars"}</Text>
           <Text style={styles.desc}>{obj["sold_count"] + " sold"}</Text>
+          <LikeButton 
+            userId={userId}
+            item={{
+              title: obj["title"],
+              image: obj["img"],
+              price: "S$" + obj["price"],
+              rating: parseFloat(obj["review_info"]["average_score"]).toFixed(2) + " stars",
+              url: obj["product_url"],
+              others: obj["sold_count"] + " sold"
+            }}
+          />
         </View>)}
         
         <Text style={styles.header}>eBay</Text>
@@ -96,8 +108,18 @@ export default function result() {
           <Text style={styles.price}>{"S" + obj["price"]}</Text>
           <Text style={styles.price}>{obj["rating"] === "" ? "" : obj["rating"] + " stars"}</Text>
           <Text style={styles.desc}>{obj["shipping"]}</Text>
+          <LikeButton 
+            userId={userId}
+            item={{
+              title: obj["title"],
+              image: obj["image"],
+              price: "S" + obj["price"],
+              rating: obj["rating"] === "" ? "No ratings found" : obj["rating"] + " stars",
+              url: obj["url"],
+              others: obj["shipping"]
+            }}
+          />
         </View>)}
-
     </ScrollView>
   )
 }
