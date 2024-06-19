@@ -2,7 +2,6 @@ import { router } from 'expo-router';
 import { StatusBar } from "expo-status-bar";
 import { Image, ImageBackground, Text, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LinearGradient } from 'expo-linear-gradient';
 import Button from '../components/Button';
 import { icons, images } from '../constants'
 
@@ -12,7 +11,6 @@ export default function App() {
     <SafeAreaView style={styles.safeAreaContainer}>
       <ImageBackground
         source={images.background}
-        resizeMode='contain'
         style={styles.backgroundImage}
       >
         <View style={styles.container}>
@@ -52,6 +50,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   safeAreaContainer: {
+    width: "100%",
     height: "100%",
   },
   backgroundImage: {
@@ -61,7 +60,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    marginTop: 100,
   },
   headerContainer: {
     flexDirection: "row",
@@ -69,30 +68,34 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   logo: {
-    width: 45,
-    height: 45,
+    width: 56,
+    height: 56,
+    marginRight: 3,
+    marginBottom: 7,
   },
   logoText: {
     fontFamily: "brusher",
-    fontSize: 75,
+    fontSize: 76,
   },
   homeImage: {
-    width: 225,
-    height: 216,
-    marginLeft: 34,
-    marginTop: 20,
+    width: 260,
+    height: 260,
+    marginLeft: 40,
+    marginTop: 18,
   },
   buttonContainer: {
-    marginTop: 32,
+    marginTop: 40,
   },
   loginButton: {
     width: 270,
-    backgroundColor: "#2F3C7E"
+    backgroundColor: "#2F3C7E",
+    height: 50,
   },
   signUpButton: {
-    marginTop: 9,
+    marginTop: 11,
     width: 270,
-    backgroundColor: "#EDF4F2"
+    backgroundColor: "#EDF4F2",
+    height: 50,
   },
   buttonText: {
     fontSize: 17,
