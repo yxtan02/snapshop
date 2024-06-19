@@ -1,6 +1,6 @@
 import { Link, router } from 'expo-router';
 import { useState } from 'react';
-import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { auth } from "../../firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -12,7 +12,7 @@ export default function login() {
   const [password, setPassword] = useState('')
   const [isSubmitting, setSubmitting] = useState(false);
 
-  async function login() {
+  function login() {
     setSubmitting(true)
     signInWithEmailAndPassword(auth, email, password)
       .then((res) => {
@@ -43,7 +43,7 @@ export default function login() {
           <Text style={styles.header}>
             Login to Snapshop!
           </Text>
-          <KeyboardAvoidingView behavior='padding' style={styles.keyboardAvoidingView}>
+          <View style={styles.mainContainer}>
             <Text style={styles.title}>Email</Text>
             <TextInput
               value={email}
@@ -66,17 +66,17 @@ export default function login() {
               containerStyle={styles.button}
             />
             <View style={styles.footerContainer}>
-            <Text style={styles.footerText}>
-              Don't have an account?
-            </Text>
-            <Link
-              href="/sign-up"
-              style={styles.linkText}
-            >
-              Sign up
-            </Link>
+              <Text style={styles.footerText}>
+                Don't have an account?
+              </Text>
+              <Link
+                href="/sign-up"
+                style={styles.linkText}
+              >
+                Sign up
+              </Link>
+            </View>
           </View>
-          </KeyboardAvoidingView>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 16,
-    marginVertical: 30,
+    marginVertical: 42,
   },
   headerContainer: {
     flexDirection: "row",
@@ -103,8 +103,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logo: {
-    width: 43,
-    height: 43,
+    width: 41,
+    height: 41,
+    marginRight: 3,
+    marginBottom: 3,
   },
   logoText: {
     fontFamily: "brusher",
@@ -113,11 +115,12 @@ const styles = StyleSheet.create({
   header: {
     fontFamily: "bold",
     fontSize: 28,
-    marginTop: 28,
+    marginTop: 32,
     marginBottom: 2,
   },
-  keyboardAvoidingView: {
-    width: 350,
+  mainContainer: {
+    width: "90%",
+    marginTop: 2,
   },
   title: {
     fontSize: 18,
@@ -137,7 +140,7 @@ const styles = StyleSheet.create({
     fontFamily: "regular",
   },
   button: {
-    marginTop: 30,
+    marginTop: 32,
     width: "100%",
   },
   footerContainer: {

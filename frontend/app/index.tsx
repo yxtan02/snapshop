@@ -84,16 +84,18 @@ const styles = StyleSheet.create({
     marginTop: 18,
   },
   buttonContainer: {
+    width: "100%",
+    alignItems: "center",
     marginTop: 40,
   },
   loginButton: {
-    width: 270,
+    width: "75%",
     backgroundColor: "#2F3C7E",
     height: 50,
   },
   signUpButton: {
     marginTop: 11,
-    width: 270,
+    width: "75%",
     backgroundColor: "#EDF4F2",
     height: 50,
   },

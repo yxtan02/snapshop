@@ -1,22 +1,29 @@
 import { Link, router } from 'expo-router';
 import { useState } from 'react';
-import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { auth } from "../../firebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { icons, images } from '../../constants';
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { icons } from '../../constants';
 import Button from '../../components/Button';
 
 export default function signUp() {
+  const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isSubmitting, setSubmitting] = useState(false);
 
-  async function signUp() {
+  function signUp() {
     setSubmitting(true)
     createUserWithEmailAndPassword(auth, email, password)
-      .then((res) => {
-        console.log(res.user)
+      .then(() => {
+        if (auth.currentUser) {
+          updateProfile(auth.currentUser, {
+            displayName: username
+          }).catch((error) => {
+            console.error(error)
+          });
+        }
         router.replace('/snap')
       })
       .catch((error) => {
@@ -32,15 +39,24 @@ export default function signUp() {
     <SafeAreaView style={styles.safeAreaContainer}>
       <ScrollView>
         <View style={styles.container}>
-          <Image
-            source={images.test}
-            resizeMode="contain"
-            style= {styles.image}
-          />
+          <View style={styles.headerContainer}>
+            <Image
+              source={icons.logo}
+              resizeMode='contain'
+              style={styles.logo}
+            />
+            <Text style={styles.logoText}>SnapShop</Text>
+          </View>
           <Text style={styles.header}>
             Sign up for Snapshop!
           </Text>
-          <KeyboardAvoidingView behavior='padding' style={styles.keyboardAvoidingView}>
+          <View style={styles.mainContainer}>
+            <Text style={styles.title}>Username</Text>
+            <TextInput
+              value={username}
+              onChangeText={setUsername}
+              style={styles.textInput}
+            />
             <Text style={styles.title}>Email</Text>
             <TextInput
               value={email}
@@ -62,7 +78,7 @@ export default function signUp() {
               isLoading={isSubmitting}
               containerStyle={styles.button}
             />
-          </KeyboardAvoidingView>
+          </View>
           <View style={styles.footerContainer}>
             <Text style={styles.footerText}>
               Already have an account?
@@ -82,8 +98,9 @@ export default function signUp() {
 
 const styles = StyleSheet.create({
   safeAreaContainer :{
+    width: "100%",
     height: "100%",
-    backgroundColor: '#F7C5CC',
+    backgroundColor: '#FBEAEB',
   },
   container: {
     width: "100%",
@@ -91,20 +108,32 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 16,
-    marginVertical: 40,
+    marginVertical: 42,
   },
-  image: {
-    width: 270,
-    height: 74,
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  keyboardAvoidingView: {
-    width: "100%",
+  logo: {
+    width: 41,
+    height: 41,
+    marginRight: 3,
+    marginBottom: 3,
+  },
+  logoText: {
+    fontFamily: "brusher",
+    fontSize: 44,
   },
   header: {
     fontFamily: "bold",
     fontSize: 28,
-    marginTop: 28,
+    marginTop: 32,
     marginBottom: 2,
+  },
+  mainContainer: {
+    width: "90%",
+    marginTop: 2,
   },
   title: {
     fontSize: 18,
@@ -124,9 +153,11 @@ const styles = StyleSheet.create({
     fontFamily: "regular",
   },
   button: {
-    marginTop: 30,
+    marginTop: 32,
+    width: "100%",
   },
   footerContainer: {
+    alignItems: "center",
     justifyContent: "center",
     paddingTop: 20,
     flexDirection: "row",
