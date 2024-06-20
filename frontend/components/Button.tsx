@@ -40,10 +40,6 @@ const styles = StyleSheet.create({
       fontSize: 18,
       color: 'white',
     },
-    buttonLabel: {
-      color: 'white',
-      fontSize: 30,
-    },
     activityIndicator: {
       marginLeft: 8,
     },

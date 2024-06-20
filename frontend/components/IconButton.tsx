@@ -1,48 +1,35 @@
-import { StyleSheet, View, Pressable, Text } from 'react-native';
+import { StyleSheet, Pressable, Text } from 'react-native';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-export default function Button({ label , name, onPress } : any) {
+export default function Button({ label , name, onPress, containerStyle, textStyle } : any) {
   return (
-    <View style={styles.buttonContainer}>
-      <Pressable style={styles.button} onPress={onPress}>
-        <FontAwesome
-          name={name}
-          size={30}
-          color="#25292e"
-          style={styles.buttonIcon}
-        />
-        <Text style={styles.buttonLabel}>{label}</Text>
-      </Pressable>
-    </View>
+    <Pressable
+      style={[styles.button, containerStyle]}
+      onPress={onPress}
+    >
+      <FontAwesome
+        name={name}
+        size={27}
+        color="#25292e"
+      />
+      <Text style={[styles.buttonText, textStyle]}>{label}</Text>
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  buttonContainer: {
-    width: 350,
-    height: 68,
-    margin: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 3,
-    borderRadius: 18,
-    backgroundColor: "#B9046F",
-    elevation: 5,
-    shadowColor: '#52006A',
-  },
   button: {
-    borderRadius: 10,
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#F1D3B2',
+    borderRadius: 25,
+    width: "100%",
+    height: 50,
     flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  buttonIcon: {
-    paddingRight: 8,
-  },
-  buttonLabel: {
-    color: 'white',
-    fontSize: 30,
+  buttonText: {
+    fontFamily: 'medium',
+    fontSize: 18,
+    marginLeft: 12,
   },
 });
