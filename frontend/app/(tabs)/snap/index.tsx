@@ -1,14 +1,34 @@
 import { launchCameraAsync, launchImageLibraryAsync } from 'expo-image-picker';
-import { router } from 'expo-router';
+import { Redirect, router } from 'expo-router';
 import { useState } from 'react';
 import { Text, Image, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '../../../components/IconButton';
+import { auth, db } from '../../../firebaseConfig.js'
+import { addDoc, collection } from "firebase/firestore";
 
 
 export default function snap() {
   const [image2, setImage] = useState("")
   let image : string = "";
+  let userId: string
+
+  if (auth.currentUser) {
+    userId = auth.currentUser.uid
+  } else {
+    alert("You are not signed in")
+    return <Redirect href="/login"/>
+  }
+
+  function saveToHistory(item : any) {
+    addDoc(collection(db, 'users', userId, 'history'), item)
+      .then((res) => {
+        console.log(`Item added (id: ${res.id})`);
+      })
+      .catch((error) => {
+        console.error('Error adding item: ', error);
+      });
+  }
 
   async function getPhoto(func: any) {
     //uncomment the line below to avoid using the microsoft vision API
@@ -49,7 +69,9 @@ export default function snap() {
       .then(res => res.json())
       .then(data => {
         console.log(data)
-        router.navigate({ pathname: 'snap/result', params: { item: data["captionResult"]["text"] } })
+        const detectedItem = data["captionResult"]["text"]
+        saveToHistory({item: detectedItem})
+        router.navigate({ pathname: 'snap/result', params: { item: detectedItem } })
       })
       .catch(error => console.error(error));
     }
