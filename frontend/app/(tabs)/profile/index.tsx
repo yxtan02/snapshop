@@ -1,9 +1,9 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
-import { auth } from '../../firebaseConfig.js'
-import { icons } from "../../constants"
-import MenuTab from '../../components/MenuTab'
+import { auth } from '../../../firebaseConfig.js'
+import { icons } from "../../../constants"
+import MenuTab from '../../../components/MenuTab'
 
 export default function profile() {
   return (
