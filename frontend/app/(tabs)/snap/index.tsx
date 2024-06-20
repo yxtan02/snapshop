@@ -7,7 +7,6 @@ import Button from '../../../components/IconButton';
 import { auth, db } from '../../../firebaseConfig.js'
 import { addDoc, collection } from "firebase/firestore";
 
-
 export default function snap() {
   const [image2, setImage] = useState("")
   let image : string = "";
@@ -34,6 +33,8 @@ export default function snap() {
     //uncomment the line below to avoid using the microsoft vision API
     //router.navigate({ pathname: 'result', params: { item: "toothbrush" } })
 
+    let query : string = ""
+
     let result = await func({
       allowsEditing: true,
       quality: 1
@@ -59,7 +60,8 @@ export default function snap() {
       });
 
       //Microsoft vision API (Superior)
-      fetch('https://snapshop.cognitiveservices.azure.com/computervision/imageanalysis:analyze?api-version=2024-02-01&features=caption', { //'http://127.0.0.1:8000/detectImage'
+      //Brand detection
+      fetch('https://snapshop.cognitiveservices.azure.com/vision/v3.2/analyze?visualFeatures=Brands', { 
         method: 'post',
         headers: { "Ocp-Apim-Subscription-Key": "c19fa222b25b454e9a3e42eecfedae10",
                     "Content-Type": "application/octet-stream"
@@ -68,10 +70,27 @@ export default function snap() {
       })
       .then(res => res.json())
       .then(data => {
-        console.log(data)
-        const detectedItem = data["captionResult"]["text"]
-        saveToHistory({item: detectedItem})
-        router.navigate({ pathname: 'snap/result', params: { item: detectedItem } })
+        console.log(data);
+        if (data["brands"].length != 0) {
+          query = data["brands"][0]["name"] + " ";
+        }
+
+        //Image captioning
+        fetch('https://snapshop.cognitiveservices.azure.com/computervision/imageanalysis:analyze?api-version=2024-02-01&features=caption', {
+          method: 'post',
+          headers: { "Ocp-Apim-Subscription-Key": "c19fa222b25b454e9a3e42eecfedae10",
+                      "Content-Type": "application/octet-stream"
+           },
+          body: blob
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data);
+          query = query + data["captionResult"]["text"];
+          console.log(query)
+          router.navigate({ pathname: 'snap/result', params: { item: query } })
+        })
+        .catch(error => console.error(error));
       })
       .catch(error => console.error(error));
     }
