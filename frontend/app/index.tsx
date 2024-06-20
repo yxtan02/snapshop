@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     width: "100%",
+    justifyContent: "center",
     alignItems: "center",
     marginTop: 40,
     gap: 11,
