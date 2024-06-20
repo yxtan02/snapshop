@@ -49,7 +49,7 @@ export default function snap() {
       .then(res => res.json())
       .then(data => {
         console.log(data)
-        // router.navigate({ pathname: 'snap/result', params: { item: data["captionResult"]["text"] } })
+        router.navigate({ pathname: 'snap/result', params: { item: data["captionResult"]["text"] } })
       })
       .catch(error => console.error(error));
     }
