@@ -31,13 +31,13 @@ export default function App() {
             <Button
               title="Log In"
               onPress={() => router.navigate('/login')}
-              containerStyle={styles.loginButton}
+              containerStyle={styles.button}
               textStyle={styles.buttonText}
             />
             <Button
               title="Sign Up"
               onPress={() => router.navigate('/sign-up')}
-              containerStyle={styles.signUpButton}
+              containerStyle={{...styles.button, backgroundColor: "#EDF4F2"}}
               textStyle={{...styles.buttonText, color: 'black'}}
             />
           </View>
@@ -52,6 +52,8 @@ const styles = StyleSheet.create({
   safeAreaContainer: {
     width: "100%",
     height: "100%",
+    alignItems: "center",
+    justifyContent: "center"
   },
   backgroundImage: {
     width: "100%",
@@ -60,7 +62,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    marginTop: 100,
+    justifyContent: "center",
+    marginTop: 10,
   },
   headerContainer: {
     flexDirection: "row",
@@ -87,16 +90,10 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     marginTop: 40,
+    gap: 11,
   },
-  loginButton: {
+  button: {
     width: "75%",
-    backgroundColor: "#2F3C7E",
-    height: 50,
-  },
-  signUpButton: {
-    marginTop: 11,
-    width: "75%",
-    backgroundColor: "#EDF4F2",
     height: 50,
   },
   buttonText: {

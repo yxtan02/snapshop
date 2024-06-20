@@ -88,6 +88,8 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     backgroundColor: '#FBEAEB',
+    alignItems: "center",
+    justifyContent: "center"
   },
   container: {
     width: "100%",
@@ -119,7 +121,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   mainContainer: {
-    width: "90%",
+    width: "100%",
     marginTop: 2,
   },
   title: {

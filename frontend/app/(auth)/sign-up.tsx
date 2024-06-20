@@ -101,6 +101,8 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     backgroundColor: '#FBEAEB',
+    alignItems: "center",
+    justifyContent: "center"
   },
   container: {
     width: "100%",
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 16,
-    marginVertical: 42,
+    marginVertical: 30,
   },
   headerContainer: {
     flexDirection: "row",
@@ -128,11 +130,11 @@ const styles = StyleSheet.create({
   header: {
     fontFamily: "bold",
     fontSize: 28,
-    marginTop: 32,
+    marginTop: 26,
     marginBottom: 2,
   },
   mainContainer: {
-    width: "90%",
+    width: "100%",
     marginTop: 2,
   },
   title: {
