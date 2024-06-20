@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import {  Redirect } from 'expo-router'
+import { Redirect} from 'expo-router'
 import { auth, db } from '../../firebaseConfig.js'
 import { collection, getDocs } from "firebase/firestore"; 
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontFamily: "semiBold",
-    fontSize: 24,
+    fontSize: 26,
     margin: 16,
   }
 })
