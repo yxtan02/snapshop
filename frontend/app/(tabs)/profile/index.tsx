@@ -21,6 +21,7 @@ export default function profile() {
         <MenuTab
           title="Search History"
           icon={icons.history}
+          onPress={() => router.navigate('/profile/history')}
         />
         <MenuTab
           title="Wishlist"

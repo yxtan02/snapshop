@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from 'react-native'
+import {  Redirect } from 'expo-router'
 import { auth, db } from '../../firebaseConfig.js'
 import { collection, getDocs } from "firebase/firestore"; 
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -10,13 +11,14 @@ export default function wishlist() {
   const [isRefresh, setIsRefresh] = useState(false)
   let userId: string
 
-  useEffect(() => {
-    if (auth.currentUser) {
-      userId = auth.currentUser.uid
-    } else {
-      return alert("You are not signed in")
-    }
+  if (auth.currentUser) {
+    userId = auth.currentUser.uid
+  } else {
+    alert("You are not signed in")
+    return <Redirect href="/login"/>
+  }
 
+  useEffect(() => {
     getDocs(collection(db, 'users', userId, 'wishlist'))
     .then(res => {
       const data: any[] = []

@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { Image, ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { auth } from '../firebaseConfig.js'
-import LikeButton from '../components/LikeButton';
+import { auth } from '../../../firebaseConfig.js'
+import LikeButton from '../../../components/LikeButton';
 
 export default function result() {
   const { item } = useLocalSearchParams()

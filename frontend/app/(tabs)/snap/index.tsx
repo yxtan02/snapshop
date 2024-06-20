@@ -3,7 +3,7 @@ import { router } from 'expo-router';
 import { StatusBar } from "expo-status-bar";
 import { useState } from 'react';
 import { Text, Image, StyleSheet, View } from 'react-native';
-import Button from '../../components/IconButton';
+import Button from '../../../components/IconButton';
 import { LinearGradient } from 'expo-linear-gradient';
 
 
@@ -50,7 +50,7 @@ export default function snap() {
       .then(res => res.json())
       .then(data => {
         console.log(data)
-        router.navigate({ pathname: 'result', params: { item: data["captionResult"]["text"] } })
+        router.navigate({ pathname: 'snap/result', params: { item: data["captionResult"]["text"] } })
       })
       .catch(error => console.error(error));
     }
