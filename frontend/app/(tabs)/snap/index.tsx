@@ -71,7 +71,7 @@ export default function snap() {
       .then(res => res.json())
       .then(data => {
         console.log(data);
-        if (data["brands"].length != 0) {
+        if (data["brands"] != undefined && data["brands"].length != 0) {
           query = data["brands"][0]["name"] + " ";
         }
 
