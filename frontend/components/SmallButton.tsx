@@ -1,8 +1,11 @@
 import { Pressable, StyleSheet, Text } from 'react-native'
 
-export default function SmallButton({ title, containerStyle }: any) {
+export default function SmallButton({ title, onPress, containerStyle }: any) {
   return (
-    <Pressable style={[styles.button, containerStyle]}>
+    <Pressable
+      onPress={onPress}
+      style={[styles.button, containerStyle]}
+    >
       <Text style={styles.buttonText}>{title}</Text>
     </Pressable>
   )

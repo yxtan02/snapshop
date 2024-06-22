@@ -35,7 +35,7 @@ export default function history() {
         <FlatList
           data={history}
           keyExtractor={(item) => item.docId}
-          renderItem={({ item }) => <HistoryCard item={item} />}
+          renderItem={({ item }) => <HistoryCard item={item} isRefresh={isRefresh} setIsRefresh={setIsRefresh}/>}
           style={styles.flatlist}
         />
       </View>

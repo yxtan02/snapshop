@@ -1,7 +1,20 @@
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native'
-import SmallButton from "./SmallButton"
+import { Image, StyleSheet, Text, View } from 'react-native';
+import { router } from 'expo-router';
+import { db } from '../firebaseConfig.js';
+import { doc, deleteDoc } from "firebase/firestore";
+import SmallButton from "./SmallButton";
 
-export default function HistoryCard({ item }: any) {
+export default function HistoryCard({ item, isRefresh, setIsRefresh }: any) {
+  function deleteFromHistory(userId: string, docId: string) {
+    deleteDoc(doc(db, "users", userId, "history", docId))
+      .then(() => {
+        setIsRefresh(!isRefresh)
+      })
+      .catch((error) => {
+        console.error('Error deleting item: ', error);
+      })
+  }
+
   return (
     <View style={styles.cardContainer}>
       <View style={styles.parentContainer}>
@@ -19,8 +32,15 @@ export default function HistoryCard({ item }: any) {
         </View>
         <View style={styles.buttonParentContainer}>
           <View style={styles.buttonContainer}>
-            <SmallButton title="View" />
-            <SmallButton title="Delete" containerStyle={{ backgroundColor: "#e53935" }}/>
+            <SmallButton
+              title="View"
+              onPress={() => router.navigate({ pathname: 'snap/result', params: { item: item.item } })}
+            />
+            <SmallButton
+              title="Delete"
+              onPress={() => deleteFromHistory(item.userId, item.docId)}
+              containerStyle={{ backgroundColor: "#e53935" }}
+            />
           </View>
         </View>
       </View>
