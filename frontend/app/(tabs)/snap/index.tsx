@@ -8,8 +8,7 @@ import { auth, db } from '../../../firebaseConfig.js'
 import { addDoc, collection } from "firebase/firestore";
 
 export default function snap() {
-  const [image2, setImage] = useState("")
-  let image : string = "";
+  const [image, setImage] = useState("")
   let userId: string
 
   if (auth.currentUser) {
@@ -37,12 +36,14 @@ export default function snap() {
 
     let result = await func({
       allowsEditing: true,
-      quality: 1
+      quality: 1,
+      base64: true
     });
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
-      image = result.assets[0].uri;
+      const imageUri = result.assets[0].uri;
+      const imageBase64 = result.assets[0].base64;
       
       // Convert image uri to blob
       const blob : BlobPart = await new Promise((resolve, reject) => {
@@ -55,7 +56,7 @@ export default function snap() {
         };
         xhr.responseType = "blob";
         //console.warn(image)
-        xhr.open("GET", image, true);
+        xhr.open("GET", imageUri, true);
         xhr.send(null);
       });
 
@@ -88,6 +89,7 @@ export default function snap() {
           console.log(data);
           query = query + data["captionResult"]["text"];
           console.log(query)
+          saveToHistory({item: query, image: imageBase64})
           router.navigate({ pathname: 'snap/result', params: { item: query } })
         })
         .catch(error => console.error(error));
@@ -117,7 +119,10 @@ export default function snap() {
           <Button label="Take a photo" name="picture-o" onPress={takePhoto}/>
           <Button label="Upload a photo" name="camera" onPress={uploadPhoto}/>
         </View>
-        <Image source={{ uri: image2 }} style={styles.image} />
+        <Image
+          resizeMode='contain'
+          source={{ uri: image }}
+          style={styles.image} />
       </View>
     </SafeAreaView>
   );

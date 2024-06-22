@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Redirect } from 'expo-router';
 import { auth, db } from '../../../firebaseConfig.js';
 import { collection, getDocs } from "firebase/firestore"; 
+import HistoryCard from "../../../components/HistoryCard";
 
 export default function history() {
   const [history, setHistory] = useState<any[]>([])
@@ -28,24 +29,16 @@ export default function history() {
     })
   }, [isRefresh])
 
-  const renderItem = ({ item }: any) => (
-    <View style={{ padding: 10, borderBottomWidth: 1, borderColor: '#ccc' }}>
-      {Object.entries(item).map(([key, value]) => (
-        <Text key={key}>{`${key}: ${value}`}</Text>
-      ))}
-    </View>
-  );
-
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
-      <Text style={styles.header}>History</Text>
-      <FlatList
-        data={history}
-        keyExtractor={(item) => item.docId}
-        renderItem={renderItem}
-      />
-      <View>
-    </View>
+      <View style={styles.container}>
+        <FlatList
+          data={history}
+          keyExtractor={(item) => item.docId}
+          renderItem={({ item }) => <HistoryCard item={item} />}
+          style={styles.flatlist}
+        />
+      </View>
     </SafeAreaView>
   )
 }
@@ -54,13 +47,16 @@ const styles = StyleSheet.create({
   safeAreaContainer :{
     width: "100%",
     height: "100%",
-    backgroundColor: '#FBEAEB',
+    backgroundColor: "#F7CED7FF",
     justifyContent: "center",
     alignItems: "center"
   },
-  header: {
-    fontFamily: "semiBold",
-    fontSize: 26,
-    margin: 16,
+  container: {
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+  },
+  flatlist: {
+    width: "95%"
   }
 })
