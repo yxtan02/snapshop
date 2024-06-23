@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react';
-import { Image, ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Button, Image, ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { auth } from '../../../firebaseConfig.js'
 import LikeButton from '../../../components/LikeButton';
+import { router } from 'expo-router';
 
 export default function result() {
   const { item } = useLocalSearchParams()
-  // let amazon : any;
-  // let setAmazon : any;
   const [amazon, setAmazon] = useState([])
   const [lazada, setLazada] = useState([])
   const [ebay, setEbay] = useState([])
+  const [combined, setCombined] = useState([])
   const [userId, setUserId] = useState<string | undefined>("")
+  const [price_comp, setPrice] = useState(false);
 
   useEffect(() => {
     //stand in code
@@ -201,15 +202,50 @@ export default function result() {
         })
         .then(res => res.json())
         .then(data3 => {
+          console.log(data);
+          console.log(data2);
           console.log(data3);
-          
-          const amzn = data["data"]["products"].slice(0, 5);
-          const laz = data2["data"]["items"].slice(0, 5);
-          const e = data3["results"].slice(0, 5);
 
-          setAmazon(amzn.length == 0 ? null : amzn)
-          setLazada(laz.length == 0 ? null : laz)
-          setEbay(e.length == 0 ? null : e)
+          const amzn = data["data"]["products"];
+          const laz = data2["data"]["items"];
+          const e = data3["results"];
+
+          setAmazon(amzn.length == 0 ? null : amzn.slice(0, 5))
+          setLazada(laz.length == 0 ? null : laz.slice(0, 5))
+          setEbay(e.length == 0 ? null : e.slice(0,5))
+
+          for (let i = 0; i < amzn.length; i++) {
+            amzn[i]["price"] = amzn[i]["product_price"].slice(2);
+            amzn[i]["type"] = "amzn";
+          }
+
+          for (let i = 0; i < laz.length; i++) {
+            laz[i]["type"] = "lazada";
+          }
+
+          for (let i = 0; i < e.length; i++) {
+            e[i]["type"] = "ebay"
+            try {;
+              e[i]["price"] = String((parseFloat(e[i]["price"].slice(1)) * 1.36).toFixed(2));
+            }
+            catch(err) {
+              e[i]["type"] = "void";
+            }
+          }
+
+          const combined_array_of_products = amzn.concat(laz, e);
+
+          //sort by price in ascending order
+          // amzn.sort((a : any, b : any) => parseFloat(a["product_price"].slice(2)) - parseFloat(b["product_price"].slice(2)));
+          
+          // laz.sort((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price));
+
+          // e.sort((a : any, b : any) => parseFloat(a.price.slice(1)) - parseFloat(b.price.slice(1)));
+
+          combined_array_of_products.sort((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price));
+
+          setCombined(combined_array_of_products.slice(0, 45))
+         
         })
         .catch(error => console.error(error));
       })
@@ -221,7 +257,7 @@ export default function result() {
     setUserId(auth.currentUser?.uid)
   }, []);
 
-  if ((amazon != null && amazon.length == 0) || (lazada != null && lazada.length == 0) || (ebay != null && ebay.length == 0)) {
+  if ((combined.length == 0)) {
     return (
       <View style={styles.activityIndicator}>
         <ActivityIndicator size='large'/>
@@ -229,15 +265,98 @@ export default function result() {
     )
   }
 
-  //sort by price in ascending order
-  if (amazon != null) {
-    amazon.sort((a : any, b : any) => parseFloat(a["product_price"].slice(2)) - parseFloat(b["product_price"].slice(2)));
-  }
-  if (lazada != null) {
-    lazada.sort((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price));
-  }
-  if (ebay != null) {
-    ebay.sort((a : any, b : any) => parseFloat(a.price.slice(1)) - parseFloat(b.price.slice(1)));
+  if (price_comp) {
+    return (
+      <ScrollView style={styles.container}>
+        <LinearGradient
+          // Background Linear Gradient
+          colors={['#FDBBE2', '#FBEAEB']}
+          style={styles.headerContainer}
+          locations={[0.5, 0.8]}
+        >
+          <Text style={styles.description}>{item}</Text>
+        </LinearGradient>
+  
+        <View style={styles.buttons}>
+          <Button
+              title="Product search"
+              
+            />
+          <Button
+              title="Review Aggregation"
+              
+            />
+        </View>
+  
+        <View style={styles.remainderContainer}>
+        {
+        combined.map((obj, index) => 
+          obj["type"] == 'amzn' ?
+          <View key={index} style={{marginLeft: 5}}>
+            <Text style={styles.header}>Amazon</Text>
+            <Text style={styles.words}>{obj["product_title"]}</Text>
+            <Image style={styles.image} source={{uri: obj["product_photo"]}}/>
+            <Text style={styles.price}>{obj["product_price"]}</Text>
+            <Text style={styles.price}>{obj["product_star_rating"] + " stars"}</Text>
+            <Text style={styles.desc}>{obj["sales_volume"]}</Text>
+            <Text style={styles.desc}>{obj["delivery"]}</Text>
+            <LikeButton 
+              userId={userId}
+              item={{
+                title: obj["product_title"],
+                image: obj["product_photo"],
+                price: obj["product_price"],
+                rating: obj["product_star_rating"] + " stars",
+                url: obj["product_url"],
+                others: obj["sales_volume"] + " | " + obj["delivery"]
+              }}
+            />
+          </View> : obj["type"] == 'lazada' ?
+
+          <View key={index} style={{marginLeft: 5}}>
+            <Text style={styles.header}>Lazada</Text>
+            <Text style={styles.words}>{obj["title"]}</Text>
+            <Image style={styles.image} source={{uri: obj["img"]}}/>
+            <Text style={styles.price}>{"S$" + obj["price"]}</Text>
+            <Text style={styles.price}>{parseFloat(obj["review_info"]["average_score"]).toFixed(2) + " stars"}</Text>
+            <Text style={styles.desc}>{obj["sold_count"] + " sold"}</Text>
+            <LikeButton 
+              userId={userId}
+              item={{
+                title: obj["title"],
+                image: obj["img"],
+                price: "S$" + obj["price"],
+                rating: parseFloat(obj["review_info"]["average_score"]).toFixed(2) + " stars",
+                url: obj["product_url"],
+                others: obj["sold_count"] + " sold"
+              }}
+            />
+          </View> : obj["type"] == 'ebay' ?
+
+          <View key={index} style={{marginLeft: 5}}>
+            <Text style={styles.header}>eBay</Text>
+            <Text style={styles.words}>{obj["title"]}</Text>
+            <Image style={styles.image} source={{uri: obj["image"]}}/>
+            <Text style={styles.price}>{"S$" + obj["price"]}</Text>
+            <Text style={styles.price}>{obj["rating"] === "" ? "" : obj["rating"] + " stars"}</Text>
+            <Text style={styles.desc}>{obj["shipping"]}</Text>
+            <LikeButton 
+              userId={userId}
+              item={{
+                title: obj["title"],
+                image: obj["image"],
+                price: "S" + obj["price"],
+                rating: obj["rating"] === "" ? "No ratings found" : obj["rating"] + " stars",
+                url: obj["url"],
+                others: obj["shipping"]
+              }}
+            />
+          </View> : <View></View>
+        )}
+ 
+          </View>
+      </ScrollView>
+    )
   }
     
   return (
@@ -251,7 +370,21 @@ export default function result() {
         <Text style={styles.description}>{item}</Text>
       </LinearGradient>
 
-      <Text style={styles.header}>Amazon</Text>
+      <View style={styles.buttons}>
+        <Button
+            title="Sort by cheapest"
+            onPress={() => {
+              setPrice(true)
+              
+            }}
+          />
+        <Button
+            title="Review Aggregation"
+            
+          />
+      </View>
+
+      <Text style={styles.header2}>Amazon</Text>
       <View style={styles.remainderContainer}>
         {amazon == null ? <Text style={styles.words}>No result</Text> :
         amazon.map((obj, index) => 
@@ -275,7 +408,7 @@ export default function result() {
             />
           </View>)}
 
-          <Text style={styles.header}>Lazada</Text>
+          <Text style={styles.header2}>Lazada</Text>
 
           
           {lazada == null ? <Text style={styles.words}>No result</Text> :
@@ -299,7 +432,7 @@ export default function result() {
             />
           </View>)}
           
-          <Text style={styles.header}>eBay</Text>
+          <Text style={styles.header2}>eBay</Text>
 
           {ebay == null ? <Text style={styles.words}>No result</Text> :
           ebay.map((obj, index) => 
@@ -325,6 +458,7 @@ export default function result() {
     </ScrollView>
   )
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -358,6 +492,15 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   header: {
+    fontSize: 20,
+    color: "black",
+    fontWeight: "bold",
+    // fontFamily: 'monospace',
+    marginLeft: 5,
+    // marginTop: 5,
+    textAlign: 'center'
+  },
+  header2: {
     fontSize: 30,
     color: "black",
     fontWeight: "bold",
@@ -392,5 +535,11 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     alignItems:'center',
     justifyContent:'center'
-  }
+  },
+  buttons: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
 });
+
