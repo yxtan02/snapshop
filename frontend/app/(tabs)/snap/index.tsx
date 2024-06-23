@@ -30,7 +30,7 @@ export default function snap() {
 
   async function getPhoto(func: any) {
     //uncomment the line below to avoid using the microsoft vision API
-    //router.navigate({ pathname: 'result', params: { item: "toothbrush" } })
+    //router.navigate({ pathname: 'snap/result', params: { item: "toothbrush" } })
 
     let query : string = ""
 
