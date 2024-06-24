@@ -4,8 +4,10 @@ import { useState } from 'react';
 import { Text, Image, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '../../../components/IconButton';
-import { auth, db } from '../../../firebaseConfig.js'
+import { auth, db, storage } from '../../../firebaseConfig.js';
 import { addDoc, collection } from "firebase/firestore";
+import { ref, uploadBytes } from "firebase/storage";
+
 
 export default function snap() {
   const [image, setImage] = useState("")
@@ -18,14 +20,22 @@ export default function snap() {
     return <Redirect href="/login"/>
   }
 
-  function saveToHistory(item : any) {
+  function saveToHistory(item: any, imageFile: any) {
     addDoc(collection(db, 'users', userId, 'history'), item)
       .then((res) => {
         console.log(`Item added (id: ${res.id})`);
+        uploadBytes(ref(storage, `${userId}/${res.id}`), imageFile)
+          .then((res) => {
+            console.log('Image uploaded')
+          })
+          .catch((error) => {
+            console.error('Error uploading image: ', error);
+          })
       })
       .catch((error) => {
         console.error('Error adding item: ', error);
       });
+    
   }
 
   async function getPhoto(func: any) {
@@ -43,7 +53,6 @@ export default function snap() {
     if (!result.canceled) {
       setImage(result.assets[0].uri);
       const imageUri = result.assets[0].uri;
-      const imageBase64 = result.assets[0].base64;
       
       // Convert image uri to blob
       const blob : BlobPart = await new Promise((resolve, reject) => {
@@ -59,6 +68,8 @@ export default function snap() {
         xhr.open("GET", imageUri, true);
         xhr.send(null);
       });
+
+      const imageFile = new File([blob], "image.jpg", { type: "image/jpeg" })
 
       //Microsoft vision API (Superior)
       //Brand detection
@@ -89,7 +100,7 @@ export default function snap() {
           console.log(data);
           query = query + data["captionResult"]["text"];
           console.log(query)
-          saveToHistory({item: query, image: imageBase64})
+          saveToHistory({item: query}, imageFile)
           router.navigate({ pathname: 'snap/result', params: { item: query } })
         })
         .catch(error => console.error(error));

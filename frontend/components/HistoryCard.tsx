@@ -1,19 +1,38 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
+import { useState, useEffect } from "react";
 import { router } from 'expo-router';
-import { db } from '../firebaseConfig.js';
+import { db, storage } from '../firebaseConfig.js';
 import { doc, deleteDoc } from "firebase/firestore";
+import { ref, getDownloadURL, deleteObject } from "firebase/storage";
 import SmallButton from "./SmallButton";
 
-export default function HistoryCard({ item, isRefresh, setIsRefresh }: any) {
+export default function HistoryCard({ item }: any) {
   function deleteFromHistory(userId: string, docId: string) {
     deleteDoc(doc(db, "users", userId, "history", docId))
       .then(() => {
-        setIsRefresh(!isRefresh)
+        deleteObject(ref(storage, `${userId}/${docId}`))
+          .then(() => {
+            console.log("File deleted successfully")
+            // setIsRefresh(!isRefresh)
+          }).catch((error) => {
+            console.error(error)
+          });
       })
       .catch((error) => {
         console.error('Error deleting item: ', error);
       })
   }
+
+  const [imageUrl, setImageUrl] = useState('');
+  useEffect(() => {
+    getDownloadURL(ref(storage, `${item.userId}/${item.docId}`))
+      .then((url) => {
+        setImageUrl(url);
+      })
+      .catch((error) => {
+        console.error("Error downloading image: ", error);
+      })
+  }, [])
 
   return (
     <View style={styles.cardContainer}>
@@ -24,7 +43,7 @@ export default function HistoryCard({ item, isRefresh, setIsRefresh }: any) {
           </View>
           <View style={styles.imageContainer}>
             <Image
-                source={{uri: "data:image/jpeg;base64," + item.image}}
+                source={{uri: imageUrl}}
                 resizeMode='contain'
                 style={styles.image}
             />
