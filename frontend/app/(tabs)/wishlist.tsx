@@ -4,7 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Redirect } from 'expo-router';
 import { auth, db } from '../../firebaseConfig.js';
 import { collection, getDocs } from "firebase/firestore"; 
-import ProductCard from "../../components/ProductCard";
+import WishlistCard from "../../components/WishlistCard";
 
 export default function wishlist() {
   const [wishlist, setWishlist] = useState<any[]>([])
@@ -38,7 +38,7 @@ export default function wishlist() {
         <FlatList
           data={wishlist}
           keyExtractor={(item) => item.docId}
-          renderItem={({ item }) => <ProductCard item={item} isRefresh={isRefresh} setIsRefresh={setIsRefresh}/>}
+          renderItem={({ item }) => <WishlistCard item={item} isRefresh={isRefresh} setIsRefresh={setIsRefresh}/>}
           style={styles.flatlist}
         />
       </View>

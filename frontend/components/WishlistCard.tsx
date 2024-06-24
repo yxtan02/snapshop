@@ -3,7 +3,7 @@ import { doc, deleteDoc } from "firebase/firestore";
 import { db } from '../firebaseConfig.js'
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 
-export default function ProductCard({ item, isRefresh, setIsRefresh }: any) {
+export default function WishlistCard({ item, isRefresh, setIsRefresh }: any) {
   function deleteFromWishlist(userId: string, docId: string) {
     deleteDoc(doc(db, "users", userId, "wishlist", docId))
       .then(() => {
