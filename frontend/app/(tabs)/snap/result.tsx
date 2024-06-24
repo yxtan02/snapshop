@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Button, Image, ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { ActivityIndicator, Button, FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useLocalSearchParams, router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { auth } from '../../../firebaseConfig.js'
 import LikeButton from '../../../components/LikeButton';
-import { router } from 'expo-router';
+import ProductCard from '../../../components/ProductCard';
 
 export default function result() {
   const { item } = useLocalSearchParams()
@@ -17,9 +17,39 @@ export default function result() {
 
   useEffect(() => {
     //stand in code
-    setAmazon(amazonTestData)
-    setLazada(lazadaTestData)
-    setEbay(ebayTestData)
+    const editedAmazon = amazonTestData.map(item => ({
+      title: item["product_title"],
+      image: item["product_photo"],
+      price: item["product_price"],
+      rating: item["product_star_rating"] + " stars",
+      volume: item["sales_volume"],
+      delivery: item["delivery"],
+      url: item["product_url"],
+    }))
+    setAmazon(editedAmazon)
+
+    const editedLazada = lazadaTestData.map(item => ({
+      title: item["title"],
+      image: item["img"],
+      price: "S$" + item["price"],
+      rating: parseFloat(item["review_info"]["average_score"]).toFixed(2) + " stars",
+      sales: item["sold_count"] + " sold",
+      delivery: "",
+      url: item["product_url"],
+    }))
+    setLazada(editedLazada)
+
+    const editedEbay = ebayTestData.map(item => ({
+      title: item["title"],
+      image: item["image"],
+      price: "S" + item["price"],
+      rating: item["rating"] === "" ? "No ratings found" : item["rating"] + " stars",
+      sales: "",
+      delivery: item["shipping"],
+      url: item["url"],
+    }))
+    setEbay(editedEbay)
+
     const combined_array_of_products = amazonTestData.concat(lazadaTestData, ebayTestData);
     combined_array_of_products.sort((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price));
     setCombined(combined_array_of_products.slice(0, 45))
@@ -213,7 +243,7 @@ export default function result() {
     
   return (
     <ScrollView style={styles.container}>
-      <LinearGradient
+      {/* <LinearGradient
         // Background Linear Gradient
         colors={['#FDBBE2', '#FBEAEB']}
         style={styles.headerContainer}
@@ -227,85 +257,43 @@ export default function result() {
             title="Sort by cheapest"
             onPress={() => {
               setPrice(true)
-              
             }}
           />
         <Button
             title="Review Aggregation"
-            
           />
-      </View>
-
-      <Text style={styles.header2}>Amazon</Text>
+      </View> */}
+      
       <View style={styles.remainderContainer}>
-        {amazon == null ? <Text style={styles.words}>No result</Text> :
-        amazon.map((obj, index) => 
-          <View key={index} style={{marginLeft: 5}}>
-            <Text style={styles.words}>{obj["product_title"]}</Text>
-            <Image style={styles.image} source={{uri: obj["product_photo"]}}/>
-            <Text style={styles.price}>{obj["product_price"]}</Text>
-            <Text style={styles.price}>{obj["product_star_rating"] + " stars"}</Text>
-            <Text style={styles.desc}>{obj["sales_volume"]}</Text>
-            <Text style={styles.desc}>{obj["delivery"]}</Text>
-            <LikeButton 
-              userId={userId}
-              item={{
-                title: obj["product_title"],
-                image: obj["product_photo"],
-                price: obj["product_price"],
-                rating: obj["product_star_rating"] + " stars",
-                url: obj["product_url"],
-                others: obj["sales_volume"] + " | " + obj["delivery"]
-              }}
-            />
-          </View>)}
+        <Text style={styles.header2}>Amazon</Text>
+        {amazon == null ? <Text style={styles.words}>No results found</Text> :
+        <FlatList
+          data={amazon}
+          renderItem={({ item }) => <ProductCard item={item} userId={userId}/>}
+          keyExtractor={(item, index) => index.toString()}
+          horizontal
+          contentContainerStyle={{paddingHorizontal: 15, gap: 5}}
+        />}
 
-          <Text style={styles.header2}>Lazada</Text>
-
+        <Text style={styles.header2}>Lazada</Text>
+        {lazada == null ? <Text style={styles.words}>No results found</Text> :
+        <FlatList
+          data={lazada}
+          renderItem={({ item }) => <ProductCard item={item} userId={userId}/>}
+          keyExtractor={(item, index) => index.toString()}
+          horizontal
+          contentContainerStyle={{paddingHorizontal: 15, gap: 5}}
+        />}
           
-          {lazada == null ? <Text style={styles.words}>No result</Text> :
-          lazada.map((obj, index) => 
-          <View key={index} style={{marginLeft: 5}}>
-            <Text style={styles.words}>{obj["title"]}</Text>
-            <Image style={styles.image} source={{uri: obj["img"]}}/>
-            <Text style={styles.price}>{"S$" + obj["price"]}</Text>
-            <Text style={styles.price}>{parseFloat(obj["review_info"]["average_score"]).toFixed(2) + " stars"}</Text>
-            <Text style={styles.desc}>{obj["sold_count"] + " sold"}</Text>
-            <LikeButton 
-              userId={userId}
-              item={{
-                title: obj["title"],
-                image: obj["img"],
-                price: "S$" + obj["price"],
-                rating: parseFloat(obj["review_info"]["average_score"]).toFixed(2) + " stars",
-                url: obj["product_url"],
-                others: obj["sold_count"] + " sold"
-              }}
-            />
-          </View>)}
-          
-          <Text style={styles.header2}>eBay</Text>
-
-          {ebay == null ? <Text style={styles.words}>No result</Text> :
-          ebay.map((obj, index) => 
-          <View key={index} style={{marginLeft: 5}}>
-            <Text style={styles.words}>{obj["title"]}</Text>
-            <Image style={styles.image} source={{uri: obj["image"]}}/>
-            <Text style={styles.price}>{"S" + obj["price"]}</Text>
-            <Text style={styles.price}>{obj["rating"] === "" ? "" : obj["rating"] + " stars"}</Text>
-            <Text style={styles.desc}>{obj["shipping"]}</Text>
-            <LikeButton 
-              userId={userId}
-              item={{
-                title: obj["title"],
-                image: obj["image"],
-                price: "S" + obj["price"],
-                rating: obj["rating"] === "" ? "No ratings found" : obj["rating"] + " stars",
-                url: obj["url"],
-                others: obj["shipping"]
-              }}
-            />
-          </View>)}
+        <Text style={styles.header2}>eBay</Text>
+        {ebay == null ? <Text style={styles.words}>No results found</Text> :
+        <FlatList
+          data={ebay}
+          renderItem={({ item }) => <ProductCard item={item} userId={userId}/>}
+          keyExtractor={(item, index) => index.toString()}
+          horizontal
+          contentContainerStyle={{paddingHorizontal: 15, gap: 5}}
+        />}
         </View>
     </ScrollView>
   )
@@ -354,8 +342,7 @@ const styles = StyleSheet.create({
   },
   header2: {
     fontSize: 30,
-    color: "black",
-    fontWeight: "bold",
+    fontFamily: "bold",
     // fontFamily: 'monospace',
     marginLeft: 5,
     marginTop: 5,

@@ -41,7 +41,7 @@ export default function WishlistCard({ item, isRefresh, setIsRefresh }: any) {
           <View style={styles.detailsContainer}>
             <Text style={styles.price}>{item.price}</Text>
             <View style={styles.ratingContainer}>
-              <AntDesign name="star" size={15} color="#ffb300" style={styles.star}/>
+              <AntDesign name="star" size={15} color="#ff6f00" style={styles.star}/>
               <Text style={styles.rating}>{item.rating}</Text>
             </View>
             <Text numberOfLines={2} style={styles.others}>{item.others}</Text>
@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
   rating: {
     fontFamily: "medium",
     marginLeft: 4,
+    color: "#ff6f00",
   },
   others: {
     fontFamily: "light",
