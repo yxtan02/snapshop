@@ -16,7 +16,7 @@ export default function ProductCard({ item, isRefresh, setIsRefresh }: any) {
 
   return (
     <View style={styles.cardContainer}>
-      <View>
+      <View style={styles.container}>
         <View style={styles.headerContainer}>
           <View style={styles.titleContainer}>
             <Text style={styles.title}>{item.title}</Text>
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   container: {
-    
+    flex: 1,
   },
   headerContainer: {
     flexDirection: "row",
