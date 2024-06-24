@@ -31,14 +31,17 @@ export default function wishlist() {
   
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
-      <Text style={styles.header}>Wishlist</Text>
-      <FlatList
-        data={wishlist}
-        keyExtractor={(item) => item.docId}
-        renderItem={({ item }) => <ProductCard item={item} isRefresh={isRefresh} setIsRefresh={setIsRefresh}/>}
-      />
-      <View>
-    </View>
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.header}>Wishlist</Text>
+        </View>
+        <FlatList
+          data={wishlist}
+          keyExtractor={(item) => item.docId}
+          renderItem={({ item }) => <ProductCard item={item} isRefresh={isRefresh} setIsRefresh={setIsRefresh}/>}
+          style={styles.flatlist}
+        />
+      </View>
     </SafeAreaView>
   )
 }
@@ -47,13 +50,30 @@ const styles = StyleSheet.create({
   safeAreaContainer :{
     width: "100%",
     height: "100%",
-    backgroundColor: '#FBEAEB',
     justifyContent: "center",
     alignItems: "center"
+  },
+  container: {
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    backgroundColor: '#F7CED7FF',
+  },
+  headerContainer: {
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: '#FBEAEB',
+    // borderBottomWidth: 1,
+    // borderBottomColor: "#83829A",
   },
   header: {
     fontFamily: "semiBold",
     fontSize: 26,
-    margin: 16,
-  }
+    marginTop: 15,
+    marginBottom: 2
+  },
+  flatlist: {
+    width: "95%"
+  },
 })
