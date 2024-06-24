@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Redirect } from 'expo-router';
 import { auth, db } from '../../../firebaseConfig.js';
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import HistoryCard from "../../../components/HistoryCard";
 
 export default function history() {
@@ -19,7 +19,8 @@ export default function history() {
   }
 
   useEffect(() => {
-    getDocs(collection(db, 'users', userId, 'history'))
+    const q = query(collection(db, 'users', userId, 'history'), orderBy("createdAt", "desc"))
+    getDocs(q)
     .then(res => {
       const data: any[] = []
       res.forEach((doc) => {

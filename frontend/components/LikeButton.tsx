@@ -2,10 +2,13 @@ import { useState } from "react";
 import { Pressable } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { db } from '../firebaseConfig.js'
-import { addDoc, collection } from "firebase/firestore"; 
+import { addDoc, collection, serverTimestamp } from "firebase/firestore"; 
 
 function addToWishlist(userId : any, item : any) {
-  addDoc(collection(db, 'users', userId, 'wishlist'), item)
+  addDoc(collection(db, 'users', userId, 'wishlist'), {
+    ...item,
+    createdAt: serverTimestamp()
+  })
     .then((res) => {
       console.log(`Item added (id: ${res.id})`);
     })

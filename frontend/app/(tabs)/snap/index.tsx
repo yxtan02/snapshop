@@ -5,7 +5,7 @@ import { Text, Image, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '../../../components/IconButton';
 import { auth, db, storage } from '../../../firebaseConfig.js';
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { ref, uploadBytes } from "firebase/storage";
 
 
@@ -21,7 +21,10 @@ export default function snap() {
   }
 
   function saveToHistory(item: any, imageFile: any) {
-    addDoc(collection(db, 'users', userId, 'history'), item)
+    addDoc(collection(db, 'users', userId, 'history'), {
+      ...item,
+      createdAt: serverTimestamp()
+    })
       .then((res) => {
         console.log(`Item added (id: ${res.id})`);
         uploadBytes(ref(storage, `${userId}/${res.id}`), imageFile)
