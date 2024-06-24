@@ -27,31 +27,7 @@ export default function history() {
       })
       setHistory(data)
     })
-  
-    // const fetchData = async () => {
-    //   console.log("useEffect");
-    //   try {
-    //     const res = await getDocs(collection(db, 'users', userId, 'history'));
-    //     const data: any[] = [];
-
-    //     res.docs.forEach(async (doc) => {
-    //       try {
-    //         console.log("Image downloaded")
-    //         const url = await getDownloadURL(ref(storage, `${userId}/${doc.id}`));
-    //         data.push({ userId: userId, docId: doc.id, ...doc.data(), image: url });
-    //       } catch (error) {
-    //         console.error("Error downloading image: ", error);
-    //       }
-    //     })
-
-    //     setHistory(data);
-    //   } catch (error) {
-    //     console.error("Error fetching documents: ", error);
-    //   }
-    // };
-
-    // fetchData();
-  }, [])
+  }, [isRefresh])
 
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
@@ -59,9 +35,7 @@ export default function history() {
         <FlatList
           data={history}
           keyExtractor={(item) => item.docId}
-          renderItem={({ item }) => <HistoryCard item={item}
-          // isRefresh={isRefresh} setIsRefresh={setIsRefresh}
-          />}
+          renderItem={({ item }) => <HistoryCard item={item} isRefresh={isRefresh} setIsRefresh={setIsRefresh}/>}
           style={styles.flatlist}
         />
       </View>

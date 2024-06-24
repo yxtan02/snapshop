@@ -6,14 +6,14 @@ import { doc, deleteDoc } from "firebase/firestore";
 import { ref, getDownloadURL, deleteObject } from "firebase/storage";
 import SmallButton from "./SmallButton";
 
-export default function HistoryCard({ item }: any) {
+export default function HistoryCard({ item, isRefresh, setIsRefresh }: any) {
   function deleteFromHistory(userId: string, docId: string) {
     deleteDoc(doc(db, "users", userId, "history", docId))
       .then(() => {
         deleteObject(ref(storage, `${userId}/${docId}`))
           .then(() => {
             console.log("File deleted successfully")
-            // setIsRefresh(!isRefresh)
+            setIsRefresh(!isRefresh)
           }).catch((error) => {
             console.error(error)
           });
