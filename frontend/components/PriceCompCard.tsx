@@ -1,8 +1,8 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, View } from 'react-native';
 import LikeButton from './LikeButton';
 import { AntDesign } from '@expo/vector-icons';
 
-export default function ProductCard({ item, userId }: any) {
+export default function PriceCompCard({ item, userId }: any) {
   return (
     <View style={styles.cardContainer}>
       <View style={styles.container}>
@@ -20,6 +20,7 @@ export default function ProductCard({ item, userId }: any) {
               <AntDesign name="star" size={15} color="#ff6f00"/>
               <Text style={styles.rating}>{item.rating} stars</Text>
             </View>
+            <Text style={styles.desc}>From: {item.platform}</Text>
             <Text style={styles.desc}>{item.sales}</Text>
             <Text style={styles.desc}>{item.delivery}</Text>
         </View>
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   titleContainer: {
-
+  
   },
   title: {
     fontFamily: "semiBold",

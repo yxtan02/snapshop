@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, Button, FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { auth } from '../../../firebaseConfig.js'
+import { auth } from '../../../firebaseConfig.js';
 import LikeButton from '../../../components/LikeButton';
 import ProductCard from '../../../components/ProductCard';
+import PriceCompCard from '../../../components/PriceCompCard';
 
 export default function result() {
   const { item } = useLocalSearchParams()
@@ -13,133 +14,210 @@ export default function result() {
   const [ebay, setEbay] = useState<any[]>([])
   const [combined, setCombined] = useState<any[]>([])
   const [userId, setUserId] = useState<string | undefined>("")
-  const [price_comp, setPrice] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
+  const [priceComp, setPrice] = useState(false)
 
   useEffect(() => {
-    //stand in code
-    const editedAmazon = amazonTestData.map(item => ({
+    // for testing
+    let editedAmazon: any[] = amazonTestData.map(item => ({
       title: item["product_title"],
       image: item["product_photo"],
-      price: item["product_price"],
-      rating: item["product_star_rating"] + " stars",
+      price: item["product_price"].slice(2),
+      rating: item["product_star_rating"],
       volume: item["sales_volume"],
       delivery: item["delivery"],
       url: item["product_url"],
+      platform: "amazon"
     }))
     setAmazon(editedAmazon)
 
-    const editedLazada = lazadaTestData.map(item => ({
+    let editedLazada: any[] = lazadaTestData.map(item => ({
       title: item["title"],
       image: item["img"],
-      price: "S$" + item["price"],
-      rating: parseFloat(item["review_info"]["average_score"]).toFixed(2) + " stars",
+      price: item["price"],
+      rating: parseFloat(item["review_info"]["average_score"]).toFixed(2),
       sales: item["sold_count"] + " sold",
       delivery: "",
       url: item["product_url"],
+      platform: "lazada"
     }))
     setLazada(editedLazada)
 
-    const editedEbay = ebayTestData.map(item => ({
+    let editedEbay: any[] = ebayTestData.map(item => ({
       title: item["title"],
       image: item["image"],
-      price: "S" + item["price"],
-      rating: item["rating"] === "" ? "No ratings found" : item["rating"] + " stars",
+      price: item["price"].split('$').length == 2
+             ? String((parseFloat(item["price"].slice(1)) * 1.36).toFixed(2))
+             : "Invalid price",
+      rating: item["rating"] === "" ? "No ratings found" : item["rating"],
       sales: "",
       delivery: item["shipping"],
       url: item["url"],
+      platform: "ebay"
     }))
+    editedEbay = editedEbay.filter(item => item.price != "Invalid price")
     setEbay(editedEbay)
 
-    const combined_array_of_products = amazonTestData.concat(lazadaTestData, ebayTestData);
+    const combined_array_of_products = editedAmazon.concat(editedLazada, editedEbay);
     combined_array_of_products.sort((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price));
     setCombined(combined_array_of_products.slice(0, 45))
     
     //uncomment below lines to use the e-commerce APIs
+    // let products: any = {
+    //   "amazon": [],
+    //   "lazada": [],
+    //   "ebay": []
+    // }
 
-    // fetch('https://real-time-amazon-data.p.rapidapi.com/search?query=' + item + '&country=SG', {
-    //   method: 'get',
-    //   headers: { 'X-RapidAPI-Key': 'ce3cc063f9msh6682049258d52bep1e8021jsn14b60338415f',
-    //              'X-RapidAPI-Host': 'real-time-amazon-data.p.rapidapi.com'
-    //    },
-    // })
-    // .then(res => res.json())
-    // .then(data => {
-    //   console.log(data);
+    // const api_key = '9d1c4db7e2msh7386f9b87aeb429p1fd40bjsn2d3e72d79474'
 
-    //   fetch('https://lazada-api.p.rapidapi.com/lazada/search/items?keywords=' + item + '&site=sg&page=1', {
-    //     method: 'get',
-    //     headers: { 'X-RapidAPI-Key': 'ce3cc063f9msh6682049258d52bep1e8021jsn14b60338415f',
-    //                'X-RapidAPI-Host': 'lazada-api.p.rapidapi.com'
-    //      },
+    // function getAmazonProducts() {
+    //   return fetch(`https://real-time-amazon-data.p.rapidapi.com/search?query=${item}&country=SG`, {
+    //     method: 'GET',
+    //     headers: {
+    //       'X-RapidAPI-Key': api_key,
+    //       'X-RapidAPI-Host': 'real-time-amazon-data.p.rapidapi.com'
+    //     },
     //   })
-    //   .then(res => res.json())
-    //   .then(data2 => {
-    //     console.log(data2);
-
-    //     fetch('https://ebay-search-result.p.rapidapi.com/search/' + item, {
-    //       method: 'get',
-    //       headers: { 'X-RapidAPI-Key': 'ce3cc063f9msh6682049258d52bep1e8021jsn14b60338415f',
-    //                  'X-RapidAPI-Host': 'ebay-search-result.p.rapidapi.com'
-    //        },
-    //     })
-    //     .then(res => res.json())
-    //     .then(data3 => {
-    //       console.log(data);
-    //       console.log(data2);
-    //       console.log(data3);
-
-    //       const amzn = data["data"]["products"];
-    //       const laz = data2["data"]["items"];
-    //       const e = data3["results"];
-
-    //       setAmazon(amzn.length == 0 ? null : amzn.slice(0, 5))
-    //       setLazada(laz.length == 0 ? null : laz.slice(0, 5))
-    //       setEbay(e.length == 0 ? null : e.slice(0,5))
-
-    //       for (let i = 0; i < amzn.length; i++) {
-    //         amzn[i]["price"] = amzn[i]["product_price"].slice(2);
-    //         amzn[i]["type"] = "amzn";
-    //       }
-
-    //       for (let i = 0; i < laz.length; i++) {
-    //         laz[i]["type"] = "lazada";
-    //       }
-
-    //       for (let i = 0; i < e.length; i++) {
-    //         e[i]["type"] = "ebay"
-    //         try {;
-    //           e[i]["price"] = String((parseFloat(e[i]["price"].slice(1)) * 1.36).toFixed(2));
-    //         }
-    //         catch(err) {
-    //           e[i]["type"] = "void";
-    //         }
-    //       }
-
-    //       const combined_array_of_products = amzn.concat(laz, e);
-
-    //       //sort by price in ascending order
-    //       // amzn.sort((a : any, b : any) => parseFloat(a["product_price"].slice(2)) - parseFloat(b["product_price"].slice(2)));
-          
-    //       // laz.sort((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price));
-
-    //       // e.sort((a : any, b : any) => parseFloat(a.price.slice(1)) - parseFloat(b.price.slice(1)));
-
-    //       combined_array_of_products.sort((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price));
-
-    //       setCombined(combined_array_of_products.slice(0, 45))
-         
-    //     })
-    //     .catch(error => console.error(error));
+    //   .then(res => {
+    //     if (!res.ok) {
+    //       console.error("Error fetching Amazon data")
+    //     }
+    //     console.log("Amazon success")
+    //     return res.json()
     //   })
-    //   .catch(error => console.error(error));
+    //   .then(data => {
+    //     const amazonData: any[] = data["data"]["products"]
+    //     let editedAmazon = amazonData.map(item => ({
+    //       title: item["product_title"],
+    //       image: item["product_photo"],
+    //       price: item["product_price"] == null
+    //              ? "Invalid price"
+    //              : item["product_price"].slice(2),
+    //       rating: item["product_star_rating"],
+    //       volume: item["sales_volume"],
+    //       delivery: item["delivery"],
+    //       url: item["product_url"],
+    //       platform: "amazon"
+    //     }))
+    //     editedAmazon = editedAmazon.filter(item => item.price != "Invalid price")
+    //     products["amazon"] = editedAmazon
+    //   })
+    // }
+
+    // function getLazadaProducts() {
+    //   return fetch(`https://lazada-api.p.rapidapi.com/lazada/search/items?keywords=${item}&site=sg&page=1`, {
+    //     method: 'GET',
+    //     headers: {
+    //       'X-RapidAPI-Key': api_key,
+    //       'X-RapidAPI-Host': 'lazada-api.p.rapidapi.com'
+    //     },
+    //   })
+    //   .then(res => {
+    //     if (!res.ok) {
+    //       console.error("Error fetching Lazada data")
+    //     }
+    //     console.log("Lazada success")
+    //     return res.json()
+    //   })
+    //   .then(data => {
+    //     const lazadaData: any[] = data["data"]["items"]
+    //     let editedLazada = lazadaData.map(item => ({
+    //       title: item["title"],
+    //       image: item["img"],
+    //       price: item["price"],
+    //       rating: item["review_info"]["average_score"] == ""
+    //               ? "No ratings found"
+    //               : parseFloat(item["review_info"]["average_score"]).toFixed(2),
+    //       sales: item["sold_count"] == null
+    //              ? ""
+    //              : item["sold_count"] + " sold",
+    //       delivery: "",
+    //       url: item["product_url"],
+    //       platform: "lazada"
+    //     }))
+    //     products["lazada"] = editedLazada
+    //   })
+    // }
+
+    // function getEbayProducts() {
+    //   return fetch(`https://ebay-search-result.p.rapidapi.com/search/${item}`, {
+    //     method: 'GET',
+    //     headers: {
+    //       'X-RapidAPI-Key': api_key,
+    //       'X-RapidAPI-Host': 'ebay-search-result.p.rapidapi.com'
+    //     },
+    //   })
+    //   .then(res => {
+    //     if (!res.ok) {
+    //       console.error("Error fetching Ebay data")
+    //     }
+    //     console.log("Ebay success")
+    //     return res.json()
+    //   })
+    //   .then(data => {
+    //     const ebayData: any[] = data["results"]
+    //     let editedEbay = ebayData.map(item => ({
+    //       title: item["title"],
+    //       image: item["image"],
+    //       price: item["price"].split('$').length == 2
+    //              ? String((parseFloat(item["price"].slice(1)) * 1.36).toFixed(2))
+    //              : "Invalid price",
+    //       rating: item["rating"] === "" ? "No ratings found" : item["rating"],
+    //       sales: "",
+    //       delivery: item["shipping"],
+    //       url: item["url"],
+    //       platform: "ebay"
+    //     }))
+    //     editedEbay = editedEbay.filter(item => item.price != "Invalid price")
+    //     products["ebay"] = editedEbay
+    //   })
+    // }
+    
+    // setIsLoading(true)
+    // Promise.all([
+    //   getAmazonProducts(),
+    //   getLazadaProducts(),
+    //   getEbayProducts()
+    // ])
+    // .then(res => {
+    //   let amazonResult: any[] = products["amazon"]
+    //   let lazadaResult: any[] = products["lazada"]
+    //   let ebayResult: any[] = products["ebay"]
+
+    //   let combined_products_array = amazonResult.concat(lazadaResult, ebayResult)
+    //   combined_products_array.sort((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price));
+    //   if (combined_products_array.length > 30) {
+    //     combined_products_array = combined_products_array.slice(0, 30)
+    //   }
+    //   setCombined(combined_products_array)
+
+    //   if (amazonResult.length > 10) {
+    //     amazonResult = amazonResult.slice(0, 10)
+    //   }
       
+    //   if (lazadaResult.length > 10) {
+    //     lazadaResult = lazadaResult.slice(0, 10)
+    //   }
+      
+    //   if (ebayResult.length > 10) {
+    //     ebayResult = ebayResult.slice(0, 10)
+    //   }
+
+    //   console.log(amazonResult)
+    //   console.log(lazadaResult)
+    //   console.log(ebayResult)
+
+    //   setAmazon(amazonResult)
+    //   setLazada(lazadaResult)
+    //   setEbay(ebayResult)
+    //   setIsLoading(false)
     // })
-    // .catch(error => console.error(error));
       
     setUserId(auth.currentUser?.uid)
   }, []);
 
-  if ((combined.length == 0)) {
+  if (isLoading) {
     return (
       <View style={styles.activityIndicator}>
         <ActivityIndicator size='large'/>
@@ -147,7 +225,8 @@ export default function result() {
     )
   }
 
-  if (price_comp) {
+  if (priceComp) {
+    console.log(combined)
     return (
       <ScrollView style={styles.container}>
         <LinearGradient
@@ -162,7 +241,9 @@ export default function result() {
         <View style={styles.buttons}>
           <Button
               title="Product search"
-              
+              onPress={() => {
+                setPrice(false)
+              }}
             />
           <Button
               title="Review Aggregation"
@@ -171,79 +252,20 @@ export default function result() {
         </View>
   
         <View style={styles.remainderContainer}>
-        {
-        combined.map((obj, index) => 
-          obj["type"] == 'amzn' ?
-          <View key={index} style={{marginLeft: 5}}>
-            <Text style={styles.header}>Amazon</Text>
-            <Text style={styles.words}>{obj["product_title"]}</Text>
-            <Image style={styles.image} source={{uri: obj["product_photo"]}}/>
-            <Text style={styles.price}>{obj["product_price"]}</Text>
-            <Text style={styles.price}>{obj["product_star_rating"] + " stars"}</Text>
-            <Text style={styles.desc}>{obj["sales_volume"]}</Text>
-            <Text style={styles.desc}>{obj["delivery"]}</Text>
-            <LikeButton 
-              userId={userId}
-              item={{
-                title: obj["product_title"],
-                image: obj["product_photo"],
-                price: obj["product_price"],
-                rating: obj["product_star_rating"] + " stars",
-                url: obj["product_url"],
-                others: obj["sales_volume"] + " | " + obj["delivery"]
-              }}
-            />
-          </View> : obj["type"] == 'lazada' ?
-
-          <View key={index} style={{marginLeft: 5}}>
-            <Text style={styles.header}>Lazada</Text>
-            <Text style={styles.words}>{obj["title"]}</Text>
-            <Image style={styles.image} source={{uri: obj["img"]}}/>
-            <Text style={styles.price}>{"S$" + obj["price"]}</Text>
-            <Text style={styles.price}>{parseFloat(obj["review_info"]["average_score"]).toFixed(2) + " stars"}</Text>
-            <Text style={styles.desc}>{obj["sold_count"] + " sold"}</Text>
-            <LikeButton 
-              userId={userId}
-              item={{
-                title: obj["title"],
-                image: obj["img"],
-                price: "S$" + obj["price"],
-                rating: parseFloat(obj["review_info"]["average_score"]).toFixed(2) + " stars",
-                url: obj["product_url"],
-                others: obj["sold_count"] + " sold"
-              }}
-            />
-          </View> : obj["type"] == 'ebay' ?
-
-          <View key={index} style={{marginLeft: 5}}>
-            <Text style={styles.header}>eBay</Text>
-            <Text style={styles.words}>{obj["title"]}</Text>
-            <Image style={styles.image} source={{uri: obj["image"]}}/>
-            <Text style={styles.price}>{"S$" + obj["price"]}</Text>
-            <Text style={styles.price}>{obj["rating"] === "" ? "" : obj["rating"] + " stars"}</Text>
-            <Text style={styles.desc}>{obj["shipping"]}</Text>
-            <LikeButton 
-              userId={userId}
-              item={{
-                title: obj["title"],
-                image: obj["image"],
-                price: "S" + obj["price"],
-                rating: obj["rating"] === "" ? "No ratings found" : obj["rating"] + " stars",
-                url: obj["url"],
-                others: obj["shipping"]
-              }}
-            />
-          </View> : <View></View>
-        )}
- 
-          </View>
+          <FlatList
+            data={combined}
+            renderItem={({ item }) => <PriceCompCard item={item} userId={userId}/>}
+            keyExtractor={(item, index) => index.toString()}
+            contentContainerStyle={{paddingHorizontal: 15, gap: 5}}
+          />
+        </View>
       </ScrollView>
     )
   }
     
   return (
     <ScrollView style={styles.container}>
-      {/* <LinearGradient
+      <LinearGradient
         // Background Linear Gradient
         colors={['#FDBBE2', '#FBEAEB']}
         style={styles.headerContainer}
@@ -262,7 +284,7 @@ export default function result() {
         <Button
             title="Review Aggregation"
           />
-      </View> */}
+      </View>
       
       <View style={styles.remainderContainer}>
         <Text style={styles.header2}>Amazon</Text>
