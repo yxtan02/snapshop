@@ -391,7 +391,7 @@ const styles = StyleSheet.create({
     fontFamily: "bold",
     marginLeft: 5,
     textAlign: 'center',
-    marginTop: 18,
+    marginTop: 20,
   },
   flatList: {
     width: "100%"

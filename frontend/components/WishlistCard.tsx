@@ -39,12 +39,17 @@ export default function WishlistCard({ item, isRefresh, setIsRefresh }: any) {
             />
           </View>
           <View style={styles.detailsContainer}>
-            <Text style={styles.price}>{item.price}</Text>
+            <Text style={styles.price}>S${item.price}</Text>
             <View style={styles.ratingContainer}>
               <AntDesign name="star" size={15} color="#ff6f00" style={styles.star}/>
-              <Text style={styles.rating}>{item.rating}</Text>
+              <Text style={styles.rating}>
+                {item.rating == "No ratings found"
+                 ? item.rating
+                 : item.rating + " stars"}
+              </Text>
             </View>
-            <Text numberOfLines={2} style={styles.others}>{item.others}</Text>
+            {item.sales !== "" && <Text style={styles.others}>{item.sales}</Text>}
+            {item.delivery !== "" && <Text style={styles.others}>{item.delivery}</Text>}
             <View style={styles.buttonsContainer}>
               <Pressable
                 onPress={() => Linking.openURL(item.url)
@@ -135,7 +140,7 @@ const styles = StyleSheet.create({
   },
   others: {
     fontFamily: "light",
-    fontSize: 13,
+    fontSize: 12,
   },
   buttonsContainer: {
     flexDirection: "column",

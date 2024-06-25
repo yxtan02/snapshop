@@ -18,7 +18,11 @@ export default function ProductCard({ item, userId }: any) {
             <Text style={styles.price}>S${item.price}</Text>
             <View style={styles.ratingContainer}>
               <AntDesign name="star" size={15} color="#ff6f00" style={styles.star}/>
-              <Text style={styles.rating}>{item.rating} stars</Text>
+              <Text style={styles.rating}>
+                {item.rating == "No ratings found"
+                 ? item.rating
+                 : item.rating + " stars"}
+              </Text>
             </View>
             <View style={styles.descriptionContainer}>
               {item.sales !== "" && <Text style={styles.sales}>{item.sales}</Text>}
