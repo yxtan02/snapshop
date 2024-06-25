@@ -4,6 +4,7 @@ import { Redirect, router } from 'expo-router'
 import { auth } from '../../../firebaseConfig.js'
 import { icons } from "../../../constants"
 import MenuTab from '../../../components/MenuTab'
+import Header from '../../../components/Header'
 
 export default function profile() {
   if (!auth.currentUser) {
@@ -14,9 +15,7 @@ export default function profile() {
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
       <View style={styles.container}>
-        <View style={styles.headerContainer}>
-          <Text style={styles.header}>Profile</Text>
-        </View>
+        <Header title="Profile" backButton={false} />
         <View style={styles.userContainer}>
           <Image
             source={icons.profile}
@@ -63,19 +62,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     alignItems: "center"
-  },
-  headerContainer: {
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "#83829A"
-  },
-  header: {
-    fontFamily: "semiBold",
-    fontSize: 26,
-    marginTop: 15,
-    marginBottom: 2
   },
   userContainer: {
     justifyContent: "center",

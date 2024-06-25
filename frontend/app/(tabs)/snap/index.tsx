@@ -7,6 +7,7 @@ import Button from '../../../components/IconButton';
 import { auth, db, storage } from '../../../firebaseConfig.js';
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { ref, uploadBytes } from "firebase/storage";
+import Header from '../../../components/Header';
 
 
 export default function snap() {
@@ -123,16 +124,14 @@ export default function snap() {
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
       <View style={styles.container}>
-        <View style={styles.headerContainer}>
-          <Text style={styles.header}>Snap</Text>
-        </View>
+        <Header title="Snap" backButton={false} />
         <View style={styles.infoContainer}>
           <Text style={styles.info}>Find your desired product simply by taking or uploading a photo</Text>
         </View>
         <View style={styles.buttonContainer}>
           <Button label="Take a photo" name="picture-o" onPress={takePhoto}/>
           <Button label="Upload a photo" name="camera" onPress={uploadPhoto}/>
-          <Button label="result" onPress={() => router.navigate('/snap/result')}/>
+          <Button label="result" onPress={() => router.navigate('/snap/result?item=a+gold+watch+with+a+black+square+face')}/>
         </View>
         <Image
           resizeMode='contain'
@@ -155,20 +154,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     alignItems: "center",
-  },
-  headerContainer: {
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: "#83829A",
-    // backgroundColor: '#FCEBF5'
-  },
-  header: {
-    fontFamily: "semiBold",
-    fontSize: 26,
-    marginTop: 15,
-    marginBottom: 2
   },
   infoContainer: {
     justifyContent: "center",

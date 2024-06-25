@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Button, FlatList, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Button, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { auth } from '../../../firebaseConfig.js';
 import LikeButton from '../../../components/LikeButton';
 import ProductCard from '../../../components/ProductCard';
 import PriceCompCard from '../../../components/PriceCompCard';
+import SmallButton from '../../../components/SmallButton';
+import Header from '../../../components/Header';
 
 export default function result() {
   const { item } = useLocalSearchParams()
@@ -204,10 +207,6 @@ export default function result() {
     //     ebayResult = ebayResult.slice(0, 10)
     //   }
 
-    //   console.log(amazonResult)
-    //   console.log(lazadaResult)
-    //   console.log(ebayResult)
-
     //   setAmazon(amazonResult)
     //   setLazada(lazadaResult)
     //   setEbay(ebayResult)
@@ -228,7 +227,7 @@ export default function result() {
   if (priceComp) {
     console.log(combined)
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.scrollView}>
         <LinearGradient
           // Background Linear Gradient
           colors={['#FDBBE2', '#FBEAEB']}
@@ -238,7 +237,8 @@ export default function result() {
           <Text style={styles.description}>{item}</Text>
         </LinearGradient>
   
-        <View style={styles.buttons}>
+        <View style={styles.buttonContainer}>
+    
           <Button
               title="Product search"
               onPress={() => {
@@ -251,7 +251,7 @@ export default function result() {
             />
         </View>
   
-        <View style={styles.remainderContainer}>
+        <View style={styles.mainContainer}>
           <FlatList
             data={combined}
             renderItem={({ item }) => <PriceCompCard item={item} userId={userId}/>}
@@ -264,81 +264,122 @@ export default function result() {
   }
     
   return (
-    <ScrollView style={styles.container}>
-      <LinearGradient
-        // Background Linear Gradient
-        colors={['#FDBBE2', '#FBEAEB']}
-        style={styles.headerContainer}
-        locations={[0.5, 0.8]}
-      >
-        <Text style={styles.description}>{item}</Text>
-      </LinearGradient>
+    <SafeAreaView style={styles.safeAreaContainer}>
+      <Header title="Result" backButton={true}/>
+      <ScrollView style={styles.scrollView}>
+        <LinearGradient
+          colors={['#F7CED7FF', '#FBEAEB']}
+          style={styles.headerContainer}
+          locations={[0.8, 1]}
+        >
+          <View style={styles.headerTextContainer}>
+            <Text style={styles.header}>Detected product:</Text>
+            <Text style={styles.detectedProduct}>{item}</Text>
+          </View>
+        </LinearGradient>
 
-      <View style={styles.buttons}>
-        <Button
+        <View style={styles.buttonContainer}>
+          <SmallButton
             title="Sort by cheapest"
-            onPress={() => {
-              setPrice(true)
-            }}
+            onPress={() => setPrice(true)}
+            containerStyle={styles.button}
           />
-        <Button
+          <SmallButton
             title="Review Aggregation"
+            containerStyle={styles.button}
           />
-      </View>
-      
-      <View style={styles.remainderContainer}>
-        <Text style={styles.header2}>Amazon</Text>
-        {amazon == null ? <Text style={styles.words}>No results found</Text> :
-        <FlatList
-          data={amazon}
-          renderItem={({ item }) => <ProductCard item={item} userId={userId}/>}
-          keyExtractor={(item, index) => index.toString()}
-          horizontal
-          contentContainerStyle={{paddingHorizontal: 15, gap: 5}}
-        />}
-
-        <Text style={styles.header2}>Lazada</Text>
-        {lazada == null ? <Text style={styles.words}>No results found</Text> :
-        <FlatList
-          data={lazada}
-          renderItem={({ item }) => <ProductCard item={item} userId={userId}/>}
-          keyExtractor={(item, index) => index.toString()}
-          horizontal
-          contentContainerStyle={{paddingHorizontal: 15, gap: 5}}
-        />}
-          
-        <Text style={styles.header2}>eBay</Text>
-        {ebay == null ? <Text style={styles.words}>No results found</Text> :
-        <FlatList
-          data={ebay}
-          renderItem={({ item }) => <ProductCard item={item} userId={userId}/>}
-          keyExtractor={(item, index) => index.toString()}
-          horizontal
-          contentContainerStyle={{paddingHorizontal: 15, gap: 5}}
-        />}
         </View>
-    </ScrollView>
+        
+        <View style={styles.mainContainer}>
+          <Text style={styles.title}>Amazon</Text>
+          
+          {amazon.length == 0 ? <Text style={styles.words}>No results found</Text> :
+          <FlatList
+            data={amazon}
+            renderItem={({ item }) => <ProductCard item={item} userId={userId}/>}
+            keyExtractor={(item, index) => index.toString()}
+            horizontal
+            contentContainerStyle={{ gap: 5 }}
+          />}
+
+          <Text style={styles.title}>Lazada</Text>
+          {lazada.length == 0 ? <Text style={styles.words}>No results found</Text> :
+          <FlatList
+            data={lazada}
+            renderItem={({ item }) => <ProductCard item={item} userId={userId}/>}
+            keyExtractor={(item, index) => index.toString()}
+            horizontal
+            contentContainerStyle={{ gap: 5 }}
+          />}
+            
+          <Text style={styles.title}>eBay</Text>
+          {ebay.length == 0 ? <Text style={styles.words}>No results found</Text> :
+          <FlatList
+            data={ebay}
+            renderItem={({ item }) => <ProductCard item={item} userId={userId}/>}
+            keyExtractor={(item, index) => index.toString()}
+            horizontal
+            contentContainerStyle={{ gap: 5 }}
+          />}
+          </View>
+      </ScrollView>
+    </SafeAreaView>
   )
 }
 
 
 const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
+  safeAreaContainer :{
+    width: "100%",
+    height: "100%",
     backgroundColor: '#FBEAEB',
-    borderColor: '#FBEAEB',
-    marginBottom: -5
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  scrollView: {
+    width: "100%",
+    height: "100%",
   },
   headerContainer: {
-    // flex: 1,
     alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#835A72",
-    width: '100%',
-    height: 200
+    width: "100%",
+    height: 128
   },
-  remainderContainer: {
-    // flex: 20
+  headerTextContainer: {
+    width: "100%",
+    height: "80%",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 2,
+  },
+  header: {
+    fontFamily: "bold",
+    fontSize: 18,
+    textDecorationLine: "underline",
+  },
+  detectedProduct: {
+    fontFamily: "medium",
+    fontSize: 18,
+    textAlign: "center",
+  },
+  buttonContainer: {
+    width: "100%",
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
+  button: {
+    width: "35%"
+  },
+  mainContainer: {
+    alignItems: "flex-start",
+    marginLeft: 15,
+  },
+  title: {
+    fontSize: 24,
+    fontFamily: "bold",
+    marginLeft: 5,
+    marginTop: 16,
+    textAlign: 'center'
   },
   description: {
     fontSize: 40,
@@ -353,23 +394,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     alignSelf: 'center'
   },
-  header: {
-    fontSize: 20,
-    color: "black",
-    fontWeight: "bold",
-    // fontFamily: 'monospace',
-    marginLeft: 5,
-    // marginTop: 5,
-    textAlign: 'center'
-  },
-  header2: {
-    fontSize: 30,
-    fontFamily: "bold",
-    // fontFamily: 'monospace',
-    marginLeft: 5,
-    marginTop: 5,
-    textAlign: 'center'
-  },
+  
   words: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -396,11 +421,6 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     alignItems:'center',
     justifyContent:'center'
-  },
-  buttons: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
   },
 });
 

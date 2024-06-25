@@ -74,8 +74,8 @@ const styles = StyleSheet.create({
       padding: 10,
       borderRadius: 10,
       borderWidth: 1,
-      borderColor: '#ccc',
-      marginTop: 5,
+      borderColor: '#e0e0e0',
+      marginTop: 6,
       justifyContent: "center",
     },
     parentContainer: {

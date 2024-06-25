@@ -5,6 +5,7 @@ import { Redirect } from 'expo-router';
 import { auth, db } from '../../firebaseConfig.js';
 import { collection, getDocs, orderBy, query } from "firebase/firestore"; 
 import WishlistCard from "../../components/WishlistCard";
+import Header from '../../components/Header';
 
 export default function wishlist() {
   const [wishlist, setWishlist] = useState<any[]>([])
@@ -32,10 +33,9 @@ export default function wishlist() {
   
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
+      
       <View style={styles.container}>
-        <View style={styles.headerContainer}>
-          <Text style={styles.header}>Wishlist</Text>
-        </View>
+        <Header title="Wishlist" backButton={false} />
         <FlatList
           data={wishlist}
           keyExtractor={(item) => item.docId}
@@ -59,20 +59,6 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     backgroundColor: '#F7CED7FF',
-  },
-  headerContainer: {
-    width: "100%",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: '#FBEAEB',
-    // borderBottomWidth: 1,
-    // borderBottomColor: "#83829A",
-  },
-  header: {
-    fontFamily: "semiBold",
-    fontSize: 26,
-    marginTop: 15,
-    marginBottom: 2
   },
   flatlist: {
     width: "95%"

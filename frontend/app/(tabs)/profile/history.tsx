@@ -5,6 +5,7 @@ import { Redirect } from 'expo-router';
 import { auth, db } from '../../../firebaseConfig.js';
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import HistoryCard from "../../../components/HistoryCard";
+import Header from '../../../components/Header';
 
 export default function history() {
   const [history, setHistory] = useState<any[]>([])
@@ -33,6 +34,7 @@ export default function history() {
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
       <View style={styles.container}>
+        <Header title="History" backButton={true} />
         <FlatList
           data={history}
           keyExtractor={(item) => item.docId}

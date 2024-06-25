@@ -71,8 +71,8 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#ccc',
-    marginTop: 5,
+    borderColor: '#e0e0e0',
+    marginTop: 6,
     gap: 12,
   },
   container: {
