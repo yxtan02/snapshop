@@ -1,4 +1,4 @@
-import { Linking, Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 import { doc, deleteDoc } from "firebase/firestore";
 import { db } from '../firebaseConfig.js'
 import { AntDesign, Ionicons } from '@expo/vector-icons';
@@ -48,7 +48,7 @@ export default function WishlistCard({ item, isRefresh, setIsRefresh }: any) {
             <View style={styles.buttonsContainer}>
               <Pressable
                 onPress={() => Linking.openURL(item.url)
-                                .catch((err) => console.error('Failed to open url', err))}
+                               .catch((err) => console.error('Failed to open url', err))}
                 style={styles.buyButton}
               >
                 <Text style={styles.buyButtonText}>Buy now!</Text>

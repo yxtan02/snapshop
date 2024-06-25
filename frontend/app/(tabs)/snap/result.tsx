@@ -4,7 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { auth } from '../../../firebaseConfig.js';
-import LikeButton from '../../../components/LikeButton';
 import ProductCard from '../../../components/ProductCard';
 import PriceCompCard from '../../../components/PriceCompCard';
 import SmallButton from '../../../components/SmallButton';
@@ -27,8 +26,12 @@ export default function result() {
       image: item["product_photo"],
       price: item["product_price"].slice(2),
       rating: item["product_star_rating"],
-      volume: item["sales_volume"],
-      delivery: item["delivery"],
+      sales: item["sales_volume"] == null
+             ? ""
+             : item["sales_volume"],
+      delivery: item["delivery"] == null
+                ? ""
+                : item["delivery"],
       url: item["product_url"],
       platform: "amazon"
     }))
@@ -90,19 +93,23 @@ export default function result() {
     //     return res.json()
     //   })
     //   .then(data => {
-    //     const amazonData: any[] = data["data"]["products"]
-    //     let editedAmazon = amazonData.map(item => ({
-    //       title: item["product_title"],
-    //       image: item["product_photo"],
-    //       price: item["product_price"] == null
-    //              ? "Invalid price"
-    //              : item["product_price"].slice(2),
-    //       rating: item["product_star_rating"],
-    //       volume: item["sales_volume"],
-    //       delivery: item["delivery"],
-    //       url: item["product_url"],
-    //       platform: "amazon"
-    //     }))
+        // const amazonData: any[] = data["data"]["products"]
+        // let editedAmazon = amazonData.map(item => ({
+        //   title: item["product_title"],
+        //   image: item["product_photo"],
+        //   price: item["product_price"] == null
+        //          ? "Invalid price"
+        //          : item["product_price"].slice(2),
+        //   rating: item["product_star_rating"],
+        //   sales: item["sales_volume"] == null
+        //          ? ""
+        //          : item["sales_volume"],
+        //   delivery: item["delivery"] == null
+        //             ? ""
+        //             : item["delivery"],
+        //   url: item["product_url"],
+        //   platform: "amazon"
+        // }))
     //     editedAmazon = editedAmazon.filter(item => item.price != "Invalid price")
     //     products["amazon"] = editedAmazon
     //   })
@@ -262,7 +269,6 @@ export default function result() {
       </ScrollView>
     )
   }
-    
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
       <Header title="Result" backButton={true}/>
@@ -299,7 +305,8 @@ export default function result() {
             renderItem={({ item }) => <ProductCard item={item} userId={userId}/>}
             keyExtractor={(item, index) => index.toString()}
             horizontal
-            contentContainerStyle={{ gap: 5 }}
+            contentContainerStyle={{ gap: 8 }}
+            style={styles.flatList}
           />}
 
           <Text style={styles.title}>Lazada</Text>
@@ -309,7 +316,8 @@ export default function result() {
             renderItem={({ item }) => <ProductCard item={item} userId={userId}/>}
             keyExtractor={(item, index) => index.toString()}
             horizontal
-            contentContainerStyle={{ gap: 5 }}
+            contentContainerStyle={{ gap: 8 }}
+            style={styles.flatList}
           />}
             
           <Text style={styles.title}>eBay</Text>
@@ -319,7 +327,8 @@ export default function result() {
             renderItem={({ item }) => <ProductCard item={item} userId={userId}/>}
             keyExtractor={(item, index) => index.toString()}
             horizontal
-            contentContainerStyle={{ gap: 5 }}
+            contentContainerStyle={{ gap: 8 }}
+            style={styles.flatList}
           />}
           </View>
       </ScrollView>
@@ -343,14 +352,14 @@ const styles = StyleSheet.create({
   headerContainer: {
     alignItems: "center",
     width: "100%",
-    height: 128
+    height: 110
   },
   headerTextContainer: {
     width: "100%",
-    height: "80%",
+    height: "90%",
     justifyContent: "center",
     alignItems: "center",
-    gap: 2,
+    paddingHorizontal: 12,
   },
   header: {
     fontFamily: "bold",
@@ -365,21 +374,27 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: "100%",
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
+    marginTop: 5,
+    paddingHorizontal: 20,
   },
   button: {
-    width: "35%"
+    width: "38%"
   },
   mainContainer: {
     alignItems: "flex-start",
-    marginLeft: 15,
+    paddingLeft: 15,
+    marginBottom: 12,
   },
   title: {
     fontSize: 24,
     fontFamily: "bold",
     marginLeft: 5,
-    marginTop: 16,
-    textAlign: 'center'
+    textAlign: 'center',
+    marginTop: 18,
+  },
+  flatList: {
+    width: "100%"
   },
   description: {
     fontSize: 40,

@@ -1,13 +1,13 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, Linking, StyleSheet, Text, View } from 'react-native'
 import LikeButton from './LikeButton';
+import SmallButton from './SmallButton';
 import { AntDesign } from '@expo/vector-icons';
 
 export default function ProductCard({ item, userId }: any) {
   return (
     <View style={styles.cardContainer}>
-      <View style={styles.container}>
         <View style={styles.titleContainer}>
-            <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.title}>{item.title}</Text>
         </View>
         <Image
             source={{uri: item.image}}
@@ -17,26 +17,30 @@ export default function ProductCard({ item, userId }: any) {
         <View style={styles.detailsContainer}>
             <Text style={styles.price}>S${item.price}</Text>
             <View style={styles.ratingContainer}>
-              <AntDesign name="star" size={15} color="#ff6f00"/>
+              <AntDesign name="star" size={15} color="#ff6f00" style={styles.star}/>
               <Text style={styles.rating}>{item.rating} stars</Text>
             </View>
-            <Text style={styles.desc}>{item.sales}</Text>
-            <Text style={styles.desc}>{item.delivery}</Text>
+            <View style={styles.descriptionContainer}>
+              {item.sales !== "" && <Text style={styles.sales}>{item.sales}</Text>}
+              {item.delivery !== "" && <Text style={styles.delivery}>{item.delivery}</Text>}
+            </View>
+            <View style={styles.buttonContainer}>
+              <SmallButton
+                title="Buy now!"
+                onPress={() => Linking.openURL(item.url)
+                               .catch((err) => console.error('Failed to open url', err))}
+                containerStyle={{ width: 80, height: 34 }}
+              />
+              <LikeButton userId={userId} item={item} />
+            </View>
         </View>
-      </View>
-      <View style={styles.buttonContainer}>
-        <LikeButton 
-            userId={userId}
-            item={item}
-        />
-      </View>
+      
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   cardContainer: {
-    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: '#FBEAEB',
@@ -44,54 +48,74 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#e0e0e0',
-  },
-  container: {
-    flexDirection: "column",
+    width: 275,
   },
   titleContainer: {
-
+    width: "100%",
+    paddingHorizontal: 4,
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     fontFamily: "semiBold",
-    fontSize: 20,
-    // color: "brown",
-    textAlign: 'center',
-    marginBottom: 5,
-    marginTop: 20,
+    fontSize: 16,
+    textAlign: "center",
+    marginBottom: 12,
   },
   image: {
-    width: 256,
-    height: 256,
+    width: 200,
+    height: 200,
     borderRadius: 2,
-    marginBottom: 5,
     alignSelf: 'center',
   },
   detailsContainer: {
-    gap: 0,
+    marginTop: 18,
+    justifyContent: "center",
+    alignItems: "center",
   },
   price: {
     fontFamily: "semiBold",
-    fontSize: 20,
+    fontSize: 18,
     color: "#c2185b",
-    textAlign: 'center'
+    textAlign: 'center',
+    lineHeight: 24
   },
   ratingContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: 2,
+  },
+  star: {
+    marginBottom: 2,
   },
   rating: {
     fontFamily: "medium",
-    fontSize: 20,
+    fontSize: 18,
     color: "#ff6f00",
     textAlign: 'center',
-    marginLeft: 4
+    marginLeft: 4,
+    lineHeight: 24
   },
-  desc: {
-    fontSize: 16,
+  descriptionContainer: {
+    marginTop: 4,
+    marginBottom: 10,
+  },
+  sales: {
+    fontSize: 14,
     fontFamily: "regular",
-    textAlign: 'center'
+    textAlign: 'center',
+    lineHeight: 20
+  },
+  delivery: {
+    fontSize: 14,
+    fontFamily: "regular",
+    textAlign: 'center',
   },
   buttonContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 18,
   },
 });
