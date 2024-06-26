@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F7CED7FF',
   },
   flatlist: {
-    width: "95%"
+    width: "95%",
+    marginBottom: 12,
   },
 })

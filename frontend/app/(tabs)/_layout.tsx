@@ -28,24 +28,6 @@ function TabIcon({ icon, color, name, focused } : any) {
 };
 
 export default function TabsLayout() {
-  const [fontsLoaded, error] = useFonts({
-    bold: require("../../assets/fonts/Poppins-Bold.ttf"),
-    extraBold: require("../../assets/fonts/Poppins-ExtraBold.ttf"),
-    extraLight: require("../../assets/fonts/Poppins-ExtraLight.ttf"),
-    light: require("../../assets/fonts/Poppins-Light.ttf"),
-    medium: require("../../assets/fonts/Poppins-Medium.ttf"),
-    regular: require("../../assets/fonts/Poppins-Regular.ttf"),
-    semiBold: require("../../assets/fonts/Poppins-SemiBold.ttf"),
-    thin: require("../../assets/fonts/Poppins-Thin.ttf"),
-  })
-
-  useEffect(() => {
-    if (error) throw error
-    if (fontsLoaded) SplashScreen.hideAsync()
-  }, [fontsLoaded, error])
-
-  if (!fontsLoaded && !error) return null
-
   return (
     <>
       <Tabs
@@ -54,7 +36,7 @@ export default function TabsLayout() {
             tabBarActiveTintColor: "#2A4D50",
             tabBarInactiveTintColor: "#83829A",
             tabBarStyle: {
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "#ffebee",
               height: 84
             }
         }}

@@ -14,7 +14,6 @@ export default function result() {
   const [amazon, setAmazon] = useState<any[]>([])
   const [lazada, setLazada] = useState<any[]>([])
   const [ebay, setEbay] = useState<any[]>([])
-  // const [combined, setCombined] = useState<any[]>([])
   const [priceComp, setPriceComp] = useState(false)
   const [combinedPrice, setCombinedPrice] = useState<any[]>([])
   const [reviewAggre, setReviewAggre] = useState(false)
@@ -31,56 +30,57 @@ export default function result() {
 
   useEffect(() => {
     // for testing
-    // let editedAmazon: any[] = amazonTestData.map(item => ({
-    //   title: item["product_title"],
-    //   image: item["product_photo"],
-    //   price: item["product_price"].slice(2),
-    //   rating: item["product_star_rating"],
-    //   sales: item["sales_volume"] == null
-    //          ? ""
-    //          : item["sales_volume"],
-    //   delivery: item["delivery"] == null
-    //             ? ""
-    //             : item["delivery"],
-    //   url: item["product_url"],
-    //   platform: "amazon"
-    // }))
-    // setAmazon(editedAmazon)
+    let editedAmazon: any[] = amazonTestData.map(item => ({
+      title: item["product_title"],
+      image: item["product_photo"],
+      price: item["product_price"].slice(2),
+      rating: item["product_star_rating"],
+      sales: item["sales_volume"] == null
+             ? ""
+             : item["sales_volume"],
+      delivery: item["delivery"] == null
+                ? ""
+                : item["delivery"],
+      url: item["product_url"],
+      platform: "amazon"
+    }))
+    setAmazon(editedAmazon)
 
-    // let editedLazada: any[] = lazadaTestData.map(item => ({
-    //   title: item["title"],
-    //   image: item["img"],
-    //   price: item["price"],
-    //   rating: parseFloat(item["review_info"]["average_score"]).toFixed(2),
-    //   sales: item["sold_count"] + " sold",
-    //   delivery: "",
-    //   url: item["product_url"],
-    //   platform: "lazada"
-    // }))
-    // setLazada(editedLazada)
+    let editedLazada: any[] = lazadaTestData.map(item => ({
+      title: item["title"],
+      image: item["img"],
+      price: item["price"],
+      rating: parseFloat(item["review_info"]["average_score"]).toFixed(2),
+      sales: item["sold_count"] + " sold",
+      delivery: "",
+      url: item["product_url"],
+      platform: "lazada"
+    }))
+    setLazada(editedLazada)
 
-    // let editedEbay: any[] = ebayTestData.map(item => ({
-    //   title: item["title"],
-    //   image: item["image"],
-    //   price: item["price"].split('$').length == 2
-    //          ? String((parseFloat(item["price"].slice(1)) * 1.36).toFixed(2))
-    //          : "Invalid price",
-    //   rating: item["rating"] === "" ? "No ratings found" : item["rating"],
-    //   sales: "",
-    //   delivery: item["shipping"],
-    //   url: item["url"],
-    //   platform: "ebay"
-    // }))
-    // editedEbay = editedEbay.filter(item => item.price != "Invalid price")
-    // setEbay(editedEbay)
+    let editedEbay: any[] = ebayTestData.map(item => ({
+      title: item["title"],
+      image: item["image"],
+      price: item["price"].split('$').length == 2
+             ? String((parseFloat(item["price"].slice(1)) * 1.36).toFixed(2))
+             : "Invalid price",
+      rating: item["rating"] === "" ? "No ratings found" : item["rating"],
+      sales: "",
+      delivery: item["shipping"],
+      url: item["url"],
+      platform: "ebay"
+    }))
+    editedEbay = editedEbay.filter(item => item.price != "Invalid price")
+    setEbay(editedEbay)
 
-    // let combined = editedAmazon.concat(editedLazada, editedEbay);
-    // const sortedPrice = combined.toSorted((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price))
-    // setCombinedPrice(sortedPrice.slice(0, 30))
+    let combinedPriceArray = editedAmazon.concat(editedLazada, editedEbay);
+    combinedPriceArray.sort((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price))
+    setCombinedPrice(combinedPriceArray.slice(0, 30))
 
-    // combined = combined.filter(item => item.rating != "No ratings found")
-    // const sortedReview = combined.toSorted((a : any, b : any) => parseFloat(b.rating) - parseFloat(a.rating))
-    // setCombinedReview(sortedReview.slice(0, 30))
+    let combinedReviewArray = editedAmazon.concat(editedLazada, editedEbay);
+    combinedReviewArray = combinedReviewArray.filter(item => item.rating != "No ratings found")
+    combinedReviewArray.sort((a : any, b : any) => parseFloat(b.rating) - parseFloat(a.rating))
+    setCombinedReview(combinedReviewArray.slice(0, 30))
     
     //uncomment below lines to use the e-commerce APIs
     let products: any = {
@@ -202,40 +202,41 @@ export default function result() {
       })
     }
     
-    setIsLoading(true)
-    Promise.all([
-      getAmazonProducts(),
-      getLazadaProducts(),
-      getEbayProducts()
-    ])
-    .then(res => {
-      let amazonResult: any[] = products["amazon"]
-      let lazadaResult: any[] = products["lazada"]
-      let ebayResult: any[] = products["ebay"]
+    // setIsLoading(true)
+    // Promise.all([
+    //   getAmazonProducts(),
+    //   getLazadaProducts(),
+    //   getEbayProducts()
+    // ])
+    // .then(res => {
+    //   let amazonResult: any[] = products["amazon"]
+    //   let lazadaResult: any[] = products["lazada"]
+    //   let ebayResult: any[] = products["ebay"]
 
-      let combined = amazonResult.concat(lazadaResult, ebayResult)
-      const sortedPrice = combined.toSorted((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price))
-      setCombinedPrice(sortedPrice.slice(0, 30))
+    //   let combinedPriceArray = amazonResult.concat(lazadaResult, ebayResult)
+    //   combinedPriceArray.sort((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price))
+    //   setCombinedPrice(combinedPriceArray.slice(0, 30))
 
-      combined = combined.filter(item => item.rating != "No ratings found")
-      const sortedReview = combined.toSorted((a : any, b : any) => parseFloat(b.rating) - parseFloat(a.rating))
-      setCombinedReview(sortedReview.slice(0, 30))
+    //   let combinedReviewArray = amazonResult.concat(lazadaResult, ebayResult)
+    //   combinedReviewArray = combinedReviewArray.filter(item => item.rating != "No ratings found")
+    //   combinedReviewArray.sort((a : any, b : any) => parseFloat(b.rating) - parseFloat(a.rating))
+    //   setCombinedReview(combinedReviewArray.slice(0, 30))
 
-      setAmazon(amazonResult.slice(0, 10))
-      setLazada(lazadaResult.slice(0, 10))
-      setEbay(ebayResult.slice(0, 10))
-      setIsLoading(false)
-    })      
+    //   setAmazon(amazonResult.slice(0, 10))
+    //   setLazada(lazadaResult.slice(0, 10))
+    //   setEbay(ebayResult.slice(0, 10))
+    //   setIsLoading(false)
+    // })      
   }, []);
 
   if (isLoading) {
     return (
-      <>
+      <SafeAreaView style={{ width: "100%", height: "100%" }}>
         <Header title="Result" backButton={true}/>
         <View style={styles.activityIndicator}>
           <ActivityIndicator size='large'/>
         </View>
-      </>
+      </SafeAreaView>
     )
   }
 
@@ -281,13 +282,9 @@ export default function result() {
       </View>
   
       <View style={styles.priceCompResultContainer}>
-        <FlatList
-          data={combinedPrice}
-          renderItem={({ item }) => <ProductCardHorizontal item={item} userId={userId}/>}
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{ gap: 6}}
-          style={{ width: "95%", marginTop: 20 }}
-        />
+        {combinedPrice.map((item, index) => (
+          <ProductCardHorizontal key={index} item={item} userId={userId}/>
+        ))}
       </View>
     </>
   )
@@ -311,13 +308,9 @@ export default function result() {
       </View>
 
       <View style={styles.reviewAggreContainer}>
-        <FlatList
-          data={combinedReview}
-          renderItem={({ item }) => <ProductCardHorizontal item={item} userId={userId}/>}
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{ gap: 6}}
-          style={{ width: "95%", marginTop: 20 }}
-        />
+        {combinedReview.map((item, index) => (
+          <ProductCardHorizontal key={index} item={item} userId={userId}/>
+        ))}
       </View>
     </>
   )
@@ -360,6 +353,11 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
+  activityIndicator: {
+    flex: 1,
+    alignItems:'center',
+    justifyContent:'center'
+  },
   headerContainer: {
     alignItems: "center",
     width: "100%",
@@ -398,18 +396,20 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   priceCompResultContainer: {
+    width: "95%",
     alignItems: "center",
     justifyContent: "center",
+    marginTop: 20,
+    marginBottom: 12,
+    gap: 6,
   },
   reviewAggreContainer: {
+    width: "95%",
     alignItems: "center",
     justifyContent: "center",
-  },
-  activityIndicator: {
-    flex: 1,
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'center'
+    marginTop: 20,
+    marginBottom: 12,
+    gap: 6,
   },
 });
 

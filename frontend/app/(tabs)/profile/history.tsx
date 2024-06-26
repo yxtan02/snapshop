@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   flatlist: {
-    width: "95%"
+    width: "95%",
+    marginBottom: 12,
   }
 })

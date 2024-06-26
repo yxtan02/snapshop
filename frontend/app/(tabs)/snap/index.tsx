@@ -51,7 +51,6 @@ export default function snap() {
     let result = await func({
       allowsEditing: true,
       quality: 1,
-      base64: true
     });
 
     if (!result.canceled) {
@@ -131,7 +130,7 @@ export default function snap() {
         <View style={styles.buttonContainer}>
           <Button label="Take a photo" name="picture-o" onPress={takePhoto}/>
           <Button label="Upload a photo" name="camera" onPress={uploadPhoto}/>
-          {/* <Button label="result" onPress={() => router.navigate('/snap/result?item=a+gold+watch+with+a+black+square+face')}/> */}
+          <Button label="result" onPress={() => router.navigate('/snap/result?item=a+gold+watch+with+a+black+square+face')}/>
         </View>
         <Image
           resizeMode='contain'
