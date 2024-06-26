@@ -47,7 +47,7 @@ export default function WishlistCard({ item, isRefresh, setIsRefresh }: any) {
               title="Buy now!"
               onPress={() => Linking.openURL(item.url)
                             .catch((err) => console.error('Failed to open url', err))}
-              containerStyle={{ width: "62%" }}
+              containerStyle={{ width: 70, height: 31 }}
             />
             <Ionicons
               name="trash"
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     backgroundColor: '#FBEAEB',
-    padding: 12,
+    padding: 14,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#e0e0e0',
@@ -88,21 +88,26 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     flexDirection: "row",
+    width: "100%",
   },
   image: {
     width: "52%",
-    height: 135,
+    height: 150,
     borderRadius: 2,
+    alignSelf: 'center',
   },
   detailsContainer: {
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     width: "48%",
-    paddingLeft: 18,
-    gap: 3,
+    padding: 2,
   },
   price: {
     fontFamily: "semiBold",
+    color: "#c2185b",
+    textAlign: 'center',
+    lineHeight: 22,
   },
   ratingContainer: {
     flexDirection: "row",
@@ -114,28 +119,25 @@ const styles = StyleSheet.create({
     fontFamily: "medium",
     marginLeft: 4,
     color: "#ff6f00",
-  },
-  others: {
-    fontFamily: "light",
-    fontSize: 12,
+    textAlign: "center",
   },
   descriptionContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 3,
+    marginTop: 4,
     gap: 2,
   },
   description: {
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: "regular",
-    lineHeight: 18,
+    lineHeight: 14,
     textAlign: "center"
   },
   buttonsContainer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    width: "100%",
-    marginTop: 8,
+    marginTop: 10,
+    gap: 14,
   },
 });

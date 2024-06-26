@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
     width: "52%",
     height: 198,
     borderRadius: 2,
-    marginBottom: 5,
     alignSelf: 'center',
   },
   detailsContainer: {
