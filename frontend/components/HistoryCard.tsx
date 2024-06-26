@@ -54,11 +54,13 @@ export default function HistoryCard({ item, isRefresh, setIsRefresh }: any) {
             <SmallButton
               title="View"
               onPress={() => router.navigate({ pathname: 'snap/result', params: { item: item.item } })}
+              textStyle={{ fontFamily: "medium"}}
             />
             <SmallButton
               title="Delete"
               onPress={() => deleteFromHistory(item.userId, item.docId)}
               containerStyle={{ backgroundColor: "#e53935" }}
+              textStyle={{ fontFamily: "medium"}}
             />
           </View>
         </View>

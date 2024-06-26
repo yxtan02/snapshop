@@ -273,7 +273,7 @@ export default function result() {
           data={combined}
           renderItem={({ item }) => <ProductCardVertical item={item} userId={userId}/>}
           keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{ gap: 5}}
+          contentContainerStyle={{ gap: 6}}
           style={{ width: "95%", marginTop: 20 }}
         />
       </View>
@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   button: {
-    width: "38%"
+    width: "40%"
   },
   normalResultContainer: {
     alignItems: "flex-start",
