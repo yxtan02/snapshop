@@ -1,7 +1,8 @@
 import { Image, Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 import { doc, deleteDoc } from "firebase/firestore";
-import { db } from '../firebaseConfig.js'
+import { db } from '../firebaseConfig.js';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
+import SmallButton from './SmallButton';
 
 export default function WishlistCard({ item, isRefresh, setIsRefresh }: any) {
   function deleteFromWishlist(userId: string, docId: string) {
@@ -16,49 +17,44 @@ export default function WishlistCard({ item, isRefresh, setIsRefresh }: any) {
 
   return (
     <View style={styles.cardContainer}>
-      <View style={styles.container}>
-        <View style={styles.headerContainer}>
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>{item.title}</Text>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>{item.title}</Text>
+      </View>
+      <View style={styles.mainContainer}>
+        <Image
+          source={{uri: item.image}}
+          resizeMode='contain'
+          style={styles.image}
+        />
+        <View style={styles.detailsContainer}>
+          <Text style={styles.price}>S${item.price}</Text>
+          <View style={styles.ratingContainer}>
+            {item.rating == "No ratings found"
+             ? <Text style={styles.rating}>{item.rating}</Text>
+             : <>
+                 <AntDesign name="star" size={15} color="#ff6f00" style={styles.star} />
+                 <Text style={styles.rating}>{item.rating} stars</Text>
+               </>
+            }
           </View>
-          <View style={styles.deleteButtonContainer}>
+          <View style={styles.descriptionContainer}>
+            <Text style={styles.description}>From: {item.platform}</Text>
+            {item.sales !== "" && <Text style={styles.description}>{item.sales}</Text>}
+            {item.delivery !== "" && <Text style={styles.description}>{item.delivery}</Text>}
+          </View>
+          <View style={styles.buttonsContainer}>
+            <SmallButton
+              title="Buy now!"
+              onPress={() => Linking.openURL(item.url)
+                            .catch((err) => console.error('Failed to open url', err))}
+              containerStyle={{ width: "62%" }}
+            />
             <Ionicons
               name="trash"
               size={23}
               color="red"
               onPress={() => deleteFromWishlist(item.userId, item.docId)}
             />
-          </View>
-        </View>
-        <View style={styles.mainContainer}>
-          <View style={styles.imageContainer}>
-            <Image
-              source={{uri: item.image}}
-              resizeMode='contain'
-              style={styles.image}
-            />
-          </View>
-          <View style={styles.detailsContainer}>
-            <Text style={styles.price}>S${item.price}</Text>
-            <View style={styles.ratingContainer}>
-              <AntDesign name="star" size={15} color="#ff6f00" style={styles.star}/>
-              <Text style={styles.rating}>
-                {item.rating == "No ratings found"
-                 ? item.rating
-                 : item.rating + " stars"}
-              </Text>
-            </View>
-            {item.sales !== "" && <Text style={styles.others}>{item.sales}</Text>}
-            {item.delivery !== "" && <Text style={styles.others}>{item.delivery}</Text>}
-            <View style={styles.buttonsContainer}>
-              <Pressable
-                onPress={() => Linking.openURL(item.url)
-                               .catch((err) => console.error('Failed to open url', err))}
-                style={styles.buyButton}
-              >
-                <Text style={styles.buyButtonText}>Buy now!</Text>
-              </Pressable>
-            </View>
           </View>
         </View>
       </View>
@@ -70,7 +66,7 @@ export default function WishlistCard({ item, isRefresh, setIsRefresh }: any) {
 const styles = StyleSheet.create({
   cardContainer: {
     alignItems: "center",
-    justifyContent: "flex-start",
+    justifyContent: "center",
     width: "100%",
     backgroundColor: '#FBEAEB',
     padding: 12,
@@ -78,49 +74,30 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e0e0e0',
     marginTop: 6,
-    gap: 12,
-  },
-  container: {
-    flex: 1,
-  },
-  headerContainer: {
-    flexDirection: "row",
-    marginBottom: 6,
   },
   titleContainer: {
-    width: "92%",
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    paddingLeft: 6
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 6,
   },
   title: {
     fontFamily: "semiBold",
     fontSize: 13,
-  },
-  deleteButtonContainer: {
-    width: "8%",
-    alignItems: "flex-end",
-    justifyContent: "flex-start",
+    textAlign: "center",
   },
   mainContainer: {
     flexDirection: "row",
-    marginBottom: 1,
-  },
-  imageContainer: {
-    width: "50%",
-    alignItems: "center",
-    justifyContent: "center",
   },
   image: {
-    width: "100%",
+    width: "52%",
     height: 135,
-    borderRadius: 10,
+    borderRadius: 2,
   },
   detailsContainer: {
-    flexDirection: "column",
     justifyContent: "center",
-    alignItems: "flex-start",
-    width: "50%",
+    alignItems: "center",
+    width: "48%",
     paddingLeft: 18,
     gap: 3,
   },
@@ -142,24 +119,23 @@ const styles = StyleSheet.create({
     fontFamily: "light",
     fontSize: 12,
   },
-  buttonsContainer: {
-    flexDirection: "column",
+  descriptionContainer: {
     justifyContent: "center",
+    alignItems: "center",
+    marginTop: 3,
+    gap: 2,
+  },
+  description: {
+    fontSize: 14,
+    fontFamily: "regular",
+    lineHeight: 18,
+    textAlign: "center"
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     width: "100%",
     marginTop: 8,
   },
-  buyButton: {
-    backgroundColor: '#00539C',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 10,
-    height: 34,
-    width: "62%",
-    padding: 5,
-  },
-  buyButtonText: {
-    fontFamily: "semiBold",
-    fontSize: 11,
-    color: "white",
-  }
 });

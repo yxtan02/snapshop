@@ -1,5 +1,5 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import ProductCardHorizontal from './ProductCardHorizontal'
+import ProductCardVertical from './ProductCardVertical'
 
 export default function ProductList({ title, data, userId }: any) {
   return (
@@ -8,7 +8,7 @@ export default function ProductList({ title, data, userId }: any) {
       {data.length == 0 ? <Text style={styles.noResultText}>No results found</Text> :
       <FlatList
         data={data}
-        renderItem={({ item }) => <ProductCardHorizontal item={item} userId={userId}/>}
+        renderItem={({ item }) => <ProductCardVertical item={item} userId={userId}/>}
         keyExtractor={(item, index) => index.toString()}
         horizontal
         contentContainerStyle={{ gap: 8 }}

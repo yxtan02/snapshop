@@ -5,7 +5,7 @@ import { useLocalSearchParams, router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { auth } from '../../../firebaseConfig.js';
 import ProductList from '../../../components/ProductList';
-import ProductCardVertical from '../../../components/ProductCardVertical';
+import ProductCardHorizontal from '../../../components/ProductCardHorizontal';
 import SmallButton from '../../../components/SmallButton';
 import Header from '../../../components/Header';
 
@@ -271,7 +271,7 @@ export default function result() {
       <View style={styles.priceCompResultContainer}>
         <FlatList
           data={combined}
-          renderItem={({ item }) => <ProductCardVertical item={item} userId={userId}/>}
+          renderItem={({ item }) => <ProductCardHorizontal item={item} userId={userId}/>}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{ gap: 6}}
           style={{ width: "95%", marginTop: 20 }}
