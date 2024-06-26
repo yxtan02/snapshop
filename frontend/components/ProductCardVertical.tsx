@@ -17,12 +17,13 @@ export default function ProductCardHorizontal({ item, userId }: any) {
         <View style={styles.detailsContainer}>
             <Text style={styles.price}>S${item.price}</Text>
             <View style={styles.ratingContainer}>
-              <AntDesign name="star" size={15} color="#ff6f00" style={styles.star}/>
-              <Text style={styles.rating}>
-                {item.rating == "No ratings found"
-                 ? item.rating
-                 : item.rating + " stars"}
-              </Text>
+              {item.rating == "No ratings found"
+               ? <Text style={styles.rating}>{item.rating}</Text>
+               : <>
+                   <AntDesign name="star" size={15} color="#ff6f00" style={styles.star} />
+                   <Text style={styles.rating}>{item.rating} stars</Text>
+                 </>
+              }
             </View>
             <View style={styles.descriptionContainer}>
               {item.sales !== "" && <Text style={styles.sales}>{item.sales}</Text>}

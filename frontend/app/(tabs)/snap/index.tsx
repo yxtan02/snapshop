@@ -88,7 +88,7 @@ export default function snap() {
       .then(data => {
         console.log(data);
         if (data["brands"] != undefined && data["brands"].length != 0) {
-          query = data["brands"][0]["name"] + " ";
+          query = data["brands"][0]["name"];
         }
 
         //Image captioning
@@ -102,7 +102,7 @@ export default function snap() {
         .then(res => res.json())
         .then(data => {
           console.log(data);
-          query = query + data["captionResult"]["text"];
+          query = data["captionResult"]["text"] + " " + query;
           console.log(query)
           saveToHistory({item: query}, imageFile)
           router.navigate({ pathname: 'snap/result', params: { item: query } })
@@ -131,7 +131,7 @@ export default function snap() {
         <View style={styles.buttonContainer}>
           <Button label="Take a photo" name="picture-o" onPress={takePhoto}/>
           <Button label="Upload a photo" name="camera" onPress={uploadPhoto}/>
-          <Button label="result" onPress={() => router.navigate('/snap/result?item=a+gold+watch+with+a+black+square+face')}/>
+          {/* <Button label="result" onPress={() => router.navigate('/snap/result?item=a+gold+watch+with+a+black+square+face')}/> */}
         </View>
         <Image
           resizeMode='contain'
@@ -160,6 +160,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
     marginBottom: 25,
+    paddingHorizontal: 12,
   },
   info: {
     fontFamily: 'regular',
@@ -178,6 +179,6 @@ const styles = StyleSheet.create({
     height: "50%",
     marginTop: 24,
     marginBottom: 50,
-    borderRadius: 15,
+    borderRadius: 10,
   },
 });

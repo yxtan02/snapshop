@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Button, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useLocalSearchParams, router } from 'expo-router';
+import { useLocalSearchParams, router, Redirect } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { auth } from '../../../firebaseConfig.js';
 import ProductList from '../../../components/ProductList';
@@ -14,220 +14,228 @@ export default function result() {
   const [amazon, setAmazon] = useState<any[]>([])
   const [lazada, setLazada] = useState<any[]>([])
   const [ebay, setEbay] = useState<any[]>([])
-  const [combined, setCombined] = useState<any[]>([])
-  const [userId, setUserId] = useState<string | undefined>("")
+  // const [combined, setCombined] = useState<any[]>([])
+  const [priceComp, setPriceComp] = useState(false)
+  const [combinedPrice, setCombinedPrice] = useState<any[]>([])
+  const [reviewAggre, setReviewAggre] = useState(false)
+  const [combinedReview, setCombinedReview] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(false)
-  const [priceComp, setPrice] = useState(false)
+  let userId: string = ""
+
+  if (auth.currentUser) {
+    userId = auth.currentUser.uid
+  } else {
+    // alert("You are not signed in")
+    // return <Redirect href="/login"/>
+  }
 
   useEffect(() => {
     // for testing
-    let editedAmazon: any[] = amazonTestData.map(item => ({
-      title: item["product_title"],
-      image: item["product_photo"],
-      price: item["product_price"].slice(2),
-      rating: item["product_star_rating"],
-      sales: item["sales_volume"] == null
-             ? ""
-             : item["sales_volume"],
-      delivery: item["delivery"] == null
-                ? ""
-                : item["delivery"],
-      url: item["product_url"],
-      platform: "amazon"
-    }))
-    setAmazon(editedAmazon)
+    // let editedAmazon: any[] = amazonTestData.map(item => ({
+    //   title: item["product_title"],
+    //   image: item["product_photo"],
+    //   price: item["product_price"].slice(2),
+    //   rating: item["product_star_rating"],
+    //   sales: item["sales_volume"] == null
+    //          ? ""
+    //          : item["sales_volume"],
+    //   delivery: item["delivery"] == null
+    //             ? ""
+    //             : item["delivery"],
+    //   url: item["product_url"],
+    //   platform: "amazon"
+    // }))
+    // setAmazon(editedAmazon)
 
-    let editedLazada: any[] = lazadaTestData.map(item => ({
-      title: item["title"],
-      image: item["img"],
-      price: item["price"],
-      rating: parseFloat(item["review_info"]["average_score"]).toFixed(2),
-      sales: item["sold_count"] + " sold",
-      delivery: "",
-      url: item["product_url"],
-      platform: "lazada"
-    }))
-    setLazada(editedLazada)
+    // let editedLazada: any[] = lazadaTestData.map(item => ({
+    //   title: item["title"],
+    //   image: item["img"],
+    //   price: item["price"],
+    //   rating: parseFloat(item["review_info"]["average_score"]).toFixed(2),
+    //   sales: item["sold_count"] + " sold",
+    //   delivery: "",
+    //   url: item["product_url"],
+    //   platform: "lazada"
+    // }))
+    // setLazada(editedLazada)
 
-    let editedEbay: any[] = ebayTestData.map(item => ({
-      title: item["title"],
-      image: item["image"],
-      price: item["price"].split('$').length == 2
-             ? String((parseFloat(item["price"].slice(1)) * 1.36).toFixed(2))
-             : "Invalid price",
-      rating: item["rating"] === "" ? "No ratings found" : item["rating"],
-      sales: "",
-      delivery: item["shipping"],
-      url: item["url"],
-      platform: "ebay"
-    }))
-    editedEbay = editedEbay.filter(item => item.price != "Invalid price")
-    setEbay(editedEbay)
+    // let editedEbay: any[] = ebayTestData.map(item => ({
+    //   title: item["title"],
+    //   image: item["image"],
+    //   price: item["price"].split('$').length == 2
+    //          ? String((parseFloat(item["price"].slice(1)) * 1.36).toFixed(2))
+    //          : "Invalid price",
+    //   rating: item["rating"] === "" ? "No ratings found" : item["rating"],
+    //   sales: "",
+    //   delivery: item["shipping"],
+    //   url: item["url"],
+    //   platform: "ebay"
+    // }))
+    // editedEbay = editedEbay.filter(item => item.price != "Invalid price")
+    // setEbay(editedEbay)
 
-    const combined_array_of_products = editedAmazon.concat(editedLazada, editedEbay);
-    combined_array_of_products.sort((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price));
-    setCombined(combined_array_of_products.slice(0, 45))
+    // let combined = editedAmazon.concat(editedLazada, editedEbay);
+    // const sortedPrice = combined.toSorted((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price))
+    // setCombinedPrice(sortedPrice.slice(0, 30))
+
+    // combined = combined.filter(item => item.rating != "No ratings found")
+    // const sortedReview = combined.toSorted((a : any, b : any) => parseFloat(b.rating) - parseFloat(a.rating))
+    // setCombinedReview(sortedReview.slice(0, 30))
     
     //uncomment below lines to use the e-commerce APIs
-    // let products: any = {
-    //   "amazon": [],
-    //   "lazada": [],
-    //   "ebay": []
-    // }
+    let products: any = {
+      "amazon": [],
+      "lazada": [],
+      "ebay": []
+    }
 
-    // const api_key = '9d1c4db7e2msh7386f9b87aeb429p1fd40bjsn2d3e72d79474'
+    const api_key = '9d1c4db7e2msh7386f9b87aeb429p1fd40bjsn2d3e72d79474'
 
-    // function getAmazonProducts() {
-    //   return fetch(`https://real-time-amazon-data.p.rapidapi.com/search?query=${item}&country=SG`, {
-    //     method: 'GET',
-    //     headers: {
-    //       'X-RapidAPI-Key': api_key,
-    //       'X-RapidAPI-Host': 'real-time-amazon-data.p.rapidapi.com'
-    //     },
-    //   })
-    //   .then(res => {
-    //     if (!res.ok) {
-    //       console.error("Error fetching Amazon data")
-    //     }
-    //     console.log("Amazon success")
-    //     return res.json()
-    //   })
-    //   .then(data => {
-        // const amazonData: any[] = data["data"]["products"]
-        // let editedAmazon = amazonData.map(item => ({
-        //   title: item["product_title"],
-        //   image: item["product_photo"],
-        //   price: item["product_price"] == null
-        //          ? "Invalid price"
-        //          : item["product_price"].slice(2),
-        //   rating: item["product_star_rating"],
-        //   sales: item["sales_volume"] == null
-        //          ? ""
-        //          : item["sales_volume"],
-        //   delivery: item["delivery"] == null
-        //             ? ""
-        //             : item["delivery"],
-        //   url: item["product_url"],
-        //   platform: "amazon"
-        // }))
-    //     editedAmazon = editedAmazon.filter(item => item.price != "Invalid price")
-    //     products["amazon"] = editedAmazon
-    //   })
-    // }
+    function getAmazonProducts() {
+      return fetch(`https://real-time-amazon-data.p.rapidapi.com/search?query=${item}&country=SG`, {
+        method: 'GET',
+        headers: {
+          'X-RapidAPI-Key': api_key,
+          'X-RapidAPI-Host': 'real-time-amazon-data.p.rapidapi.com'
+        },
+      })
+      .then(res => {
+        if (!res.ok) {
+          console.error("Error fetching Amazon data")
+        }
+        console.log("Amazon success")
+        return res.json()
+      })
+      .then(data => {
+        const amazonData: any[] = data["data"]["products"]
+        let editedAmazon = amazonData.map(item => ({
+          title: item["product_title"],
+          image: item["product_photo"],
+          price: item["product_price"] == null
+                 ? "Invalid price"
+                 : item["product_price"].slice(2),
+          rating: item["product_star_rating"] == null
+                  ? "No ratings found"
+                  : item["product_star_rating"],
+          sales: item["sales_volume"] == null
+                 ? ""
+                 : item["sales_volume"],
+          delivery: item["delivery"] == null
+                    ? ""
+                    : item["delivery"],
+          url: item["product_url"],
+          platform: "amazon"
+        }))
+        editedAmazon = editedAmazon.filter(item => item.price != "Invalid price")
+        products["amazon"] = editedAmazon
+      })
+    }
 
-    // function getLazadaProducts() {
-    //   return fetch(`https://lazada-api.p.rapidapi.com/lazada/search/items?keywords=${item}&site=sg&page=1`, {
-    //     method: 'GET',
-    //     headers: {
-    //       'X-RapidAPI-Key': api_key,
-    //       'X-RapidAPI-Host': 'lazada-api.p.rapidapi.com'
-    //     },
-    //   })
-    //   .then(res => {
-    //     if (!res.ok) {
-    //       console.error("Error fetching Lazada data")
-    //     }
-    //     console.log("Lazada success")
-    //     return res.json()
-    //   })
-    //   .then(data => {
-    //     const lazadaData: any[] = data["data"]["items"]
-    //     let editedLazada = lazadaData.map(item => ({
-    //       title: item["title"],
-    //       image: item["img"],
-    //       price: item["price"],
-    //       rating: item["review_info"]["average_score"] == ""
-    //               ? "No ratings found"
-    //               : parseFloat(item["review_info"]["average_score"]).toFixed(2),
-    //       sales: item["sold_count"] == null
-    //              ? ""
-    //              : item["sold_count"] + " sold",
-    //       delivery: "",
-    //       url: item["product_url"],
-    //       platform: "lazada"
-    //     }))
-    //     products["lazada"] = editedLazada
-    //   })
-    // }
+    function getLazadaProducts() {
+      return fetch(`https://lazada-api.p.rapidapi.com/lazada/search/items?keywords=${item}&site=sg&page=1`, {
+        method: 'GET',
+        headers: {
+          'X-RapidAPI-Key': api_key,
+          'X-RapidAPI-Host': 'lazada-api.p.rapidapi.com'
+        },
+      })
+      .then(res => {
+        if (!res.ok) {
+          console.error("Error fetching Lazada data")
+        }
+        console.log("Lazada success")
+        return res.json()
+      })
+      .then(data => {
+        const lazadaData: any[] = data["data"]["items"]
+        let editedLazada = lazadaData.map(item => ({
+          title: item["title"],
+          image: item["img"],
+          price: item["price"] == ""
+                 ? "Invalid price"
+                 : item["price"],
+          rating: item["review_info"]["average_score"] == ""
+                  ? "No ratings found"
+                  : parseFloat(item["review_info"]["average_score"]).toFixed(2),
+          sales: item["sold_count"] == null
+                 ? ""
+                 : item["sold_count"] + " sold",
+          delivery: "",
+          url: item["product_url"],
+          platform: "lazada"
+        }))
+        products["lazada"] = editedLazada
+      })
+    }
 
-    // function getEbayProducts() {
-    //   return fetch(`https://ebay-search-result.p.rapidapi.com/search/${item}`, {
-    //     method: 'GET',
-    //     headers: {
-    //       'X-RapidAPI-Key': api_key,
-    //       'X-RapidAPI-Host': 'ebay-search-result.p.rapidapi.com'
-    //     },
-    //   })
-    //   .then(res => {
-    //     if (!res.ok) {
-    //       console.error("Error fetching Ebay data")
-    //     }
-    //     console.log("Ebay success")
-    //     return res.json()
-    //   })
-    //   .then(data => {
-    //     const ebayData: any[] = data["results"]
-    //     let editedEbay = ebayData.map(item => ({
-    //       title: item["title"],
-    //       image: item["image"],
-    //       price: item["price"].split('$').length == 2
-    //              ? String((parseFloat(item["price"].slice(1)) * 1.36).toFixed(2))
-    //              : "Invalid price",
-    //       rating: item["rating"] === "" ? "No ratings found" : item["rating"],
-    //       sales: "",
-    //       delivery: item["shipping"],
-    //       url: item["url"],
-    //       platform: "ebay"
-    //     }))
-    //     editedEbay = editedEbay.filter(item => item.price != "Invalid price")
-    //     products["ebay"] = editedEbay
-    //   })
-    // }
+    function getEbayProducts() {
+      return fetch(`https://ebay-search-result.p.rapidapi.com/search/${item}`, {
+        method: 'GET',
+        headers: {
+          'X-RapidAPI-Key': api_key,
+          'X-RapidAPI-Host': 'ebay-search-result.p.rapidapi.com'
+        },
+      })
+      .then(res => {
+        if (!res.ok) {
+          console.error("Error fetching Ebay data")
+        }
+        console.log("Ebay success")
+        return res.json()
+      })
+      .then(data => {
+        const ebayData: any[] = data["results"]
+        let editedEbay = ebayData.map(item => ({
+          title: item["title"],
+          image: item["image"],
+          price: item["price"].split('$').length == 2
+                 ? String((parseFloat(item["price"].slice(1)) * 1.36).toFixed(2))
+                 : "Invalid price",
+          rating: item["rating"] === "" ? "No ratings found" : item["rating"],
+          sales: "",
+          delivery: item["shipping"],
+          url: item["url"],
+          platform: "ebay"
+        }))
+        editedEbay = editedEbay.filter(item => item.price != "Invalid price")
+        products["ebay"] = editedEbay
+      })
+    }
     
-    // setIsLoading(true)
-    // Promise.all([
-    //   getAmazonProducts(),
-    //   getLazadaProducts(),
-    //   getEbayProducts()
-    // ])
-    // .then(res => {
-    //   let amazonResult: any[] = products["amazon"]
-    //   let lazadaResult: any[] = products["lazada"]
-    //   let ebayResult: any[] = products["ebay"]
+    setIsLoading(true)
+    Promise.all([
+      getAmazonProducts(),
+      getLazadaProducts(),
+      getEbayProducts()
+    ])
+    .then(res => {
+      let amazonResult: any[] = products["amazon"]
+      let lazadaResult: any[] = products["lazada"]
+      let ebayResult: any[] = products["ebay"]
 
-    //   let combined_products_array = amazonResult.concat(lazadaResult, ebayResult)
-    //   combined_products_array.sort((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price));
-    //   if (combined_products_array.length > 30) {
-    //     combined_products_array = combined_products_array.slice(0, 30)
-    //   }
-    //   setCombined(combined_products_array)
+      let combined = amazonResult.concat(lazadaResult, ebayResult)
+      const sortedPrice = combined.toSorted((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price))
+      setCombinedPrice(sortedPrice.slice(0, 30))
 
-    //   if (amazonResult.length > 10) {
-    //     amazonResult = amazonResult.slice(0, 10)
-    //   }
-      
-    //   if (lazadaResult.length > 10) {
-    //     lazadaResult = lazadaResult.slice(0, 10)
-    //   }
-      
-    //   if (ebayResult.length > 10) {
-    //     ebayResult = ebayResult.slice(0, 10)
-    //   }
+      combined = combined.filter(item => item.rating != "No ratings found")
+      const sortedReview = combined.toSorted((a : any, b : any) => parseFloat(b.rating) - parseFloat(a.rating))
+      setCombinedReview(sortedReview.slice(0, 30))
 
-    //   setAmazon(amazonResult)
-    //   setLazada(lazadaResult)
-    //   setEbay(ebayResult)
-    //   setIsLoading(false)
-    // })
-      
-    setUserId(auth.currentUser?.uid)
+      setAmazon(amazonResult.slice(0, 10))
+      setLazada(lazadaResult.slice(0, 10))
+      setEbay(ebayResult.slice(0, 10))
+      setIsLoading(false)
+    })      
   }, []);
 
   if (isLoading) {
     return (
-      <View style={styles.activityIndicator}>
-        <ActivityIndicator size='large'/>
-      </View>
+      <>
+        <Header title="Result" backButton={true}/>
+        <View style={styles.activityIndicator}>
+          <ActivityIndicator size='large'/>
+        </View>
+      </>
     )
   }
 
@@ -236,11 +244,12 @@ export default function result() {
       <View style={styles.buttonContainer}>
         <SmallButton
           title="Sort by cheapest"
-          onPress={() => setPrice(true)}
+          onPress={() => setPriceComp(true)}
           containerStyle={styles.button}
         />
         <SmallButton
           title="Review Aggregation"
+          onPress={() => setReviewAggre(true)}
           containerStyle={styles.button}
         />
       </View>
@@ -257,20 +266,53 @@ export default function result() {
     <>
       <View style={styles.buttonContainer}>
         <SmallButton
-          title="Product search"
-          onPress={() => setPrice(false)}
+          title="Product Search"
+          onPress={() => setPriceComp(false)}
           containerStyle={styles.button}
         />
         <SmallButton
           title="Review Aggregation"
           containerStyle={styles.button}
-              
+          onPress={() => {
+            setPriceComp(false)
+            setReviewAggre(true)
+          }}
         />
       </View>
   
       <View style={styles.priceCompResultContainer}>
         <FlatList
-          data={combined}
+          data={combinedPrice}
+          renderItem={({ item }) => <ProductCardHorizontal item={item} userId={userId}/>}
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={{ gap: 6}}
+          style={{ width: "95%", marginTop: 20 }}
+        />
+      </View>
+    </>
+  )
+
+  const reviewAggreResult = (
+    <>
+      <View style={styles.buttonContainer}>
+        <SmallButton
+          title="Product Search"
+          onPress={() => setReviewAggre(false)}
+          containerStyle={styles.button}
+        />
+        <SmallButton
+          title="Sort by cheapest"
+          onPress={() => {
+            setReviewAggre(false)
+            setPriceComp(true)
+          }}
+          containerStyle={styles.button}
+        />
+      </View>
+
+      <View style={styles.reviewAggreContainer}>
+        <FlatList
+          data={combinedReview}
           renderItem={({ item }) => <ProductCardHorizontal item={item} userId={userId}/>}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{ gap: 6}}
@@ -295,7 +337,11 @@ export default function result() {
           </View>
         </LinearGradient>
 
-        {priceComp ? priceCompResult : normalResult}
+        {priceComp ? priceCompResult
+                   : reviewAggre
+                   ? reviewAggreResult
+                   : normalResult}
+
       </ScrollView>
     </SafeAreaView>
   )
@@ -354,7 +400,11 @@ const styles = StyleSheet.create({
   priceCompResultContainer: {
     alignItems: "center",
     justifyContent: "center",
-  },  
+  },
+  reviewAggreContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
   activityIndicator: {
     flex: 1,
     flexDirection:'row',

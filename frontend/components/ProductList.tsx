@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
     fontFamily: "regular",
     marginBottom: 12,
     marginLeft: 5,
+    marginTop: 3,
   },
   flatList: {
     width: "100%"
