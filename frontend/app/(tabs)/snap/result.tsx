@@ -4,7 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { auth } from '../../../firebaseConfig.js';
-import ProductCard from '../../../components/ProductCard';
+import ProductCardHorizontal from '../../../components/ProductCardHorizontal';
+import ProductList from '../../../components/ProductList';
 import PriceCompCard from '../../../components/PriceCompCard';
 import SmallButton from '../../../components/SmallButton';
 import Header from '../../../components/Header';
@@ -297,40 +298,10 @@ export default function result() {
         </View>
         
         <View style={styles.mainContainer}>
-          <Text style={styles.title}>Amazon</Text>
-          
-          {amazon.length == 0 ? <Text style={styles.words}>No results found</Text> :
-          <FlatList
-            data={amazon}
-            renderItem={({ item }) => <ProductCard item={item} userId={userId}/>}
-            keyExtractor={(item, index) => index.toString()}
-            horizontal
-            contentContainerStyle={{ gap: 8 }}
-            style={styles.flatList}
-          />}
-
-          <Text style={styles.title}>Lazada</Text>
-          {lazada.length == 0 ? <Text style={styles.words}>No results found</Text> :
-          <FlatList
-            data={lazada}
-            renderItem={({ item }) => <ProductCard item={item} userId={userId}/>}
-            keyExtractor={(item, index) => index.toString()}
-            horizontal
-            contentContainerStyle={{ gap: 8 }}
-            style={styles.flatList}
-          />}
-            
-          <Text style={styles.title}>eBay</Text>
-          {ebay.length == 0 ? <Text style={styles.words}>No results found</Text> :
-          <FlatList
-            data={ebay}
-            renderItem={({ item }) => <ProductCard item={item} userId={userId}/>}
-            keyExtractor={(item, index) => index.toString()}
-            horizontal
-            contentContainerStyle={{ gap: 8 }}
-            style={styles.flatList}
-          />}
-          </View>
+          <ProductList title="Amazon" data={amazon} userId={userId} />
+          <ProductList title="Lazada" data={lazada} userId={userId} />
+          <ProductList title="eBay" data={ebay} userId={userId} />
+        </View>
       </ScrollView>
     </SafeAreaView>
   )
@@ -386,6 +357,10 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     marginBottom: 12,
   },
+  listContainer: {
+    alignItems: "flex-start",
+    width: "100%",
+  },
   title: {
     fontSize: 24,
     fontFamily: "bold",
@@ -411,12 +386,10 @@ const styles = StyleSheet.create({
   },
   
   words: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: "brown",
-    marginBottom: 5,
-    marginTop: 20,
-    textAlign: 'center'
+    fontSize: 18,
+    fontFamily: "regular",
+    marginBottom: 12,
+    marginLeft: 5,
   },
   price: {
     fontSize: 20,

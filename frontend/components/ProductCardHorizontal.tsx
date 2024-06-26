@@ -3,7 +3,7 @@ import LikeButton from './LikeButton';
 import SmallButton from './SmallButton';
 import { AntDesign } from '@expo/vector-icons';
 
-export default function ProductCard({ item, userId }: any) {
+export default function ProductCardHorizontal({ item, userId }: any) {
   return (
     <View style={styles.cardContainer}>
         <View style={styles.titleContainer}>
