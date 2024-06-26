@@ -4,9 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { auth } from '../../../firebaseConfig.js';
-import ProductCardHorizontal from '../../../components/ProductCardHorizontal';
 import ProductList from '../../../components/ProductList';
-import PriceCompCard from '../../../components/PriceCompCard';
+import ProductCardVertical from '../../../components/ProductCardVertical';
 import SmallButton from '../../../components/SmallButton';
 import Header from '../../../components/Header';
 
@@ -232,44 +231,55 @@ export default function result() {
     )
   }
 
-  if (priceComp) {
-    console.log(combined)
-    return (
-      <ScrollView style={styles.scrollView}>
-        <LinearGradient
-          // Background Linear Gradient
-          colors={['#FDBBE2', '#FBEAEB']}
-          style={styles.headerContainer}
-          locations={[0.5, 0.8]}
-        >
-          <Text style={styles.description}>{item}</Text>
-        </LinearGradient>
-  
-        <View style={styles.buttonContainer}>
-    
-          <Button
-              title="Product search"
-              onPress={() => {
-                setPrice(false)
-              }}
-            />
-          <Button
-              title="Review Aggregation"
+  const normalResult = (
+    <>
+      <View style={styles.buttonContainer}>
+        <SmallButton
+          title="Sort by cheapest"
+          onPress={() => setPrice(true)}
+          containerStyle={styles.button}
+        />
+        <SmallButton
+          title="Review Aggregation"
+          containerStyle={styles.button}
+        />
+      </View>
+
+      <View style={styles.normalResultContainer}>
+        <ProductList title="Amazon" data={amazon} userId={userId} />
+        <ProductList title="Lazada" data={lazada} userId={userId} />
+        <ProductList title="eBay" data={ebay} userId={userId} />
+      </View>
+    </>
+  )
+
+  const priceCompResult = (
+    <>
+      <View style={styles.buttonContainer}>
+        <SmallButton
+          title="Product search"
+          onPress={() => setPrice(false)}
+          containerStyle={styles.button}
+        />
+        <SmallButton
+          title="Review Aggregation"
+          containerStyle={styles.button}
               
-            />
-        </View>
+        />
+      </View>
   
-        <View style={styles.mainContainer}>
-          <FlatList
-            data={combined}
-            renderItem={({ item }) => <PriceCompCard item={item} userId={userId}/>}
-            keyExtractor={(item, index) => index.toString()}
-            contentContainerStyle={{paddingHorizontal: 15, gap: 5}}
-          />
-        </View>
-      </ScrollView>
-    )
-  }
+      <View style={styles.priceCompResultContainer}>
+        <FlatList
+          data={combined}
+          renderItem={({ item }) => <ProductCardVertical item={item} userId={userId}/>}
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={{ gap: 5}}
+          style={{ width: "95%", marginTop: 20 }}
+        />
+      </View>
+    </>
+  )
+  
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
       <Header title="Result" backButton={true}/>
@@ -285,23 +295,7 @@ export default function result() {
           </View>
         </LinearGradient>
 
-        <View style={styles.buttonContainer}>
-          <SmallButton
-            title="Sort by cheapest"
-            onPress={() => setPrice(true)}
-            containerStyle={styles.button}
-          />
-          <SmallButton
-            title="Review Aggregation"
-            containerStyle={styles.button}
-          />
-        </View>
-        
-        <View style={styles.mainContainer}>
-          <ProductList title="Amazon" data={amazon} userId={userId} />
-          <ProductList title="Lazada" data={lazada} userId={userId} />
-          <ProductList title="eBay" data={ebay} userId={userId} />
-        </View>
+        {priceComp ? priceCompResult : normalResult}
       </ScrollView>
     </SafeAreaView>
   )
@@ -352,58 +346,15 @@ const styles = StyleSheet.create({
   button: {
     width: "38%"
   },
-  mainContainer: {
+  normalResultContainer: {
     alignItems: "flex-start",
     paddingLeft: 15,
     marginBottom: 12,
   },
-  listContainer: {
-    alignItems: "flex-start",
-    width: "100%",
-  },
-  title: {
-    fontSize: 24,
-    fontFamily: "bold",
-    marginLeft: 5,
-    textAlign: 'center',
-    marginTop: 20,
-  },
-  flatList: {
-    width: "100%"
-  },
-  description: {
-    fontSize: 40,
-    color: "#F71199",
-    fontStyle: 'italic',
-    fontFamily: 'Cursive',
-    textAlign: 'center'
-  },
-  image: {
-    width: 400,
-    height: 400,
-    marginBottom: 5,
-    alignSelf: 'center'
-  },
-  
-  words: {
-    fontSize: 18,
-    fontFamily: "regular",
-    marginBottom: 12,
-    marginLeft: 5,
-  },
-  price: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: "#E50B8C",
-    textAlign: 'center'
-  },
-  desc: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: "black",
-    marginBottom: 5,
-    textAlign: 'center'
-  },
+  priceCompResultContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },  
   activityIndicator: {
     flex: 1,
     flexDirection:'row',
