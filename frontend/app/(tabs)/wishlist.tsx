@@ -6,8 +6,10 @@ import { auth, db } from '../../firebaseConfig.js';
 import { collection, getDocs, orderBy, query } from "firebase/firestore"; 
 import WishlistCard from "../../components/WishlistCard";
 import Header from '../../components/Header';
+import { useIsFocused } from "@react-navigation/native";
 
 export default function wishlist() {
+  const isFocused = useIsFocused()
   const [wishlist, setWishlist] = useState<any[]>([])
   const [isRefresh, setIsRefresh] = useState(false)
   let userId: string
@@ -29,7 +31,7 @@ export default function wishlist() {
       })
       setWishlist(data)
     })
-  }, [isRefresh])
+  }, [isFocused, isRefresh])
   
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
