@@ -135,7 +135,7 @@ export default function result() {
       return fetch(`https://lazada-api.p.rapidapi.com/lazada/search/items?keywords=${item}&site=sg&page=1`, {
         method: 'GET',
         headers: {
-          'X-RapidAPI-Key': api_key,
+          'X-RapidAPI-Key': '6c5d16a2a6msh7b40979d839fcc2p1a8a65jsn16c3a43c4b50',
           'X-RapidAPI-Host': 'lazada-api.p.rapidapi.com'
         },
       })
