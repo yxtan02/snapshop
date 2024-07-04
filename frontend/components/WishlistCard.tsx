@@ -1,4 +1,5 @@
 import { Image, Linking, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useState } from "react";
 import { doc, deleteDoc } from "firebase/firestore";
 import { db } from '../firebaseConfig.js';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
@@ -53,7 +54,10 @@ export default function WishlistCard({ item, isRefresh, setIsRefresh }: any) {
               name="trash"
               size={23}
               color="red"
-              onPress={() => deleteFromWishlist(item.userId, item.docId)}
+              onPress={() => {
+                deleteFromWishlist(item.userId, item.docId)
+              }
+              }
             />
           </View>
         </View>
