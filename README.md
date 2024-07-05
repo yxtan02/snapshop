@@ -1,12 +1,9 @@
 # SnapShop
+SnapShop is a fuss-free shopping app that offers efficient visual product search and convenient price & review comparisons to facilitate a seamless shopping experience.
 
 ## Tech Stack
-- Frontend:
-  - **React Native** (Expo)
-
-- Backend:
-  - **FastAPI** (Python)
-  - **Ultralytics YOLOv8**: Object Detection
+- Frontend: **React Native** (Expo)
+- Backend: **FastAPI** (Python)
 
 ## Getting Started 🛠️
 ### Prerequisites
