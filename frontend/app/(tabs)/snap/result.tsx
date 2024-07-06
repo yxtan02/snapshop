@@ -89,7 +89,7 @@ export default function result() {
       "ebay": []
     }
 
-    const api_key = '9d1c4db7e2msh7386f9b87aeb429p1fd40bjsn2d3e72d79474'
+    const api_key = 'e54e6469c9mshfd93a2d40f44b01p14bbe0jsn509f9fa4490e'
 
     function getAmazonProducts() {
       return fetch(`https://real-time-amazon-data.p.rapidapi.com/search?query=${item}&country=SG`, {
@@ -135,7 +135,7 @@ export default function result() {
       return fetch(`https://lazada-api.p.rapidapi.com/lazada/search/items?keywords=${item}&site=sg&page=1`, {
         method: 'GET',
         headers: {
-          'X-RapidAPI-Key': '6c5d16a2a6msh7b40979d839fcc2p1a8a65jsn16c3a43c4b50',
+          'X-RapidAPI-Key': api_key,
           'X-RapidAPI-Host': 'lazada-api.p.rapidapi.com'
         },
       })
