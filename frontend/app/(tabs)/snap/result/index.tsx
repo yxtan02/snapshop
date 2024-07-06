@@ -31,6 +31,7 @@ export default function result() {
   useEffect(() => {
     // for testing
     // let editedAmazon: any[] = amazonTestData.map(item => ({
+    //   id: item["asin"],
     //   title: item["product_title"],
     //   image: item["product_photo"],
     //   price: item["product_price"].slice(2),
@@ -47,6 +48,7 @@ export default function result() {
     // setAmazon(editedAmazon)
 
     // let editedLazada: any[] = lazadaTestData.map(item => ({
+    //   id: item["item_id"],
     //   title: item["title"],
     //   image: item["img"],
     //   price: item["price"],
@@ -59,6 +61,7 @@ export default function result() {
     // setLazada(editedLazada)
 
     // let editedEbay: any[] = ebayTestData.map(item => ({
+    //   id: item["id"],
     //   title: item["title"],
     //   image: item["image"],
     //   price: item["price"].split('$').length == 2
@@ -82,7 +85,7 @@ export default function result() {
     // combinedReviewArray.sort((a : any, b : any) => parseFloat(b.rating) - parseFloat(a.rating))
     // setCombinedReview(combinedReviewArray.slice(0, 30))
     
-    //uncomment below lines to use the e-commerce APIs
+    // uncomment below lines to use the e-commerce APIs
     let products: any = {
       "amazon": [],
       "lazada": [],
@@ -109,6 +112,7 @@ export default function result() {
       .then(data => {
         const amazonData: any[] = data["data"]["products"]
         let editedAmazon = amazonData.map(item => ({
+          id: item["asin"],
           title: item["product_title"],
           image: item["product_photo"],
           price: item["product_price"] == null
@@ -149,6 +153,7 @@ export default function result() {
       .then(data => {
         const lazadaData: any[] = data["data"]["items"]
         let editedLazada = lazadaData.map(item => ({
+          id: item["item_id"],
           title: item["title"],
           image: item["img"],
           price: item["price"] == ""
@@ -186,6 +191,7 @@ export default function result() {
       .then(data => {
         const ebayData: any[] = data["results"]
         let editedEbay = ebayData.map(item => ({
+          id: item["id"],
           title: item["title"],
           image: item["image"],
           price: item["price"].split('$').length == 2

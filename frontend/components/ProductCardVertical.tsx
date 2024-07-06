@@ -4,20 +4,21 @@ import LikeButton from './LikeButton';
 import SmallButton from './SmallButton';
 import { AntDesign } from '@expo/vector-icons';
 import { db } from '../firebaseConfig.js';
-import { addDoc, collection } from "firebase/firestore"; 
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore"; 
 
 export default function ProductCardHorizontal({ item, userId }: any) {
-  let productId = ""
-
-  function addToDb(item: any) {
-    return addDoc(collection(db, 'products'), item)
+  async function addToDb(item: any) {
+    const q = query(collection(db, 'products'), where("id", "==", item.id));
+    const querySnapshot = await getDocs(q)
+    if (querySnapshot.empty) {
+      return addDoc(collection(db, 'products'), item)
       .then((res) => {
         console.log(`Item added (id: ${res.id})`);
-        productId = res.id
       })
       .catch((error) => {
         console.error('Error adding item: ', error);
       });
+    }
   }
 
   return (
@@ -39,12 +40,13 @@ export default function ProductCardHorizontal({ item, userId }: any) {
                     <AntDesign name="star" size={15} color="#ff6f00" style={styles.star} />
                     <Text style={styles.rating}>{item.rating} stars</Text>
                     <Pressable
+                      style = {styles.reviewButton}
                       onPress={async () => {
                         await addToDb(item)
-                        router.navigate(`/snap/result/${productId}`)
+                        router.navigate(`/snap/result/${item.id}`)
                       }}
                     >
-                      Reviews
+                      <Text>Reviews</Text>
                     </Pressable>
                  </>
               }
@@ -125,6 +127,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginLeft: 4,
     lineHeight: 24
+  },
+  reviewButton: {
+    marginLeft: 5,
   },
   descriptionContainer: {
     marginTop: 4,
