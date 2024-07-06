@@ -1,9 +1,25 @@
-import { Image, Linking, StyleSheet, Text, View } from 'react-native'
+import { Image, Linking, Pressable, StyleSheet, Text, View } from 'react-native';
+import { router } from 'expo-router';
 import LikeButton from './LikeButton';
 import SmallButton from './SmallButton';
 import { AntDesign } from '@expo/vector-icons';
+import { db } from '../firebaseConfig.js';
+import { addDoc, collection } from "firebase/firestore"; 
 
 export default function ProductCardHorizontal({ item, userId }: any) {
+  let productId = ""
+
+  function addToDb(item: any) {
+    return addDoc(collection(db, 'products'), item)
+      .then((res) => {
+        console.log(`Item added (id: ${res.id})`);
+        productId = res.id
+      })
+      .catch((error) => {
+        console.error('Error adding item: ', error);
+      });
+  }
+
   return (
     <View style={styles.cardContainer}>
         <View style={styles.titleContainer}>
@@ -20,8 +36,16 @@ export default function ProductCardHorizontal({ item, userId }: any) {
               {item.rating == "No ratings found"
                ? <Text style={styles.rating}>{item.rating}</Text>
                : <>
-                   <AntDesign name="star" size={15} color="#ff6f00" style={styles.star} />
-                   <Text style={styles.rating}>{item.rating} stars</Text>
+                    <AntDesign name="star" size={15} color="#ff6f00" style={styles.star} />
+                    <Text style={styles.rating}>{item.rating} stars</Text>
+                    <Pressable
+                      onPress={async () => {
+                        await addToDb(item)
+                        router.navigate(`/snap/result/${productId}`)
+                      }}
+                    >
+                      Reviews
+                    </Pressable>
                  </>
               }
             </View>
