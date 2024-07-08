@@ -3,9 +3,9 @@ import LikeButton from './LikeButton';
 import SmallButton from './SmallButton';
 import { AntDesign } from '@expo/vector-icons';
 
-export default function ProductCardVertical({ item, userId }: any) {
+export default function ProductCardVertical({ item, userId, containerStyle }: any) {
   return (
-    <View style={styles.cardContainer}>
+    <View style={[styles.cardContainer, containerStyle]}>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>{item.title}</Text>
       </View>

@@ -30,209 +30,209 @@ export default function result() {
 
   useEffect(() => {
     // for testing
-    // let editedAmazon: any[] = amazonTestData.map(item => ({
-    //   id: item["asin"],
-    //   title: item["product_title"],
-    //   image: item["product_photo"],
-    //   price: item["product_price"].slice(2),
-    //   rating: item["product_star_rating"],
-    //   sales: item["sales_volume"] == null
-    //          ? ""
-    //          : item["sales_volume"],
-    //   delivery: item["delivery"] == null
-    //             ? ""
-    //             : item["delivery"],
-    //   url: item["product_url"],
-    //   platform: "amazon"
-    // }))
-    // setAmazon(editedAmazon)
+    let editedAmazon: any[] = amazonTestData.map(item => ({
+      id: item["asin"],
+      title: item["product_title"],
+      image: item["product_photo"],
+      price: item["product_price"].slice(2),
+      rating: item["product_star_rating"],
+      sales: item["sales_volume"] == null
+             ? ""
+             : item["sales_volume"],
+      delivery: item["delivery"] == null
+                ? ""
+                : item["delivery"],
+      url: item["product_url"],
+      platform: "amazon"
+    }))
+    setAmazon(editedAmazon)
 
-    // let editedLazada: any[] = lazadaTestData.map(item => ({
-    //   id: item["item_id"],
-    //   title: item["title"],
-    //   image: item["img"],
-    //   price: item["price"],
-    //   rating: parseFloat(item["review_info"]["average_score"]).toFixed(2),
-    //   sales: item["sold_count"] + " sold",
-    //   delivery: "",
-    //   url: item["product_url"],
-    //   platform: "lazada"
-    // }))
-    // setLazada(editedLazada)
+    let editedLazada: any[] = lazadaTestData.map(item => ({
+      id: item["item_id"],
+      title: item["title"],
+      image: item["img"],
+      price: item["price"],
+      rating: parseFloat(item["review_info"]["average_score"]).toFixed(2),
+      sales: item["sold_count"] + " sold",
+      delivery: "",
+      url: item["product_url"],
+      platform: "lazada"
+    }))
+    setLazada(editedLazada)
 
-    // let editedEbay: any[] = ebayTestData.map(item => ({
-    //   id: item["id"],
-    //   title: item["title"],
-    //   image: item["image"],
-    //   price: item["price"].split('$').length == 2
-    //          ? String((parseFloat(item["price"].slice(1)) * 1.36).toFixed(2))
-    //          : "Invalid price",
-    //   rating: item["rating"] === "" ? "No ratings found" : item["rating"],
-    //   sales: "",
-    //   delivery: item["shipping"],
-    //   url: item["url"],
-    //   platform: "ebay"
-    // }))
-    // editedEbay = editedEbay.filter(item => item.price != "Invalid price")
-    // setEbay(editedEbay)
+    let editedEbay: any[] = ebayTestData.map(item => ({
+      id: item["id"],
+      title: item["title"],
+      image: item["image"],
+      price: item["price"].split('$').length == 2
+             ? String((parseFloat(item["price"].slice(1)) * 1.36).toFixed(2))
+             : "Invalid price",
+      rating: item["rating"] === "" ? "No ratings found" : item["rating"],
+      sales: "",
+      delivery: item["shipping"],
+      url: item["url"],
+      platform: "ebay"
+    }))
+    editedEbay = editedEbay.filter(item => item.price != "Invalid price")
+    setEbay(editedEbay)
 
-    // let combinedPriceArray = editedAmazon.concat(editedLazada, editedEbay);
-    // combinedPriceArray.sort((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price))
-    // setCombinedPrice(combinedPriceArray.slice(0, 30))
+    let combinedPriceArray = editedAmazon.concat(editedLazada, editedEbay);
+    combinedPriceArray.sort((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price))
+    setCombinedPrice(combinedPriceArray.slice(0, 30))
 
-    // let combinedReviewArray = editedAmazon.concat(editedLazada, editedEbay);
-    // combinedReviewArray = combinedReviewArray.filter(item => item.rating != "No ratings found")
-    // combinedReviewArray.sort((a : any, b : any) => parseFloat(b.rating) - parseFloat(a.rating))
-    // setCombinedReview(combinedReviewArray.slice(0, 30))
+    let combinedReviewArray = editedAmazon.concat(editedLazada, editedEbay);
+    combinedReviewArray = combinedReviewArray.filter(item => item.rating != "No ratings found")
+    combinedReviewArray.sort((a : any, b : any) => parseFloat(b.rating) - parseFloat(a.rating))
+    setCombinedReview(combinedReviewArray.slice(0, 30))
     
     // uncomment below lines to use the e-commerce APIs
-    let products: any = {
-      "amazon": [],
-      "lazada": [],
-      "ebay": []
-    }
+    // let products: any = {
+    //   "amazon": [],
+    //   "lazada": [],
+    //   "ebay": []
+    // }
 
-    const api_key = 'e54e6469c9mshfd93a2d40f44b01p14bbe0jsn509f9fa4490e'
+    // const api_key = 'e54e6469c9mshfd93a2d40f44b01p14bbe0jsn509f9fa4490e'
 
-    function getAmazonProducts() {
-      return fetch(`https://real-time-amazon-data.p.rapidapi.com/search?query=${item}&country=SG`, {
-        method: 'GET',
-        headers: {
-          'X-RapidAPI-Key': api_key,
-          'X-RapidAPI-Host': 'real-time-amazon-data.p.rapidapi.com'
-        },
-      })
-      .then(res => {
-        if (!res.ok) {
-          console.error("Error fetching Amazon data")
-        }
-        console.log("Amazon success")
-        return res.json()
-      })
-      .then(data => {
-        const amazonData: any[] = data["data"]["products"]
-        let editedAmazon = amazonData.map(item => ({
-          id: item["asin"],
-          title: item["product_title"],
-          image: item["product_photo"],
-          price: item["product_price"] == null
-                 ? "Invalid price"
-                 : item["product_price"].slice(2),
-          rating: item["product_star_rating"] == null
-                  ? "No ratings found"
-                  : item["product_star_rating"],
-          sales: item["sales_volume"] == null
-                 ? ""
-                 : item["sales_volume"],
-          delivery: item["delivery"] == null
-                    ? ""
-                    : item["delivery"],
-          url: item["product_url"],
-          platform: "amazon"
-        }))
-        editedAmazon = editedAmazon.filter(item => item.price != "Invalid price")
-        products["amazon"] = editedAmazon
-      })
-    }
+    // function getAmazonProducts() {
+    //   return fetch(`https://real-time-amazon-data.p.rapidapi.com/search?query=${item}&country=SG`, {
+    //     method: 'GET',
+    //     headers: {
+    //       'X-RapidAPI-Key': api_key,
+    //       'X-RapidAPI-Host': 'real-time-amazon-data.p.rapidapi.com'
+    //     },
+    //   })
+    //   .then(res => {
+    //     if (!res.ok) {
+    //       console.error("Error fetching Amazon data")
+    //     }
+    //     console.log("Amazon success")
+    //     return res.json()
+    //   })
+    //   .then(data => {
+    //     const amazonData: any[] = data["data"]["products"]
+    //     let editedAmazon = amazonData.map(item => ({
+    //       id: item["asin"],
+    //       title: item["product_title"],
+    //       image: item["product_photo"],
+    //       price: item["product_price"] == null
+    //              ? "Invalid price"
+    //              : item["product_price"].slice(2),
+    //       rating: item["product_star_rating"] == null
+    //               ? "No ratings found"
+    //               : item["product_star_rating"],
+    //       sales: item["sales_volume"] == null
+    //              ? ""
+    //              : item["sales_volume"],
+    //       delivery: item["delivery"] == null
+    //                 ? ""
+    //                 : item["delivery"],
+    //       url: item["product_url"],
+    //       platform: "amazon"
+    //     }))
+    //     editedAmazon = editedAmazon.filter(item => item.price != "Invalid price")
+    //     products["amazon"] = editedAmazon
+    //   })
+    // }
 
-    function getLazadaProducts() {
-      return fetch(`https://lazada-api.p.rapidapi.com/lazada/search/items?keywords=${item}&site=sg&page=1`, {
-        method: 'GET',
-        headers: {
-          'X-RapidAPI-Key': api_key,
-          'X-RapidAPI-Host': 'lazada-api.p.rapidapi.com'
-        },
-      })
-      .then(res => {
-        if (!res.ok) {
-          console.error("Error fetching Lazada data")
-        }
-        console.log("Lazada success")
-        return res.json()
-      })
-      .then(data => {
-        const lazadaData: any[] = data["data"]["items"]
-        let editedLazada = lazadaData.map(item => ({
-          id: item["item_id"],
-          title: item["title"],
-          image: item["img"],
-          price: item["price"] == ""
-                 ? "Invalid price"
-                 : item["price"],
-          rating: item["review_info"]["average_score"] == ""
-                  ? "No ratings found"
-                  : parseFloat(item["review_info"]["average_score"]).toFixed(2),
-          sales: item["sold_count"] == null
-                 ? ""
-                 : item["sold_count"] + " sold",
-          delivery: "",
-          url: item["product_url"],
-          platform: "lazada"
-        }))
-        products["lazada"] = editedLazada
-      })
-    }
+    // function getLazadaProducts() {
+    //   return fetch(`https://lazada-api.p.rapidapi.com/lazada/search/items?keywords=${item}&site=sg&page=1`, {
+    //     method: 'GET',
+    //     headers: {
+    //       'X-RapidAPI-Key': api_key,
+    //       'X-RapidAPI-Host': 'lazada-api.p.rapidapi.com'
+    //     },
+    //   })
+    //   .then(res => {
+    //     if (!res.ok) {
+    //       console.error("Error fetching Lazada data")
+    //     }
+    //     console.log("Lazada success")
+    //     return res.json()
+    //   })
+    //   .then(data => {
+    //     const lazadaData: any[] = data["data"]["items"]
+    //     let editedLazada = lazadaData.map(item => ({
+    //       id: item["item_id"],
+    //       title: item["title"],
+    //       image: item["img"],
+    //       price: item["price"] == ""
+    //              ? "Invalid price"
+    //              : item["price"],
+    //       rating: item["review_info"]["average_score"] == ""
+    //               ? "No ratings found"
+    //               : parseFloat(item["review_info"]["average_score"]).toFixed(2),
+    //       sales: item["sold_count"] == null
+    //              ? ""
+    //              : item["sold_count"] + " sold",
+    //       delivery: "",
+    //       url: item["product_url"],
+    //       platform: "lazada"
+    //     }))
+    //     products["lazada"] = editedLazada
+    //   })
+    // }
 
-    function getEbayProducts() {
-      return fetch(`https://ebay-search-result.p.rapidapi.com/search/${item}`, {
-        method: 'GET',
-        headers: {
-          'X-RapidAPI-Key': api_key,
-          'X-RapidAPI-Host': 'ebay-search-result.p.rapidapi.com'
-        },
-      })
-      .then(res => {
-        if (!res.ok) {
-          console.error("Error fetching Ebay data")
-        }
-        console.log("Ebay success")
-        return res.json()
-      })
-      .then(data => {
-        const ebayData: any[] = data["results"]
-        let editedEbay = ebayData.map(item => ({
-          id: item["id"],
-          title: item["title"],
-          image: item["image"],
-          price: item["price"].split('$').length == 2
-                 ? String((parseFloat(item["price"].slice(1)) * 1.36).toFixed(2))
-                 : "Invalid price",
-          rating: item["rating"] === "" ? "No ratings found" : item["rating"],
-          sales: "",
-          delivery: item["shipping"],
-          url: item["url"],
-          platform: "ebay"
-        }))
-        editedEbay = editedEbay.filter(item => item.price != "Invalid price")
-        products["ebay"] = editedEbay
-      })
-    }
+    // function getEbayProducts() {
+    //   return fetch(`https://ebay-search-result.p.rapidapi.com/search/${item}`, {
+    //     method: 'GET',
+    //     headers: {
+    //       'X-RapidAPI-Key': api_key,
+    //       'X-RapidAPI-Host': 'ebay-search-result.p.rapidapi.com'
+    //     },
+    //   })
+    //   .then(res => {
+    //     if (!res.ok) {
+    //       console.error("Error fetching Ebay data")
+    //     }
+    //     console.log("Ebay success")
+    //     return res.json()
+    //   })
+    //   .then(data => {
+    //     const ebayData: any[] = data["results"]
+    //     let editedEbay = ebayData.map(item => ({
+    //       id: item["id"],
+    //       title: item["title"],
+    //       image: item["image"],
+    //       price: item["price"].split('$').length == 2
+    //              ? String((parseFloat(item["price"].slice(1)) * 1.36).toFixed(2))
+    //              : "Invalid price",
+    //       rating: item["rating"] === "" ? "No ratings found" : item["rating"],
+    //       sales: "",
+    //       delivery: item["shipping"],
+    //       url: item["url"],
+    //       platform: "ebay"
+    //     }))
+    //     editedEbay = editedEbay.filter(item => item.price != "Invalid price")
+    //     products["ebay"] = editedEbay
+    //   })
+    // }
     
-    setIsLoading(true)
-    Promise.all([
-      getAmazonProducts(),
-      getLazadaProducts(),
-      getEbayProducts()
-    ])
-    .then(res => {
-      let amazonResult: any[] = products["amazon"]
-      let lazadaResult: any[] = products["lazada"]
-      let ebayResult: any[] = products["ebay"]
+    // setIsLoading(true)
+    // Promise.all([
+    //   getAmazonProducts(),
+    //   getLazadaProducts(),
+    //   getEbayProducts()
+    // ])
+    // .then(res => {
+    //   let amazonResult: any[] = products["amazon"]
+    //   let lazadaResult: any[] = products["lazada"]
+    //   let ebayResult: any[] = products["ebay"]
 
-      let combinedPriceArray = amazonResult.concat(lazadaResult, ebayResult)
-      combinedPriceArray.sort((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price))
-      setCombinedPrice(combinedPriceArray.slice(0, 30))
+    //   let combinedPriceArray = amazonResult.concat(lazadaResult, ebayResult)
+    //   combinedPriceArray.sort((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price))
+    //   setCombinedPrice(combinedPriceArray.slice(0, 30))
 
-      let combinedReviewArray = amazonResult.concat(lazadaResult, ebayResult)
-      combinedReviewArray = combinedReviewArray.filter(item => item.rating != "No ratings found")
-      combinedReviewArray.sort((a : any, b : any) => parseFloat(b.rating) - parseFloat(a.rating))
-      setCombinedReview(combinedReviewArray.slice(0, 30))
+    //   let combinedReviewArray = amazonResult.concat(lazadaResult, ebayResult)
+    //   combinedReviewArray = combinedReviewArray.filter(item => item.rating != "No ratings found")
+    //   combinedReviewArray.sort((a : any, b : any) => parseFloat(b.rating) - parseFloat(a.rating))
+    //   setCombinedReview(combinedReviewArray.slice(0, 30))
 
-      setAmazon(amazonResult.slice(0, 10))
-      setLazada(lazadaResult.slice(0, 10))
-      setEbay(ebayResult.slice(0, 10))
-      setIsLoading(false)
-    })
+    //   setAmazon(amazonResult.slice(0, 10))
+    //   setLazada(lazadaResult.slice(0, 10))
+    //   setEbay(ebayResult.slice(0, 10))
+    //   setIsLoading(false)
+    // })
     
   }, []);
 
