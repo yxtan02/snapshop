@@ -138,7 +138,7 @@ export default function result() {
                  : item["product_price"].slice(2),
           rating: item["product_star_rating"] == null
                   ? "No ratings found"
-                  : item["product_star_rating"],
+                  : parseFloat(item["product_star_rating"]).toFixed(2),
           sales: item["sales_volume"] == null
                  ? ""
                  : item["sales_volume"],
@@ -215,7 +215,7 @@ export default function result() {
           price: item["price"].split('$').length == 2
                  ? String((parseFloat(item["price"].slice(1)) * 1.36).toFixed(2))
                  : "Invalid price",
-          rating: item["rating"] === "" ? "No ratings found" : item["rating"],
+          rating: item["rating"] === "" ? "No ratings found" : parseFloat(item["rating"]).toFixed(2),
           sales: "",
           delivery: item["shipping"],
           url: item["url"],
