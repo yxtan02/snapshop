@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 13,
+    gap: 2,
     marginTop: 10,
   },
   button: {
