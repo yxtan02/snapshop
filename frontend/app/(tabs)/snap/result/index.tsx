@@ -9,6 +9,11 @@ import ProductCardHorizontal from '../../../../components/ProductCardHorizontal'
 import SmallButton from '../../../../components/SmallButton';
 import Header from '../../../../components/Header';
 
+let numPrice : number = 15
+let numReviews : number = 15
+let priceLoadMore = true
+let reviewsLoadMore = true
+
 export default function result() {
   const { item } = useLocalSearchParams()
   const [amazon, setAmazon] = useState<any[]>([])
@@ -19,6 +24,10 @@ export default function result() {
   const [reviewAggre, setReviewAggre] = useState(false)
   const [combinedReview, setCombinedReview] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [fullPriceArr, setFullPriceArr] = useState<any[]>([])
+  const [fullRevArr, setFullRevArr] = useState<any[]>([])
+  // const [priceLoadMore, setPriceLoadMore] = useState(true)
+  // const [reviewLoadMore, setReviewLoadMore] = useState(true)
   let userId: string = ""
 
   if (auth.currentUser) {
@@ -91,6 +100,8 @@ export default function result() {
       "lazada": [],
       "ebay": []
     }
+
+    
 
     const api_key = 'e54e6469c9mshfd93a2d40f44b01p14bbe0jsn509f9fa4490e'
 
@@ -221,16 +232,18 @@ export default function result() {
 
       let combinedPriceArray = amazonResult.concat(lazadaResult, ebayResult)
       combinedPriceArray.sort((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price))
-      setCombinedPrice(combinedPriceArray.slice(0, 30))
+      setFullPriceArr(combinedPriceArray)
+      setCombinedPrice(combinedPriceArray.slice(0, 15))
 
       let combinedReviewArray = amazonResult.concat(lazadaResult, ebayResult)
       combinedReviewArray = combinedReviewArray.filter(item => item.rating != "No ratings found")
+      setFullRevArr(combinedReviewArray)
       combinedReviewArray.sort((a : any, b : any) => parseFloat(b.rating) - parseFloat(a.rating))
-      setCombinedReview(combinedReviewArray.slice(0, 30))
+      setCombinedReview(combinedReviewArray.slice(0, 15))
 
-      setAmazon(amazonResult.slice(0, 10))
-      setLazada(lazadaResult.slice(0, 10))
-      setEbay(ebayResult.slice(0, 10))
+      setAmazon(amazonResult)
+      setLazada(lazadaResult)
+      setEbay(ebayResult)
       setIsLoading(false)
     })
     
@@ -270,6 +283,8 @@ export default function result() {
     </>
   )
 
+  
+
   const priceCompResult = (
     <>
       <View style={styles.buttonContainer}>
@@ -293,6 +308,16 @@ export default function result() {
           <ProductCardHorizontal key={index} item={item} userId={userId}/>
         ))}
       </View>
+      {priceLoadMore ? <Button title="Load More" onPress={() => {
+        numPrice += 15
+        console.log(numPrice)
+        console.log(fullPriceArr.length)
+        setCombinedPrice(fullPriceArr.slice(0, numPrice))
+        if (numPrice >= fullPriceArr.length) {
+          priceLoadMore = false
+          console.log("hello world")
+        }
+      }}></Button> : <View></View>}
     </>
   )
 
@@ -319,6 +344,13 @@ export default function result() {
           <ProductCardHorizontal key={index} item={item} userId={userId}/>
         ))}
       </View>
+      {reviewsLoadMore ? <Button title="Load More" onPress={() => {
+        numReviews += 15
+        setCombinedReview(fullRevArr.slice(0, numReviews))
+        if (numReviews >= fullRevArr.length) {
+          reviewsLoadMore = false
+        }
+      }}></Button> : <View></View>}
     </>
   )
   

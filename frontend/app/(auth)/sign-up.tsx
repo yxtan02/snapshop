@@ -24,7 +24,7 @@ export default function signUp() {
             console.error(error)
           });
         }
-        router.replace('/snap')
+        router.replace('/login')
       })
       .catch((error) => {
         console.error(error)
