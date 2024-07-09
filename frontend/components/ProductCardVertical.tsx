@@ -1,9 +1,30 @@
-import { Image, Linking, StyleSheet, Text, View } from 'react-native'
+import { Image, Linking, StyleSheet, Text, View } from 'react-native';
+import { router } from 'expo-router';
 import LikeButton from './LikeButton';
 import SmallButton from './SmallButton';
 import { AntDesign } from '@expo/vector-icons';
+import { db } from '../firebaseConfig.js';
+import { setDoc, getDoc, doc } from "firebase/firestore"; 
 
 export default function ProductCardHorizontal({ item, userId }: any) {
+  async function addToDb(item: any) {
+    // check if product is already stored in db
+    const docSnap = await getDoc(doc(db, 'products', item.id))
+
+    // add product to db if it is not stored yet
+    if (!docSnap.exists()) {
+      try {
+        await setDoc(doc(db, 'products', item.id), item);
+        console.log(`Item added (id: ${item.id})`);
+      } catch (error) {
+        console.error('Error adding item: ', error);
+      }
+    }
+
+    // navigate to product page
+    router.navigate(`/snap/result/${item.id}`);
+  }
+
   return (
     <View style={styles.cardContainer}>
         <View style={styles.titleContainer}>
@@ -20,8 +41,8 @@ export default function ProductCardHorizontal({ item, userId }: any) {
               {item.rating == "No ratings found"
                ? <Text style={styles.rating}>{item.rating}</Text>
                : <>
-                   <AntDesign name="star" size={15} color="#ff6f00" style={styles.star} />
-                   <Text style={styles.rating}>{item.rating} stars</Text>
+                    <AntDesign name="star" size={15} color="#ff6f00" style={styles.star} />
+                    <Text style={styles.rating}>{item.rating} stars</Text>
                  </>
               }
             </View>
@@ -31,12 +52,17 @@ export default function ProductCardHorizontal({ item, userId }: any) {
             </View>
             <View style={styles.buttonContainer}>
               <SmallButton
+                title="Reviews"
+                onPress={() => addToDb(item)}
+                containerStyle={{...styles.button, backgroundColor: '#FB6542', marginLeft: 54}}
+              />
+              <SmallButton
                 title="Buy now!"
                 onPress={() => Linking.openURL(item.url)
                                .catch((err) => console.error('Failed to open url', err))}
-                containerStyle={{ width: 80, height: 34 }}
+                containerStyle={{...styles.button, marginLeft: 12, marginRight: 22}}
               />
-              <LikeButton userId={userId} item={item} />
+              <LikeButton userId={userId} item={item}/>
             </View>
         </View>
       
@@ -118,9 +144,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   buttonContainer: {
+    width: "100%",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 18,
+  },
+  button: {
+    width: 68,
+    height: 32,
   },
 });
