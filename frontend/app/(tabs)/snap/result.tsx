@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { ActivityIndicator, Button, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router, Redirect } from 'expo-router';
@@ -8,11 +8,21 @@ import ProductList from '../../../components/ProductList';
 import ProductCardHorizontal from '../../../components/ProductCardHorizontal';
 import SmallButton from '../../../components/SmallButton';
 import Header from '../../../components/Header';
+import ToTopButton from '../../../components/toTopButton';
+import LoadMoreButton from '../../../components/loadMoreButton';
 
 let numPrice : number = 15
 let numReviews : number = 15
 let priceLoadMore = true
 let reviewsLoadMore = true
+
+const scrollRef : any = useRef();
+const onPressTouch = () => {
+  scrollRef.current?.scrollTo({
+    y: 0,
+    animated: true,
+  });
+}
 
 export default function result() {
   const { item } = useLocalSearchParams()
@@ -26,8 +36,10 @@ export default function result() {
   const [isLoading, setIsLoading] = useState(false)
   const [fullPriceArr, setFullPriceArr] = useState<any[]>([])
   const [fullRevArr, setFullRevArr] = useState<any[]>([])
-  // const [priceLoadMore, setPriceLoadMore] = useState(true)
-  // const [reviewLoadMore, setReviewLoadMore] = useState(true)
+
+  const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
+  const CONTENT_OFFSET_THRESHOLD = 300;
+
   let userId: string = ""
 
   if (auth.currentUser) {
@@ -39,57 +51,57 @@ export default function result() {
 
   useEffect(() => {
     // for testing
-    // let editedAmazon: any[] = amazonTestData.map(item => ({
-    //   title: item["product_title"],
-    //   image: item["product_photo"],
-    //   price: item["product_price"].slice(2),
-    //   rating: item["product_star_rating"],
-    //   sales: item["sales_volume"] == null
-    //          ? ""
-    //          : item["sales_volume"],
-    //   delivery: item["delivery"] == null
-    //             ? ""
-    //             : item["delivery"],
-    //   url: item["product_url"],
-    //   platform: "amazon"
-    // }))
-    // setAmazon(editedAmazon)
+    let editedAmazon: any[] = amazonTestData.map(item => ({
+      title: item["product_title"],
+      image: item["product_photo"],
+      price: item["product_price"].slice(2),
+      rating: item["product_star_rating"],
+      sales: item["sales_volume"] == null
+             ? ""
+             : item["sales_volume"],
+      delivery: item["delivery"] == null
+                ? ""
+                : item["delivery"],
+      url: item["product_url"],
+      platform: "amazon"
+    }))
+    setAmazon(editedAmazon)
 
-    // let editedLazada: any[] = lazadaTestData.map(item => ({
-    //   title: item["title"],
-    //   image: item["img"],
-    //   price: item["price"],
-    //   rating: parseFloat(item["review_info"]["average_score"]).toFixed(2),
-    //   sales: item["sold_count"] + " sold",
-    //   delivery: "",
-    //   url: item["product_url"],
-    //   platform: "lazada"
-    // }))
-    // setLazada(editedLazada)
+    let editedLazada: any[] = lazadaTestData.map(item => ({
+      title: item["title"],
+      image: item["img"],
+      price: item["price"],
+      rating: parseFloat(item["review_info"]["average_score"]).toFixed(2),
+      sales: item["sold_count"] + " sold",
+      delivery: "",
+      url: item["product_url"],
+      platform: "lazada"
+    }))
+    setLazada(editedLazada)
 
-    // let editedEbay: any[] = ebayTestData.map(item => ({
-    //   title: item["title"],
-    //   image: item["image"],
-    //   price: item["price"].split('$').length == 2
-    //          ? String((parseFloat(item["price"].slice(1)) * 1.36).toFixed(2))
-    //          : "Invalid price",
-    //   rating: item["rating"] === "" ? "No ratings found" : item["rating"],
-    //   sales: "",
-    //   delivery: item["shipping"],
-    //   url: item["url"],
-    //   platform: "ebay"
-    // }))
-    // editedEbay = editedEbay.filter(item => item.price != "Invalid price")
-    // setEbay(editedEbay)
+    let editedEbay: any[] = ebayTestData.map(item => ({
+      title: item["title"],
+      image: item["image"],
+      price: item["price"].split('$').length == 2
+             ? String((parseFloat(item["price"].slice(1)) * 1.36).toFixed(2))
+             : "Invalid price",
+      rating: item["rating"] === "" ? "No ratings found" : item["rating"],
+      sales: "",
+      delivery: item["shipping"],
+      url: item["url"],
+      platform: "ebay"
+    }))
+    editedEbay = editedEbay.filter(item => item.price != "Invalid price")
+    setEbay(editedEbay)
 
-    // let combinedPriceArray = editedAmazon.concat(editedLazada, editedEbay);
-    // combinedPriceArray.sort((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price))
-    // setCombinedPrice(combinedPriceArray.slice(0, 30))
+    let combinedPriceArray = editedAmazon.concat(editedLazada, editedEbay);
+    combinedPriceArray.sort((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price))
+    setCombinedPrice(combinedPriceArray.slice(0, 30))
 
-    // let combinedReviewArray = editedAmazon.concat(editedLazada, editedEbay);
-    // combinedReviewArray = combinedReviewArray.filter(item => item.rating != "No ratings found")
-    // combinedReviewArray.sort((a : any, b : any) => parseFloat(b.rating) - parseFloat(a.rating))
-    // setCombinedReview(combinedReviewArray.slice(0, 30))
+    let combinedReviewArray = editedAmazon.concat(editedLazada, editedEbay);
+    combinedReviewArray = combinedReviewArray.filter(item => item.rating != "No ratings found")
+    combinedReviewArray.sort((a : any, b : any) => parseFloat(b.rating) - parseFloat(a.rating))
+    setCombinedReview(combinedReviewArray.slice(0, 30))
     
     //uncomment below lines to use the e-commerce APIs
     let products: any = {
@@ -97,8 +109,6 @@ export default function result() {
       "lazada": [],
       "ebay": []
     }
-
-    
 
     const api_key = 'e54e6469c9mshfd93a2d40f44b01p14bbe0jsn509f9fa4490e'
 
@@ -213,33 +223,33 @@ export default function result() {
       })
     }
     
-    setIsLoading(true)
-    Promise.all([
-      getAmazonProducts(),
-      getLazadaProducts(),
-      getEbayProducts()
-    ])
-    .then(res => {
-      let amazonResult: any[] = products["amazon"]
-      let lazadaResult: any[] = products["lazada"]
-      let ebayResult: any[] = products["ebay"]
+    // setIsLoading(true)
+    // Promise.all([
+    //   getAmazonProducts(),
+    //   getLazadaProducts(),
+    //   getEbayProducts()
+    // ])
+    // .then(res => {
+    //   let amazonResult: any[] = products["amazon"]
+    //   let lazadaResult: any[] = products["lazada"]
+    //   let ebayResult: any[] = products["ebay"]
 
-      let combinedPriceArray = amazonResult.concat(lazadaResult, ebayResult)
-      combinedPriceArray.sort((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price))
-      setFullPriceArr(combinedPriceArray)
-      setCombinedPrice(combinedPriceArray.slice(0, 15))
+    //   let combinedPriceArray = amazonResult.concat(lazadaResult, ebayResult)
+    //   combinedPriceArray.sort((a : any, b : any) => parseFloat(a.price) - parseFloat(b.price))
+    //   setFullPriceArr(combinedPriceArray)
+    //   setCombinedPrice(combinedPriceArray.slice(0, 15))
 
-      let combinedReviewArray = amazonResult.concat(lazadaResult, ebayResult)
-      combinedReviewArray = combinedReviewArray.filter(item => item.rating != "No ratings found")
-      setFullRevArr(combinedReviewArray)
-      combinedReviewArray.sort((a : any, b : any) => parseFloat(b.rating) - parseFloat(a.rating))
-      setCombinedReview(combinedReviewArray.slice(0, 15))
+    //   let combinedReviewArray = amazonResult.concat(lazadaResult, ebayResult)
+    //   combinedReviewArray = combinedReviewArray.filter(item => item.rating != "No ratings found")
+    //   setFullRevArr(combinedReviewArray)
+    //   combinedReviewArray.sort((a : any, b : any) => parseFloat(b.rating) - parseFloat(a.rating))
+    //   setCombinedReview(combinedReviewArray.slice(0, 15))
 
-      setAmazon(amazonResult)
-      setLazada(lazadaResult)
-      setEbay(ebayResult)
-      setIsLoading(false)
-    })
+    //   setAmazon(amazonResult)
+    //   setLazada(lazadaResult)
+    //   setEbay(ebayResult)
+    //   setIsLoading(false)
+    // })
     
   }, []);
 
@@ -277,8 +287,6 @@ export default function result() {
     </>
   )
 
-  
-
   const priceCompResult = (
     <>
       <View style={styles.buttonContainer}>
@@ -301,8 +309,8 @@ export default function result() {
         {combinedPrice.map((item, index) => (
           <ProductCardHorizontal key={index} item={item} userId={userId}/>
         ))}
-      </View>
-      {priceLoadMore ? <Button title="Load More" onPress={() => {
+      </View >
+      {priceLoadMore ? <LoadMoreButton title="Load More" onPress={() => {
         numPrice += 15
         console.log(numPrice)
         console.log(fullPriceArr.length)
@@ -311,7 +319,7 @@ export default function result() {
           priceLoadMore = false
           console.log("hello world")
         }
-      }}></Button> : <View></View>}
+      }}></LoadMoreButton> : <View></View>}
     </>
   )
 
@@ -338,20 +346,21 @@ export default function result() {
           <ProductCardHorizontal key={index} item={item} userId={userId}/>
         ))}
       </View>
-      {reviewsLoadMore ? <Button title="Load More" onPress={() => {
+      {reviewsLoadMore ? <LoadMoreButton title="Load More" onPress={() => {
         numReviews += 15
         setCombinedReview(fullRevArr.slice(0, numReviews))
         if (numReviews >= fullRevArr.length) {
           reviewsLoadMore = false
         }
-      }}></Button> : <View></View>}
+      }}></LoadMoreButton> : <View></View>}
     </>
   )
-  
+
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
       <Header title="Result" backButton={true}/>
-      <ScrollView style={styles.scrollView}>
+      <ScrollView ref={scrollRef} style={styles.scrollView} onScroll={event => setContentVerticalOffset(event.nativeEvent.contentOffset.y)} 
+        scrollEventThrottle={16}>
         <LinearGradient
           colors={['#F7CED7FF', '#FBEAEB']}
           style={styles.headerContainer}
@@ -367,8 +376,9 @@ export default function result() {
                    : reviewAggre
                    ? reviewAggreResult
                    : normalResult}
-
       </ScrollView>
+      {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD &&
+      <ToTopButton title="To the top" onPress={onPressTouch}></ToTopButton>}
     </SafeAreaView>
   )
 }
@@ -443,7 +453,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 12,
     gap: 6,
-  },
+  }
 });
 
 let amazonTestData: any[] = [

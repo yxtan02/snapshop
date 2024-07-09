@@ -1,7 +1,7 @@
 import { launchCameraAsync, launchImageLibraryAsync } from 'expo-image-picker';
 import { Redirect, router } from 'expo-router';
 import { useState } from 'react';
-import { Text, Image, StyleSheet, View } from 'react-native';
+import { Text, Image, StyleSheet, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '../../../components/IconButton';
 import { auth, db, storage } from '../../../firebaseConfig.js';
@@ -44,7 +44,7 @@ export default function snap() {
 
   async function getPhoto(func: any) {
     //uncomment the line below to avoid using the microsoft vision API
-    //router.navigate({ pathname: 'snap/result', params: { item: "toothbrush" } })
+    router.navigate({ pathname: 'snap/result', params: { item: "toothbrush" } })
 
     let query : string = ""
 
@@ -130,12 +130,14 @@ export default function snap() {
         <View style={styles.buttonContainer}>
           <Button label="Take a photo" name="picture-o" onPress={takePhoto}/>
           <Button label="Upload a photo" name="camera" onPress={uploadPhoto}/>
+          
           {/* <Button label="result" onPress={() => router.navigate('/snap/result?item=a+gold+watch+with+a+black+square+face')}/> */}
         </View>
         <Image
           resizeMode='contain'
           source={{ uri: image }}
           style={styles.image} />
+          
       </View>
     </SafeAreaView>
   );
