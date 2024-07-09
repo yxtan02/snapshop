@@ -2,8 +2,29 @@ import { Linking, Image, StyleSheet, Text, View } from 'react-native';
 import LikeButton from './LikeButton';
 import SmallButton from './SmallButton';
 import { AntDesign } from '@expo/vector-icons';
+import { setDoc, getDoc, doc } from "firebase/firestore";
+import { router } from 'expo-router';
+import { db } from '../firebaseConfig.js';
 
 export default function ProductCardVertical({ item, userId, containerStyle }: any) {
+  async function addToDb(item: any) {
+    // check if product is already stored in db
+    const docSnap = await getDoc(doc(db, 'products', item.id))
+
+    // add product to db if it is not stored yet
+    if (!docSnap.exists()) {
+      try {
+        await setDoc(doc(db, 'products', item.id), item);
+        console.log(`Item added (id: ${item.id})`);
+      } catch (error) {
+        console.error('Error adding item: ', error);
+      }
+    }
+
+    // navigate to product page
+    router.navigate(`/snap/result/${item.id}`);
+  }
+  
   return (
     <View style={[styles.cardContainer, containerStyle]}>
       <View style={styles.titleContainer}>
@@ -34,6 +55,11 @@ export default function ProductCardVertical({ item, userId, containerStyle }: an
             {item.delivery !== "" && <Text style={styles.description}>{item.delivery}</Text>}
           </View>
           <View style={styles.buttonContainer}>
+            <SmallButton
+              title="Reviews"
+              onPress={() => addToDb(item)}
+              containerStyle={{...styles.button, backgroundColor: '#FB6542', marginLeft: 54}}
+            />
             <SmallButton
               title="Buy now!"
               onPress={() => Linking.openURL(item.url)
@@ -128,5 +154,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 13,
     marginTop: 10,
+  },
+  button: {
+    width: 72,
+    height: 33,
   },
 });
