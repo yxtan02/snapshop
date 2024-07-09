@@ -5,7 +5,7 @@ import { db } from '../firebaseConfig.js'
 import { addDoc, collection, serverTimestamp } from "firebase/firestore"; 
 import { doc, deleteDoc } from "firebase/firestore";
 
-let hashmap = {}
+let hashmap: any = {}
 
 function addToWishlist(userId : any, item : any) {
   let docId = "test"
