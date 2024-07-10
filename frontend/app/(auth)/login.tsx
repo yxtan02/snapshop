@@ -1,13 +1,3 @@
-// 319612752769-ksg3127o1pdpcbuhcc4h2cssl36k2i3i.apps.googleusercontent.com
-// import * as WebBrowser from "expo-web-browser";
-// import * as Google from "expo-auth-session/providers/google";
-// import AsyncStorage from "@react-native-async-storage/async-storage"
-
-// WebBrowser.maybeCompleteAuthSession();
-// const [request, response, promptAsync] = Google.useAuthRequest({
-//   androidClientId: "319612752769-ksg3127o1pdpcbuhcc4h2cssl36k2i3i.apps.googleusercontent.com"
-// })
-
 import { Link, router } from 'expo-router';
 import { useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
@@ -16,6 +6,25 @@ import { auth } from "../../firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { icons } from '../../constants';
 import Button from '../../components/Button';
+
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
+GoogleSignin.configure({
+  webClientId: "319612752769-t06j7imr4hv1rnghfo9e6d5dqh1r4iqc.apps.googleusercontent.com"
+});
+_signIn = async () => {
+  try {
+    await GoogleSignin.hasPlayServices();
+    const userInfo = await GoogleSignin.signIn();
+    
+  } catch (error) {
+    console.log(error)
+    
+  }
+};
 
 export default function login() {
   const [email, setEmail] = useState('')
@@ -86,12 +95,10 @@ export default function login() {
                 Sign up
               </Link>
             </View>
-            {/* <Button
-              title="Login"
-              onPress={login}
-              isLoading={isSubmitting}
-              containerStyle={styles.button}
-            /> */}
+            {/* <GoogleSigninButton size={GoogleSigninButton.Size.Wide} color={GoogleSigninButton.Color.Dark}
+            onPress={() => {
+                      // initiate sign in
+                    }}/> */}
           </View>
         </View>
       </ScrollView>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "637812254928",
+    "project_id": "snapsnop-android",
+    "storage_bucket": "snapsnop-android.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:637812254928:android:531935f6825a64407ad6d5",
+        "android_client_info": {
+          "package_name": "com.cshao02.SnapShop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDN0ZFy0jPwqp6at321RGvbyb0srxVj3rg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
