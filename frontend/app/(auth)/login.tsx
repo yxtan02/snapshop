@@ -1,3 +1,13 @@
+// 319612752769-ksg3127o1pdpcbuhcc4h2cssl36k2i3i.apps.googleusercontent.com
+// import * as WebBrowser from "expo-web-browser";
+// import * as Google from "expo-auth-session/providers/google";
+// import AsyncStorage from "@react-native-async-storage/async-storage"
+
+// WebBrowser.maybeCompleteAuthSession();
+// const [request, response, promptAsync] = Google.useAuthRequest({
+//   androidClientId: "319612752769-ksg3127o1pdpcbuhcc4h2cssl36k2i3i.apps.googleusercontent.com"
+// })
+
 import { Link, router } from 'expo-router';
 import { useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
@@ -76,6 +86,12 @@ export default function login() {
                 Sign up
               </Link>
             </View>
+            {/* <Button
+              title="Login"
+              onPress={login}
+              isLoading={isSubmitting}
+              containerStyle={styles.button}
+            /> */}
           </View>
         </View>
       </ScrollView>
