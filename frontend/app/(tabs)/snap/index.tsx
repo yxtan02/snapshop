@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Text, Image, StyleSheet, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '../../../components/IconButton';
-import { auth, db, storage } from '../../../firebaseConfig.js';
+import { authy, db, storage } from '../../../firebaseConfig.js';
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { ref, uploadBytes } from "firebase/storage";
 import Header from '../../../components/Header';
@@ -14,8 +14,8 @@ export default function snap() {
   const [image, setImage] = useState("")
   let userId: string
 
-  if (auth.currentUser) {
-    userId = auth.currentUser.uid
+  if (authy.currentUser) {
+    userId = authy.currentUser.uid
   } else {
     alert("You are not signed in")
     return <Redirect href="/login"/>

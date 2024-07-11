@@ -3,7 +3,7 @@ import { ActivityIndicator, Button, FlatList, Image, Pressable, ScrollView, Styl
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router, Redirect } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { auth } from '../../../../firebaseConfig.js';
+import { authy } from '../../../../firebaseConfig.js';
 import ProductList from '../../../../components/ProductList';
 import ProductCardHorizontal from '../../../../components/ProductCardHorizontal';
 import SmallButton from '../../../../components/SmallButton';
@@ -42,8 +42,8 @@ export default function result() {
 
   let userId: string = ""
 
-  if (auth.currentUser) {
-    userId = auth.currentUser.uid
+  if (authy.currentUser) {
+    userId = authy.currentUser.uid
   } else {
     // alert("You are not signed in")
     // return <Redirect href="/login"/>

@@ -1,26 +1,44 @@
 {
   "project_info": {
-    "project_number": "637812254928",
-    "project_id": "snapsnop-android",
-    "storage_bucket": "snapsnop-android.appspot.com"
+    "project_number": "319612752769",
+    "project_id": "snapshop-9981c",
+    "storage_bucket": "snapshop-9981c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:637812254928:android:531935f6825a64407ad6d5",
+        "mobilesdk_app_id": "1:319612752769:android:1840ffe9d57a599e250e80",
         "android_client_info": {
           "package_name": "com.cshao02.SnapShop"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "319612752769-ksg3127o1pdpcbuhcc4h2cssl36k2i3i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cshao02.SnapShop",
+            "certificate_hash": "eaf2df8d6a9fd575ff4fb76d1e1a8d24e0251e58"
+          }
+        },
+        {
+          "client_id": "319612752769-dpngaf1f453ma2a0qfq1p6uqj8ol5166.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyDN0ZFy0jPwqp6at321RGvbyb0srxVj3rg"
+          "current_key": "AIzaSyBONW1NFcFI8IyGJyStyjnRcYLgmxfcxF0"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "319612752769-8rsd5isg09oroue8q7ausnndal35t79f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

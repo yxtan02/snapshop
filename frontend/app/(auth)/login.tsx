@@ -1,31 +1,58 @@
 import { Link, router } from 'expo-router';
 import { useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { TouchableOpacity, Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { auth } from "../../firebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { authy } from "../../firebaseConfig";
+import { signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, getRedirectResult } from "firebase/auth";
 import { icons } from '../../constants';
 import Button from '../../components/Button';
 
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-  statusCodes,
-} from '@react-native-google-signin/google-signin';
-GoogleSignin.configure({
-  webClientId: "319612752769-t06j7imr4hv1rnghfo9e6d5dqh1r4iqc.apps.googleusercontent.com"
-});
-_signIn = async () => {
-  try {
-    await GoogleSignin.hasPlayServices();
-    const userInfo = await GoogleSignin.signIn();
-    
-  } catch (error) {
-    console.log(error)
-    
-  }
-};
+import { GoogleAuthProvider } from "firebase/auth";
 
+import {GoogleSignin, statusCodes, GoogleSigninButton} from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth';
+    //   GoogleSignin.configure({
+    //     offlineAccess: false,
+    //     webClientId:
+    //       '319612752769-dpngaf1f453ma2a0qfq1p6uqj8ol5166.apps.googleusercontent.com',
+    //     scopes: ['profile', 'email'],
+    //  });
+
+    //  async function onGoogleButtonPress() {
+    //   try {
+    //     console.log("pressed")
+    //     // Get the user's ID token
+    //     // const { idToken } = 
+    //     await GoogleSignin.signIn()
+    //     .then((res) => {
+    //       router.replace('/snap')
+    //     })
+    //     // // Create a Google credential with the token
+    //     // const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+    //     // // Sign-in the user with the credential
+    //     // auth().signInWithCredential(googleCredential)
+    //     // .then((res) => {
+    //     //   console.log(res.user)
+    //     //   router.replace('/snap')
+    //     // })
+    //     // .catch((error) => {
+    //     //   console.error(error)
+    //     //   alert("Login failed!\n" + error.message)
+    //     // })
+    //   } catch (error : any) {
+    //     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+    //       // user cancelled the login flow
+    //     } else if (error.code === statusCodes.IN_PROGRESS) {
+    //       // operation sign in is in progress already
+    //     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+    //       // play services not available
+    //     } else {
+    //       // some other error
+    //     }
+    //   }
+    // }
+    
+  
 export default function login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -33,7 +60,7 @@ export default function login() {
 
   function login() {
     setSubmitting(true)
-    signInWithEmailAndPassword(auth, email, password)
+    signInWithEmailAndPassword(authy, email, password)
       .then((res) => {
         console.log(res.user)
         router.replace('/snap')
@@ -95,10 +122,9 @@ export default function login() {
                 Sign up
               </Link>
             </View>
-            {/* <GoogleSigninButton size={GoogleSigninButton.Size.Wide} color={GoogleSigninButton.Color.Dark}
-            onPress={() => {
-                      // initiate sign in
-                    }}/> */}
+            {/* <GoogleSigninButton onPress={
+              onGoogleButtonPress}>
+            </GoogleSigninButton> */}
           </View>
         </View>
       </ScrollView>

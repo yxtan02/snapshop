@@ -2,7 +2,7 @@ import { Link, router } from 'expo-router';
 import { useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { auth } from "../../firebaseConfig";
+import { authy } from "../../firebaseConfig";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { icons } from '../../constants';
 import Button from '../../components/Button';
@@ -15,10 +15,10 @@ export default function signUp() {
 
   function signUp() {
     setSubmitting(true)
-    createUserWithEmailAndPassword(auth, email, password)
+    createUserWithEmailAndPassword(authy, email, password)
       .then(() => {
-        if (auth.currentUser) {
-          updateProfile(auth.currentUser, {
+        if (authy.currentUser) {
+          updateProfile(authy.currentUser, {
             displayName: username
           }).catch((error) => {
             console.error(error)

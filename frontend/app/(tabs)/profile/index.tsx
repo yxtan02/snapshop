@@ -1,13 +1,13 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Redirect, router } from 'expo-router'
-import { auth } from '../../../firebaseConfig.js'
+import { authy } from '../../../firebaseConfig.js'
 import { icons } from "../../../constants"
 import MenuTab from '../../../components/MenuTab'
 import Header from '../../../components/Header'
 
 export default function profile() {
-  if (!auth.currentUser) {
+  if (!authy.currentUser) {
     alert("You are not signed in")
     return <Redirect href="/login"/>
   }
@@ -21,8 +21,8 @@ export default function profile() {
             source={icons.profile}
             style={styles.image}
           />
-          <Text style={styles.userName}>{auth.currentUser?.displayName}</Text>
-          <Text style={styles.email}>{auth.currentUser?.email}</Text>
+          <Text style={styles.userName}>{authy.currentUser?.displayName}</Text>
+          <Text style={styles.email}>{authy.currentUser?.email}</Text>
         </View>
         <View style={styles.menuContainer}>
           <MenuTab
@@ -40,7 +40,7 @@ export default function profile() {
             title="Log out"
             icon={icons.logout}
             onPress={() => {
-              auth.signOut()
+              authy.signOut()
               router.replace('/login')
             }}
           />

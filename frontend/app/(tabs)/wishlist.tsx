@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Redirect } from 'expo-router';
-import { auth, db } from '../../firebaseConfig.js';
+import { authy, db } from '../../firebaseConfig.js';
 import { collection, getDocs, orderBy, query } from "firebase/firestore"; 
 import WishlistCard from "../../components/WishlistCard";
 import Header from '../../components/Header';
@@ -14,8 +14,8 @@ export default function wishlist() {
   const [isRefresh, setIsRefresh] = useState(false)
   let userId: string
 
-  if (auth.currentUser) {
-    userId = auth.currentUser.uid
+  if (authy.currentUser) {
+    userId = authy.currentUser.uid
   } else {
     alert("You are not signed in")
     return <Redirect href="/login"/>
