@@ -3,60 +3,78 @@ import { useState } from 'react';
 import { TouchableOpacity, Image, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { authy } from "../../firebaseConfig";
-import { signInWithEmailAndPassword, signInWithPopup, signInWithRedirect, getRedirectResult } from "firebase/auth";
+import { GoogleAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword, signInWithCredential } from "firebase/auth";
 import { icons } from '../../constants';
 import Button from '../../components/Button';
-
-import { GoogleAuthProvider } from "firebase/auth";
-
 import {GoogleSignin, statusCodes, GoogleSigninButton} from '@react-native-google-signin/google-signin';
-import auth from '@react-native-firebase/auth';
-    //   GoogleSignin.configure({
-    //     offlineAccess: false,
-    //     webClientId:
-    //       '319612752769-dpngaf1f453ma2a0qfq1p6uqj8ol5166.apps.googleusercontent.com',
-    //     scopes: ['profile', 'email'],
-    //  });
-
-    //  async function onGoogleButtonPress() {
-    //   try {
-    //     console.log("pressed")
-    //     // Get the user's ID token
-    //     // const { idToken } = 
-    //     await GoogleSignin.signIn()
-    //     .then((res) => {
-    //       router.replace('/snap')
-    //     })
-    //     // // Create a Google credential with the token
-    //     // const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-    //     // // Sign-in the user with the credential
-    //     // auth().signInWithCredential(googleCredential)
-    //     // .then((res) => {
-    //     //   console.log(res.user)
-    //     //   router.replace('/snap')
-    //     // })
-    //     // .catch((error) => {
-    //     //   console.error(error)
-    //     //   alert("Login failed!\n" + error.message)
-    //     // })
-    //   } catch (error : any) {
-    //     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-    //       // user cancelled the login flow
-    //     } else if (error.code === statusCodes.IN_PROGRESS) {
-    //       // operation sign in is in progress already
-    //     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-    //       // play services not available
-    //     } else {
-    //       // some other error
-    //     }
-    //   }
-    // }
-    
+import {LoginManager, AccessToken} from 'react-native-fbsdk-next'
   
 export default function login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isSubmitting, setSubmitting] = useState(false);
+
+  GoogleSignin.configure({
+    webClientId: '319612752769-dpngaf1f453ma2a0qfq1p6uqj8ol5166.apps.googleusercontent.com', // From Google Developer Console
+    offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+    scopes: ['profile', 'email'],
+  });
+  
+  async function onGoogleButtonPress() {
+    try {
+      console.log("Google Sign-In button pressed");
+  
+      // Check if your device supports Google Play services.
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+  
+      // Get the user's ID token
+      const { idToken } = await GoogleSignin.signIn();
+  
+      // Create a Google credential with the token
+      const googleCredential = GoogleAuthProvider.credential(idToken);
+  
+      // Sign-in the user with the credential
+      await signInWithCredential(authy, googleCredential)
+        .then((res) => {
+          router.replace('/snap')
+        })
+  
+      console.log("User signed in successfully!");
+      // Redirect or do other necessary actions
+    } catch (error : any) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+        alert("User cancelled the login flow");
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+        alert("Sign in operation is in progress already");
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+        alert("Play services not available or outdated");
+      } else {
+        // some other error happened
+        alert("An error occurred during sign in:" + error);
+      }
+    }
+  }
+
+  const onFacebookButtonPress = async () => {
+    // const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+    // if (result.isCancelled) {
+    //   throw new Error('User cancelled login')
+    // }
+
+    // const data = await AccessToken.getCurrentAccessToken();
+    // if (!data) {
+    //   throw new Error('Something went wrong obtaining access token');
+    // }
+
+    const credential = FacebookAuthProvider.credential(data.accessToken);
+    await signInWithCredential(authy, credential)
+      .then((res) => {
+        router.replace('/snap')
+      })
+  }
 
   function login() {
     setSubmitting(true)
@@ -122,9 +140,17 @@ export default function login() {
                 Sign up
               </Link>
             </View>
-            {/* <GoogleSigninButton onPress={
+            <GoogleSigninButton 
+              size={GoogleSigninButton.Size.Wide}
+              color={GoogleSigninButton.Color.Dark} 
+              onPress={
               onGoogleButtonPress}>
-            </GoogleSigninButton> */}
+            </GoogleSigninButton>
+            <Button
+              title="Sign in with Facebook"
+              onPress={onFacebookButtonPress}
+              containerStyle={styles.button}
+            />
           </View>
         </View>
       </ScrollView>

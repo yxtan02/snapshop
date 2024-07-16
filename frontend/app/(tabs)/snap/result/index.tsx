@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, createRef } from 'react';
 import { ActivityIndicator, Button, FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router, Redirect } from 'expo-router';
@@ -16,7 +16,7 @@ let numReviews : number = 15
 let priceLoadMore = true
 let reviewsLoadMore = true
 
-const scrollRef : any = useRef();
+const scrollRef : any = createRef();
 const onPressTouch = () => {
   scrollRef.current?.scrollTo({
     y: 0,
@@ -362,7 +362,7 @@ export default function result() {
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
       <Header title="Result" backButton={true}/>
-      <ScrollView ref={scrollRef} style={styles.scrollView} onScroll={event => setContentVerticalOffset(event.nativeEvent.contentOffset.y)} 
+      <ScrollView style={styles.scrollView} ref={scrollRef} onScroll={event => setContentVerticalOffset(event.nativeEvent.contentOffset.y)} 
         scrollEventThrottle={16}>
         <LinearGradient
           colors={['#F7CED7FF', '#FBEAEB']}
@@ -616,5 +616,5 @@ let ebayTestData: any[] = [
     "image":"https://i.ebayimg.com/thumbs/images/g/3JUAAOSw3HRk3Ebc/s-l140.jpg",
     "url":"https://www.ebay.com/itm/364422868922?hash=item54d94bafba:g:3JUAAOSw3HRk3Ebc&itmprp=enc%3AAQAJAAAAsFBZqgb0cBBc%2BL8GeJWnm74soxGEmHy3GJGp1WQSi%2BPuydOTF2QTs9yw%2F7ORP32fO799JSWVPabWFn%2Fwz12Phy4zKxgyDaDCnSDPt0Z6DFfwah844SubM7GZ1XqUcSlLZDQOhZ12mTkP3yttx2sdSa71EoRdeIoBEj3k8WqH6vw4bXyFmfyFEw7Hkh6QY5ZUoA3UuIaiDx4x1%2Fg3X1Phje3euNJhY9vNFeljfrJ3lIap%7Ctkp%3ABlBMUNTuzIzzYw",
     "id":"cbee0912-b321-42db-b33f-77f8ec6e0228"
-  }
-]
+  }]
+

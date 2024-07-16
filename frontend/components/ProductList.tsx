@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, FlatList, StyleSheet, Text, View } from 'react-native'
 import ProductCardVertical from './ProductCardVertical'
 
 export default function ProductList({ title, data, userId }: any) {
@@ -13,7 +13,8 @@ export default function ProductList({ title, data, userId }: any) {
         horizontal
         contentContainerStyle={{ gap: 8 }}
         style={styles.flatList}
-      />}
+      />
+      }
     </View>
   )
 }

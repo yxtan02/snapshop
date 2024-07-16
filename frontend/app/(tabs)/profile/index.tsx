@@ -5,12 +5,29 @@ import { authy } from '../../../firebaseConfig.js'
 import { icons } from "../../../constants"
 import MenuTab from '../../../components/MenuTab'
 import Header from '../../../components/Header'
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 export default function profile() {
   if (!authy.currentUser) {
     alert("You are not signed in")
     return <Redirect href="/login"/>
   }
+
+  const signOut = async () => {
+    try {
+      // Sign out from Google
+      await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut();
+
+      // Sign out from Firebase
+      await authy.signOut();
+
+      // Navigate to the login screen
+      router.replace('/login');
+    } catch (error) {
+      console.error('Error signing out: ', error);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
@@ -21,8 +38,8 @@ export default function profile() {
             source={icons.profile}
             style={styles.image}
           />
-          <Text style={styles.userName}>{authy.currentUser?.displayName}</Text>
-          <Text style={styles.email}>{authy.currentUser?.email}</Text>
+          <Text style={styles.userName}>{authy.currentUser?.displayName }</Text>
+          <Text style={styles.email}>{ authy.currentUser?.email }</Text>
         </View>
         <View style={styles.menuContainer}>
           <MenuTab
@@ -39,10 +56,7 @@ export default function profile() {
           <MenuTab
             title="Log out"
             icon={icons.logout}
-            onPress={() => {
-              authy.signOut()
-              router.replace('/login')
-            }}
+            onPress={signOut}
           />
         </View>
       </View>

@@ -36,11 +36,20 @@
       "expo-router",
       "@react-native-google-signin/google-signin",
       [
+        "react-native-fbsdk-next",
+        {
+          "appID": "439225219092518",
+          "clientToken": "4957cd3501ee277be0a18e6d8f6fa7ac",
+          "displayName": "SnapShop",
+          "scheme": "fb439225219092518"
+        }
+      ],
+      [
         "expo-image-picker",
         {
           "photosPermission": "Allow app to access your photos",
           "cameraPermission": "Allow app to access your camera"
-        }
+        } 
       ]
     ],
     "experiments": {
@@ -53,6 +62,7 @@
       "eas": {
         "projectId": "6f2bf635-27bf-490a-8e05-e62b94ac277c"
       }
-    }
+    },
+    "owner": "snapees"
   }
 }
