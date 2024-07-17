@@ -176,7 +176,7 @@ export default function result() {
           image: item["img"],
           price: item["price"] == ""
                  ? "Invalid price"
-                 : item["price"],
+                 : String(parseFloat(item["price"]).toFixed(2)),
           rating: item["review_info"]["average_score"] == ""
                   ? "No ratings found"
                   : parseFloat(item["review_info"]["average_score"]).toFixed(2),

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, Text, View, Image } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Redirect } from 'expo-router';
 import { authy, db } from '../../firebaseConfig.js';
@@ -7,6 +7,7 @@ import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import WishlistCard from "../../components/WishlistCard";
 import Header from '../../components/Header';
 import { useIsFocused } from "@react-navigation/native";
+import { images } from "../../constants"
 
 export default function wishlist() {
   const isFocused = useIsFocused()
@@ -38,12 +39,26 @@ export default function wishlist() {
       
       <View style={styles.container}>
         <Header title="Wishlist" backButton={false} />
+        {wishlist.length === 0 ? 
+        <View style={styles.textContainer}>
+          <Image
+            source={images.noProduct}
+            resizeMode="contain"
+            style={{
+              width: 168,
+              height: 100
+            }}
+          />
+          <Text style={styles.text}>There's nothing here, yet.</Text>
+          <Text style={styles.text}>Click on heart icon next to product to add your desired product to wishlist.</Text>
+        </View> : 
         <FlatList
           data={wishlist}
           keyExtractor={(item) => item.docId}
           renderItem={({ item }) => <WishlistCard item={item} isRefresh={isRefresh} setIsRefresh={setIsRefresh}/>}
           style={styles.flatlist}
         />
+        }
       </View>
     </SafeAreaView>
   )
@@ -66,4 +81,14 @@ const styles = StyleSheet.create({
     width: "95%",
     marginBottom: 12,
   },
+  text: {
+    fontStyle: "italic",
+    textAlign: "center"
+  },
+  textContainer: {
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  }
 })
