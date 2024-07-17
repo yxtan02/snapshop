@@ -254,7 +254,7 @@ export default function result() {
       setIsLoading(false)
     })
     
-  }, []);
+  }, [item]);
 
   if (isLoading) {
     return (
