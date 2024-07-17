@@ -25,7 +25,7 @@ const onPressTouch = () => {
 }
 
 export default function result() {
-  const { item } = useLocalSearchParams()
+  const { item, type } = useLocalSearchParams()
   const [amazon, setAmazon] = useState<any[]>([])
   const [lazada, setLazada] = useState<any[]>([])
   const [ebay, setEbay] = useState<any[]>([])
@@ -370,7 +370,7 @@ export default function result() {
           locations={[0.8, 1]}
         >
           <View style={styles.headerTextContainer}>
-            <Text style={styles.header}>Detected product:</Text>
+            <Text style={styles.header}>{type == "snap" ? "Detected product:" : "Searched product"}</Text>
             <Text style={styles.detectedProduct}>{item}</Text>
           </View>
         </LinearGradient>

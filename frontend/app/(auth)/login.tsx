@@ -7,7 +7,8 @@ import { GoogleAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword, s
 import { icons } from '../../constants';
 import Button from '../../components/Button';
 import {GoogleSignin, statusCodes, GoogleSigninButton} from '@react-native-google-signin/google-signin';
-import {LoginManager, AccessToken} from 'react-native-fbsdk-next'
+import OR from '../../components/OR';
+//import {LoginManager, AccessToken, LoginButton} from 'react-native-fbsdk-next'
   
 export default function login() {
   const [email, setEmail] = useState('')
@@ -44,37 +45,42 @@ export default function login() {
     } catch (error : any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
-        alert("User cancelled the login flow");
+        console.log("User cancelled the login flow");
       } else if (error.code === statusCodes.IN_PROGRESS) {
         // operation (e.g. sign in) is in progress already
-        alert("Sign in operation is in progress already");
+        console.log("Sign in operation is in progress already");
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         // play services not available or outdated
-        alert("Play services not available or outdated");
+        console.log("Play services not available or outdated");
       } else {
         // some other error happened
-        alert("An error occurred during sign in:" + error);
+        console.log("An error occurred during sign in:" + error);
       }
     }
   }
 
-  const onFacebookButtonPress = async () => {
-    // const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
-    // if (result.isCancelled) {
-    //   throw new Error('User cancelled login')
-    // }
+  // const onFacebookButtonPress = async () => {
+  //   try {
+  //     const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+  //     if (result.isCancelled) {
+  //       alert('User cancelled login')
+  //     }
 
-    // const data = await AccessToken.getCurrentAccessToken();
-    // if (!data) {
-    //   throw new Error('Something went wrong obtaining access token');
-    // }
+  //     const data = await AccessToken.getCurrentAccessToken();
+  //     if (!data) {
+  //       alert('Something went wrong obtaining access token');
+  //       throw new Error("Something went wrong obtaining access token")
+  //     }
 
-    const credential = FacebookAuthProvider.credential(data.accessToken);
-    await signInWithCredential(authy, credential)
-      .then((res) => {
-        router.replace('/snap')
-      })
-  }
+  //     const credential = FacebookAuthProvider.credential(data.accessToken);
+  //     await signInWithCredential(authy, credential)
+  //       .then((res) => {
+  //         router.replace('/snap')
+  //       })
+  //   } catch (error : any) {
+  //     alert(error)
+  //   }
+  // }
 
   function login() {
     setSubmitting(true)
@@ -105,7 +111,7 @@ export default function login() {
             <Text style={styles.logoText}>SnapShop</Text>
           </View>
           <Text style={styles.header}>
-            Login to Snapshop!
+               Login to Snapshop!   
           </Text>
           <View style={styles.mainContainer}>
             <Text style={styles.title}>Email</Text>
@@ -140,18 +146,14 @@ export default function login() {
                 Sign up
               </Link>
             </View>
-            <GoogleSigninButton 
-              size={GoogleSigninButton.Size.Wide}
-              color={GoogleSigninButton.Color.Dark} 
-              onPress={
-              onGoogleButtonPress}>
-            </GoogleSigninButton>
-            <Button
-              title="Sign in with Facebook"
-              onPress={onFacebookButtonPress}
-              containerStyle={styles.button}
-            />
           </View>
+          <OR></OR>
+          <GoogleSigninButton 
+            size={GoogleSigninButton.Size.Wide}
+            color={GoogleSigninButton.Color.Dark} 
+            onPress={
+            onGoogleButtonPress}>
+          </GoogleSigninButton>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -191,7 +193,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontFamily: "bold",
-    fontSize: 28,
+    fontSize: 26,
     marginTop: 32,
     marginBottom: 2,
   },
@@ -226,6 +228,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     flexDirection: "row",
     gap: 8,
+    marginBottom: 5
   },
   footerText: {
     fontSize: 18,

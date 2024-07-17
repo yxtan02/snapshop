@@ -5,7 +5,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '../components/Button';
 import { icons, images } from '../constants'
 
-
 export default function App() {
   return (
     <SafeAreaView style={styles.safeAreaContainer}>

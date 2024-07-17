@@ -104,7 +104,7 @@ export default function snap() {
           query = data["captionResult"]["text"] + " " + query;
           console.log(query)
           saveToHistory({item: query}, imageFile)
-          router.navigate({ pathname: 'snap/result', params: { item: query } })
+          router.navigate({ pathname: 'snap/result', params: { item: query, type: "snap" } })
         })
         .catch(error => console.error(error));
       })

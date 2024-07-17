@@ -6,6 +6,9 @@ import { authy } from "../../firebaseConfig";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { icons } from '../../constants';
 import Button from '../../components/Button';
+import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+import {GoogleSignin, statusCodes, GoogleSigninButton} from '@react-native-google-signin/google-signin';
+import OR from '../../components/OR';
 
 export default function signUp() {
   const [username, setUsername] = useState('')
@@ -24,6 +27,7 @@ export default function signUp() {
             console.error(error)
           });
         }
+        alert("Account created successfully")
         router.replace('/login')
       })
       .catch((error) => {
@@ -33,6 +37,50 @@ export default function signUp() {
       .finally(() => {
         setSubmitting(false)
       })
+  }
+
+  GoogleSignin.configure({
+    webClientId: '319612752769-dpngaf1f453ma2a0qfq1p6uqj8ol5166.apps.googleusercontent.com', // From Google Developer Console
+    offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+    scopes: ['profile', 'email'],
+  });
+  
+  async function onGoogleButtonPress() {
+    try {
+      console.log("Google Sign-In button pressed");
+  
+      // Check if your device supports Google Play services.
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+  
+      // Get the user's ID token
+      const { idToken } = await GoogleSignin.signIn();
+  
+      // Create a Google credential with the token
+      const googleCredential = GoogleAuthProvider.credential(idToken);
+  
+      // Sign-in the user with the credential
+      await signInWithCredential(authy, googleCredential)
+        .then((res) => {
+          router.replace('/snap')
+        })
+  
+      console.log("User signed in successfully!");
+      // Redirect or do other necessary actions
+    } catch (error : any) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+        console.log("User cancelled the login flow");
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+        console.log("Sign in operation is in progress already");
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+        console.log("Play services not available or outdated");
+      } else {
+        // some other error happened
+        console.log("An error occurred during sign in:" + error);
+      }
+    }
   }
 
   return (
@@ -51,7 +99,7 @@ export default function signUp() {
             Sign up for Snapshop!
           </Text>
           <View style={styles.mainContainer}>
-            <Text style={styles.title}>Username</Text>
+            <Text style={styles.title}>Username (Optional)</Text>
             <TextInput
               value={username}
               onChangeText={setUsername}
@@ -90,6 +138,13 @@ export default function signUp() {
               Login
             </Link>
           </View>
+          <OR></OR > 
+          <GoogleSigninButton 
+              size={GoogleSigninButton.Size.Wide}
+              color={GoogleSigninButton.Color.Dark} 
+              onPress={
+              onGoogleButtonPress}>
+            </GoogleSigninButton>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -129,7 +184,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontFamily: "bold",
-    fontSize: 28,
+    fontSize: 22,
     marginTop: 26,
     marginBottom: 2,
   },
@@ -164,6 +219,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     flexDirection: "row",
     gap: 8,
+    marginBottom: 5
   },
   footerText: {
     fontSize: 18,
