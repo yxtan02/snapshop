@@ -12,7 +12,7 @@ async function fetchCategory(item: any) {
   const options = {
     method: 'GET',
     headers: {
-      'x-rapidapi-key': 'fd8ebc1cdfmsh56e05e7add568dcp1d272ajsn946a41063cf8',
+      'x-rapidapi-key': '6c5d16a2a6msh7b40979d839fcc2p1a8a65jsn16c3a43c4b50',
       'x-rapidapi-host': 'real-time-amazon-data.p.rapidapi.com'
     }
   };
@@ -20,9 +20,11 @@ async function fetchCategory(item: any) {
   try {
     const response = await fetch(url, options);
     const result = await response.json();
+    console.log("test " + result["data"]["category_path"])
     return result["data"]["category_path"]
   } catch (error) {
     console.error(error);
+    return []
   }
 }
 

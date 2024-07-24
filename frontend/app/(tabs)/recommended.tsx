@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, createRef } from "react";
 import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Redirect } from 'expo-router';
@@ -7,12 +7,27 @@ import { collection, getDocs } from "firebase/firestore";
 import { useIsFocused } from "@react-navigation/native";
 import Header from '../../components/Header'
 import ProductCardHorizontal from "../../components/ProductCardHorizontal";
+import LoadMoreButton from '../../components/loadMoreButton';
+import ToTopButton from '../../components/toTopButton';
 
+let numRec : number = 15
+let loadMore = true
+
+const scrollRef : any = createRef();
+const onPressTouch = () => {
+  scrollRef.current?.scrollTo({
+    y: 0,
+    animated: true,
+  });
+}
 
 export default function recommended() {
   const isFocused = useIsFocused()
   const [products, setProducts] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [allProducts, setAllProducts] = useState<any[]>([])
+  const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
+  const CONTENT_OFFSET_THRESHOLD = 300;
   let userId: string
 
   if (authy.currentUser) {
@@ -89,7 +104,8 @@ export default function recommended() {
             platform: "amazon"
           }))
           editedAmazon = editedAmazon.filter(item => item.price != "Invalid price")
-          setProducts(editedAmazon)
+          setAllProducts(editedAmazon)
+          setProducts(editedAmazon.slice(0, 15))
         })
         .catch(error => console.error(error))
         .finally(() => setIsLoading(false))
@@ -111,14 +127,24 @@ export default function recommended() {
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
       <Header title="For You" backButton={false} />
-      <ScrollView style={styles.scrollView}>
+      <ScrollView style={styles.scrollView} ref={scrollRef} onScroll={event => setContentVerticalOffset(event.nativeEvent.contentOffset.y)} 
+        scrollEventThrottle={16}>
         <Text style={styles.text}>Here are recommendations made just for you</Text>
         <View style={styles.container}>
           {products.map((item, index) => (
               <ProductCardHorizontal key={index} item={item} userId={userId}/>
           ))}
         </View>
+        {loadMore ? <LoadMoreButton title="Load More" onPress={() => {
+        numRec += 15
+        setProducts(allProducts.slice(0, numRec))
+        if (numRec >= allProducts.length) {
+          loadMore = false
+        }
+      }}></LoadMoreButton> : <View></View>}
       </ScrollView>
+      {contentVerticalOffset > CONTENT_OFFSET_THRESHOLD &&
+      <ToTopButton title="To the top" onPress={onPressTouch}></ToTopButton>}
     </SafeAreaView>
   )
 }
