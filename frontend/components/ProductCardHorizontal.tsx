@@ -6,7 +6,7 @@ import { setDoc, getDoc, doc } from "firebase/firestore";
 import { router } from 'expo-router';
 import { db } from '../firebaseConfig.js';
 
-export default function ProductCardVertical({ item, userId, containerStyle }: any) {
+export default function ProductCardHorizontal({ item, userId, containerStyle }: any) {
   async function addToDb(item: any) {
     // check if product is already stored in db
     const docSnap = await getDoc(doc(db, 'products', item.id))
@@ -58,16 +58,16 @@ export default function ProductCardVertical({ item, userId, containerStyle }: an
             <SmallButton
               title="Reviews"
               onPress={() => addToDb(item)}
-              containerStyle={{...styles.button, backgroundColor: '#FB6542', marginLeft: 54}}
+              containerStyle={{...styles.button, backgroundColor: '#FB6542'}}
             />
             <SmallButton
               title="Buy now!"
               onPress={() => Linking.openURL(item.url)
                             .catch((err) => console.error('Failed to open url', err))}
-              containerStyle={{ width: 72, height: 33 }}
+              containerStyle={{ ...styles.button }}
             />
-            <LikeButton userId={userId} item={item} />
           </View>
+          <LikeButton userId={userId} item={item} />
         </View>
       </View>
     </View>
@@ -152,11 +152,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 2,
+    gap: 6,
     marginTop: 10,
+    marginBottom: 6,
   },
   button: {
-    width: 72,
-    height: 33,
+    width: 62,
+    height: 28,
   },
 });

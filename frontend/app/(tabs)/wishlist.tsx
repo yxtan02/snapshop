@@ -52,12 +52,14 @@ export default function wishlist() {
           <Text style={styles.text}>There's nothing here, yet.</Text>
           <Text style={styles.text}>Click on heart icon next to product to add your desired product to wishlist.</Text>
         </View> : 
-        <FlatList
-          data={wishlist}
-          keyExtractor={(item) => item.docId}
-          renderItem={({ item }) => <WishlistCard item={item} isRefresh={isRefresh} setIsRefresh={setIsRefresh}/>}
-          style={styles.flatlist}
-        />
+        <View style={styles.flatlistContainer}>
+          <FlatList
+            data={wishlist}
+            keyExtractor={(item) => item.docId}
+            renderItem={({ item }) => <WishlistCard item={item} isRefresh={isRefresh} setIsRefresh={setIsRefresh}/>}
+            contentContainerStyle={{ marginBottom: 12, paddingHorizontal: "2.5%" }}
+          />
+        </View>
         }
       </View>
     </SafeAreaView>
@@ -68,6 +70,7 @@ const styles = StyleSheet.create({
   safeAreaContainer :{
     width: "100%",
     height: "100%",
+    backgroundColor: '#FBEAEB',
     justifyContent: "center",
     alignItems: "center"
   },
@@ -77,9 +80,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: '#F7CED7FF',
   },
-  flatlist: {
-    width: "95%",
-    marginBottom: 12,
+  flatlistContainer: {
+    flex: 1,
   },
   text: {
     fontStyle: "italic",

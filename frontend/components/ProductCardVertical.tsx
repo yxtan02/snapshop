@@ -6,7 +6,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { db } from '../firebaseConfig.js';
 import { setDoc, getDoc, doc } from "firebase/firestore"; 
 
-export default function ProductCardHorizontal({ item, userId }: any) {
+export default function ProductCardVertical({ item, userId }: any) {
   async function addToDb(item: any) {
     // check if product is already stored in db
     const docSnap = await getDoc(doc(db, 'products', item.id))

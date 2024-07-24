@@ -20,6 +20,7 @@ function TabIcon({ icon, color, name, focused } : any) {
       />
       <Text
         style={focused ? styles.tabIconTextFocused : styles.tabIconTextNotFocused}
+        numberOfLines={1}
       >
         {name}
       </Text>
@@ -66,6 +67,21 @@ export default function TabsLayout() {
                 icon={icons.search}
                 color={color}
                 name="Search"
+                focused={focused}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name= "recommended"
+          options={{
+            title: "For You",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon
+                icon={icons.star}
+                color={color}
+                name="For You"
                 focused={focused}
               />
             ),
