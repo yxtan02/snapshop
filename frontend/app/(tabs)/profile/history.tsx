@@ -35,12 +35,14 @@ export default function history() {
     <SafeAreaView style={styles.safeAreaContainer}>
       <View style={styles.container}>
         <Header title="History" backButton={true} />
-        <FlatList
-          data={history}
-          keyExtractor={(item) => item.docId}
-          renderItem={({ item }) => <HistoryCard item={item} isRefresh={isRefresh} setIsRefresh={setIsRefresh}/>}
-          style={styles.flatlist}
-        />
+        <View style={styles.flatlistContainer}>
+          <FlatList
+            data={history}
+            keyExtractor={(item) => item.docId}
+            renderItem={({ item }) => <HistoryCard item={item} isRefresh={isRefresh} setIsRefresh={setIsRefresh}/>}
+            contentContainerStyle={{ marginBottom: 12, paddingHorizontal: "2.5%" }}
+          />
+        </View>
       </View>
     </SafeAreaView>
   )
@@ -50,17 +52,16 @@ const styles = StyleSheet.create({
   safeAreaContainer :{
     width: "100%",
     height: "100%",
-    backgroundColor: "#F7CED7FF",
+    backgroundColor: "#FBEAEB",
     justifyContent: "center",
     alignItems: "center"
   },
   container: {
     width: "100%",
     height: "100%",
-    alignItems: "center",
+    backgroundColor: "#F7CED7FF",
   },
-  flatlist: {
-    width: "95%",
-    marginBottom: 12,
-  }
+  flatlistContainer: {
+    flex: 1,
+  },
 })

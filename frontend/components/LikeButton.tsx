@@ -7,10 +7,34 @@ import { doc, deleteDoc } from "firebase/firestore";
 
 let hashmap: any = {}
 
-function addToWishlist(userId : any, item : any) {
-  let docId = "test"
+async function fetchCategory(item: any) {
+  const url = `https://real-time-amazon-data.p.rapidapi.com/product-details?asin=${item.id}&country=SG`;
+  const options = {
+    method: 'GET',
+    headers: {
+      'x-rapidapi-key': 'fd8ebc1cdfmsh56e05e7add568dcp1d272ajsn946a41063cf8',
+      'x-rapidapi-host': 'real-time-amazon-data.p.rapidapi.com'
+    }
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const result = await response.json();
+    return result["data"]["category_path"]
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function addToWishlist(userId : any, item : any) {
+  let category = []
+  if (item.platform == "amazon") {
+    category = await fetchCategory(item)
+  }
+
   addDoc(collection(db, 'users', userId, 'wishlist'), {
     ...item,
+    category: category,
     createdAt: serverTimestamp()
   })
     .then((res) => {

@@ -110,7 +110,7 @@ export default function result() {
       "ebay": []
     }
 
-    const api_key = 'fd8ebc1cdfmsh56e05e7add568dcp1d272ajsn946a41063cf8'
+    const api_key = 'ce3cc063f9msh6682049258d52bep1e8021jsn14b60338415f'
 
     function getAmazonProducts() {
       return fetch(`https://real-time-amazon-data.p.rapidapi.com/search?query=${item}&country=SG`, {
@@ -157,7 +157,7 @@ export default function result() {
       return fetch(`https://lazada-api.p.rapidapi.com/lazada/search/items?keywords=${item}&site=sg&page=1`, {
         method: 'GET',
         headers: {
-          'X-RapidAPI-Key': "fd8ebc1cdfmsh56e05e7add568dcp1d272ajsn946a41063cf8",
+          'X-RapidAPI-Key': api_key,
           'X-RapidAPI-Host': 'lazada-api.p.rapidapi.com'
         },
       })
@@ -251,8 +251,9 @@ export default function result() {
       setAmazon(amazonResult)
       setLazada(lazadaResult)
       setEbay(ebayResult)
-      setIsLoading(false)
     })
+    .catch(error => console.log(error))
+    .finally(() => setIsLoading(false))
     
   }, [item]);
 
@@ -442,7 +443,8 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   priceCompResultContainer: {
-    width: "95%",
+    width: "100%",
+    paddingHorizontal: "2.5%",
     alignItems: "center",
     justifyContent: "center",
     marginTop: 20,
@@ -450,7 +452,8 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   reviewAggreContainer: {
-    width: "95%",
+    width: "100%",
+    paddingHorizontal: "2.5%",
     alignItems: "center",
     justifyContent: "center",
     marginTop: 20,
