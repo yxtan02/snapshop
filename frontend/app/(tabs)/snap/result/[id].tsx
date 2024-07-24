@@ -38,47 +38,49 @@ export default function product() {
     async function fetchReviews(item: any) {
       if (item.platform == "amazon") {
         // for testing
-        let reviewData: any[] = reviewTestData.map(review => ({
-          id: review["review_id"],
-          title: review["review_title"],
-          comment: review["review_comment"],
-          rating: review["review_star_rating"],
-          author: review["review_author"],
-          author_avatar: review["review_author_avatar"],
-          date: review["review_date"]
-        }))
-        setReviews(reviewData)
+        // let reviewData: any[] = reviewTestData.map(review => ({
+        //   id: review["review_id"],
+        //   title: review["review_title"],
+        //   comment: review["review_comment"],
+        //   rating: review["review_star_rating"],
+        //   author: review["review_author"],
+        //   author_avatar: review["review_author_avatar"],
+        //   date: review["review_date"]
+        // }))
+        // setReviews(reviewData)
 
-        // uncomment to use the actual API
-        // return fetch(`https://real-time-amazon-data.p.rapidapi.com/product-reviews?asin=${id}&country=SG`, {
-        //   method: 'GET',
-        //   headers: {
-        //     'X-RapidAPI-Key': 'e54e6469c9mshfd93a2d40f44b01p14bbe0jsn509f9fa4490e',
-        //     'X-RapidAPI-Host': 'real-time-amazon-data.p.rapidapi.com'
-        //   },
-        // })
-        //   .then(res => {
-        //     if (!res.ok) {
-        //       console.error("Error fetching review data")
-        //     }
-        //     console.log("Fetch review success")
-        //     return res.json()
-        //   })
-        //   .then(data => {
-        //     console.log(data)
-        //     let reviewData: any[] = data["data"]["reviews"]
-        //     reviewData = reviewData.map(review => ({
-        //       id: review["review_id"],
-        //       title: review["review_title"],
-        //       comment: review["review_comment"],
-        //       rating: review["review_star_rating"],
-        //       author: review["review_author"],
-        //       author_avatar: review["review_author_avatar"],
-        //       date: review["review_date"]
-        //     }))
-        //     setReviews(reviewData)
-        //   })
-        //   .catch(error => console.error("Failed to fetch reviews" + error))
+        //uncomment to use the actual API
+        const api_key = 'e54e6469c9mshfd93a2d40f44b01p14bbe0jsn509f9fa4490e';
+        
+        return fetch(`https://real-time-amazon-data.p.rapidapi.com/product-reviews?asin=${id}&country=SG`, {
+          method: 'GET',
+          headers: {
+            'X-RapidAPI-Key': api_key,
+            'X-RapidAPI-Host': 'real-time-amazon-data.p.rapidapi.com'
+          },
+        })
+          .then(res => {
+            if (!res.ok) {
+              console.error("Error fetching review data")
+            }
+            console.log("Fetch review success")
+            return res.json()
+          })
+          .then(data => {
+            console.log(data)
+            let reviewData: any[] = data["data"]["reviews"]
+            reviewData = reviewData.map(review => ({
+              id: review["review_id"],
+              title: review["review_title"],
+              comment: review["review_comment"],
+              rating: review["review_star_rating"],
+              author: review["review_author"],
+              author_avatar: review["review_author_avatar"],
+              date: review["review_date"]
+            }))
+            setReviews(reviewData)
+          })
+          .catch(error => console.error("Failed to fetch reviews" + error))
       }
     }
 
