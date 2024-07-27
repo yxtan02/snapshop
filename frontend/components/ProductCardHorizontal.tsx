@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   button: {
-    width: 62,
-    height: 28,
+    width: 70,
+    height: 31,
   },
 });

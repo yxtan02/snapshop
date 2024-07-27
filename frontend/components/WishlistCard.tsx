@@ -1,9 +1,10 @@
 import { Image, Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useState } from "react";
-import { doc, deleteDoc } from "firebase/firestore";
+import { doc, deleteDoc, setDoc, getDoc } from "firebase/firestore";
 import { db } from '../firebaseConfig.js';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import SmallButton from './SmallButton';
+import { router } from 'expo-router';
 
 export default function WishlistCard({ item, isRefresh, setIsRefresh }: any) {
   function deleteFromWishlist(userId: string, docId: string) {
@@ -14,6 +15,24 @@ export default function WishlistCard({ item, isRefresh, setIsRefresh }: any) {
       .catch((error) => {
         console.error('Error deleting item: ', error);
       })
+  }
+
+  async function addToDb(item: any) {
+    // check if product is already stored in db
+    const docSnap = await getDoc(doc(db, 'products', item.id))
+
+    // add product to db if it is not stored yet
+    if (!docSnap.exists()) {
+      try {
+        await setDoc(doc(db, 'products', item.id), item);
+        console.log(`Item added (id: ${item.id})`);
+      } catch (error) {
+        console.error('Error adding item: ', error);
+      }
+    }
+
+    // navigate to product page
+    router.navigate(`/snap/result/${item.id}`);
   }
 
   return (
@@ -44,6 +63,11 @@ export default function WishlistCard({ item, isRefresh, setIsRefresh }: any) {
             {item.delivery !== "" && <Text style={styles.description}>{item.delivery}</Text>}
           </View>
           <View style={styles.buttonsContainer}>
+            <SmallButton
+                title="Reviews"
+                onPress={() => addToDb(item)}
+                containerStyle={{ width: 70, height: 31, backgroundColor: '#FB6542'} }
+              />
             <SmallButton
               title="Buy now!"
               onPress={() => Linking.openURL(item.url)
@@ -142,6 +166,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 10,
-    gap: 14,
+    gap: 6,
   },
 });

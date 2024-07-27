@@ -42,6 +42,11 @@ export default function result() {
 
   let userId: string = ""
 
+  // const [numPrice, setNumPrice] = useState<number>(15)
+  // const [numReviews, setNumReviews] = useState<number>(15)
+  // const [priceLoadMore, setPriceLoadMore] = useState<boolean>(true)
+  // const [reviewsLoadMore, setReviewsLoadMore] = useState<boolean>(true)
+
   if (authy.currentUser) {
     userId = authy.currentUser.uid
   } else {
@@ -50,6 +55,11 @@ export default function result() {
   }
 
   useEffect(() => {
+    numPrice = 15
+    numReviews = 15
+    priceLoadMore = true
+    reviewsLoadMore = true
+
     // for testing
     // let editedAmazon: any[] = amazonTestData.map(item => ({
     //   title: item["product_title"],

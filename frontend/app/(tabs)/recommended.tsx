@@ -29,7 +29,7 @@ export default function recommended() {
   const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
   const CONTENT_OFFSET_THRESHOLD = 300;
   let userId: string
-
+  
   if (authy.currentUser) {
     userId = authy.currentUser.uid
   } else {
