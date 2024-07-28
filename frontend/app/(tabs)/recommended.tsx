@@ -1,5 +1,5 @@
 import { useEffect, useState, createRef } from "react";
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Redirect } from 'expo-router';
 import { authy, db } from '../../firebaseConfig.js';
@@ -9,6 +9,8 @@ import Header from '../../components/Header'
 import ProductCardHorizontal from "../../components/ProductCardHorizontal";
 import LoadMoreButton from '../../components/loadMoreButton';
 import ToTopButton from '../../components/toTopButton';
+import { images } from "../../constants"
+
 
 let numRec : number = 15
 let loadMore = true
@@ -124,12 +126,31 @@ export default function recommended() {
     )
   }
 
+  if (products.length == 0) {
+    return (
+      <SafeAreaView style={{ width: "100%", height: "100%" }}>
+        <Header title="For You" backButton={false}/>
+        <View style={styles.textContainer}>
+          <Image
+            source={images.noProduct}
+            resizeMode="contain"
+            style={{
+              width: 168,
+              height: 100
+            }}
+          />
+          <Text style={styles.text}>To receive recommendations, add at least 1 item to your wishlist</Text>
+        </View>
+      </SafeAreaView>
+    )
+  }
+
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
       <Header title="For You" backButton={false} />
       <ScrollView style={styles.scrollView} ref={scrollRef} onScroll={event => setContentVerticalOffset(event.nativeEvent.contentOffset.y)} 
         scrollEventThrottle={16}>
-        <Text style={styles.text}>Here are recommendations made just for you</Text>
+        <Text style={styles.title}>Here are recommendations made just for you</Text>
         <View style={styles.container}>
           {products.map((item, index) => (
               <ProductCardHorizontal key={index} item={item} userId={userId}/>
@@ -162,7 +183,19 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: "#F7CED7FF"
   },
+  textContainer: {
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
   text: {
+    fontFamily: "regular",
+    fontStyle: "italic",
+    textAlign: "center",
+    padding: 8
+  },
+  title: {
     fontFamily: 'medium',
     fontSize: 14,
     fontStyle: 'italic',
