@@ -8,13 +8,12 @@ import { getReactNativePersistence } from '@firebase/auth/dist/rn/index.js';
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDRAGA4Y7XGP8KJT48FPd1CdasexWmYVMA",
-  authDomain: "snapshop-9981c.firebaseapp.com",
-  projectId: "snapshop-9981c",
-  storageBucket: "snapshop-9981c.appspot.com",
-  messagingSenderId: "319612752769",
-  appId: "1:319612752769:web:e6120b347a0b52be250e80",
-  storageBucket: "gs://snapshop-9981c.appspot.com"
+  apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
+  messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
+  storageBucket: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET
 };
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];

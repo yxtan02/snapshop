@@ -70,7 +70,7 @@ export default function recommended() {
       fetch(`https://real-time-amazon-data.p.rapidapi.com/products-by-category?category_id=${highestCategory}&page=1&country=SG`, {
         method: 'GET',
         headers: {
-          'X-RapidAPI-Key': "ce3cc063f9msh6682049258d52bep1e8021jsn14b60338415f",
+          'X-RapidAPI-Key': process.env.EXPO_PUBLIC_RAPIDAPI_KEY || '',
           'X-RapidAPI-Host': 'real-time-amazon-data.p.rapidapi.com'
         },
       })

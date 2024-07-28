@@ -50,7 +50,7 @@ export default function product() {
         // setReviews(reviewData)
 
         //uncomment to use the actual API
-        const api_key = 'e54e6469c9mshfd93a2d40f44b01p14bbe0jsn509f9fa4490e';
+        const api_key = process.env.EXPO_PUBLIC_RAPIDAPI_KEY || ''
         
         return fetch(`https://real-time-amazon-data.p.rapidapi.com/product-reviews?asin=${id}&country=SG`, {
           method: 'GET',

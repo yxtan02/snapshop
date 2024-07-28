@@ -120,7 +120,7 @@ export default function result() {
       "ebay": []
     }
 
-    const api_key = 'ce3cc063f9msh6682049258d52bep1e8021jsn14b60338415f'
+    const api_key: string = process.env.EXPO_PUBLIC_RAPIDAPI_KEY || ''
 
     function getAmazonProducts() {
       return fetch(`https://real-time-amazon-data.p.rapidapi.com/search?query=${item}&country=SG`, {

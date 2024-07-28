@@ -40,7 +40,7 @@ export default function signUp() {
   }
 
   GoogleSignin.configure({
-    webClientId: '319612752769-dpngaf1f453ma2a0qfq1p6uqj8ol5166.apps.googleusercontent.com', // From Google Developer Console
+    webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID, // From Google Developer Console
     offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
     scopes: ['profile', 'email'],
   });

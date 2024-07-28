@@ -73,12 +73,13 @@ export default function snap() {
       });
 
       const imageFile = new File([blob], "image.jpg", { type: "image/jpeg" })
+      const azure_key = process.env.EXPO_PUBLIC_AZURE_KEY || ''
 
       //Microsoft vision API (Superior)
       //Brand detection
       fetch('https://snapshop.cognitiveservices.azure.com/vision/v3.2/analyze?visualFeatures=Brands', { 
         method: 'post',
-        headers: { "Ocp-Apim-Subscription-Key": "c19fa222b25b454e9a3e42eecfedae10",
+        headers: { "Ocp-Apim-Subscription-Key": azure_key,
                     "Content-Type": "application/octet-stream"
          },
         body: blob
@@ -93,7 +94,7 @@ export default function snap() {
         //Image captioning
         fetch('https://snapshop.cognitiveservices.azure.com/computervision/imageanalysis:analyze?api-version=2024-02-01&features=caption', {
           method: 'post',
-          headers: { "Ocp-Apim-Subscription-Key": "c19fa222b25b454e9a3e42eecfedae10",
+          headers: { "Ocp-Apim-Subscription-Key": azure_key,
                       "Content-Type": "application/octet-stream"
            },
           body: blob
