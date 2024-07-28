@@ -1,9 +1,9 @@
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
-import { useLocalSearchParams } from 'expo-router';
+import { Redirect, useLocalSearchParams } from 'expo-router';
 import Header from '../../../../components/Header';
-import { db } from '../../../../firebaseConfig.js';
+import { authy, db } from '../../../../firebaseConfig.js';
 import { doc, getDoc } from "firebase/firestore";
 import ProductCardHorizontal from '../../../../components/ProductCardHorizontal';
 import ReviewCard from '../../../../components/ReviewCard';
@@ -13,7 +13,15 @@ export default function product() {
   const [item, setItem] = useState<any>(null)
   const [reviews, setReviews] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(false)
-  
+  let userId: string
+
+  if (authy.currentUser) {
+    userId = authy.currentUser.uid
+  } else {
+    alert("You are not signed in")
+    return <Redirect href="/login"/>
+  }
+
   useEffect(() => {
     async function fetchData() {
       if (typeof id === 'string') {
@@ -118,7 +126,7 @@ export default function product() {
           ListEmptyComponent={() => <Text style={styles.noReviewFoundText}>No reviews found</Text>}
           ListHeaderComponent={() =>
             <>
-              <ProductCardHorizontal item={item} containerStyle={{borderWidth: 0}}/>
+              <ProductCardHorizontal item={item} userId={userId} containerStyle={{borderWidth: 0}}/>
               <Text style={styles.reviewsHeader}>Reviews</Text>
             </>
           }
