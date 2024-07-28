@@ -321,7 +321,7 @@ export default function result() {
   
       <View style={styles.priceCompResultContainer}>
         {combinedPrice.map((item, index) => (
-          <ProductCardHorizontal key={index} item={item} userId={userId}/>
+          <ProductCardHorizontal key={item.id} item={item} userId={userId}/>
         ))}
       </View >
       {priceLoadMore ? <LoadMoreButton title="Load More" onPress={() => {
@@ -357,7 +357,7 @@ export default function result() {
 
       <View style={styles.reviewAggreContainer}>
         {combinedReview.map((item, index) => (
-          <ProductCardHorizontal key={index} item={item} userId={userId}/>
+          <ProductCardHorizontal key={item.id} item={item} userId={userId}/>
         ))}
       </View>
       {reviewsLoadMore ? <LoadMoreButton title="Load More" onPress={() => {
