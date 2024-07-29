@@ -1,6 +1,9 @@
 # SnapShop
 SnapShop is a fuss-free shopping app that offers efficient visual product search and convenient price & review comparisons to facilitate a seamless shopping experience.
 
+![0729](https://github.com/user-attachments/assets/42c42805-c13e-45d1-a100-a6dc6565e71d)
+
+
 ## To run Snapshop on Android/IOS
 1. Download Expo Go from Google Play Store / Apple App Store
 2. Use the Expo Go App to scan the following QR code:
