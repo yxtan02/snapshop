@@ -1,13 +1,9 @@
 # SnapShop
 SnapShop is a fuss-free shopping app that offers efficient visual product search and convenient price & review comparisons to facilitate a seamless shopping experience.
 
-![0729](https://github.com/user-attachments/assets/42c42805-c13e-45d1-a100-a6dc6565e71d)
-![0729 (1)(8)](https://github.com/user-attachments/assets/df67535e-4822-4be1-b152-f3de926f60c7)
-![0729 (1)(13)](https://github.com/user-attachments/assets/111b781f-1f0d-44e3-aee2-42c83971dc4b)
-![0730](https://github.com/user-attachments/assets/a820feb2-7bcf-4bb3-87ff-794bf5c58d2b)
-
-
-
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/424fb226-41c4-4ed3-b144-4941bc16104b" alt="introduction" />
+</p>
 
 
 ## To run Snapshop on Android/IOS
