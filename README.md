@@ -5,7 +5,7 @@ SnapShop is a one-stop shopping app that offers **efficient visual product searc
   <img src="https://github.com/user-attachments/assets/424fb226-41c4-4ed3-b144-4941bc16104b" alt="introduction" />
 </p>
 
-View our complete app demo [here](https://drive.google.com/file/d/1kIs7_73rGlKJBKE0b_rxvcPXOOUeGOMJ/view?usp=drive_link)
+Check out our complete app demo [here](https://drive.google.com/file/d/1kIs7_73rGlKJBKE0b_rxvcPXOOUeGOMJ/view?usp=drive_link)
 
 ## Key Features
 ### 1. Visual Product Search 🔍
@@ -43,9 +43,11 @@ View our complete app demo [here](https://drive.google.com/file/d/1kIs7_73rGlKJB
 ## To run Snapshop on Android / IOS
 1. Download Expo Go from Google Play Store / Apple App Store
 2. Use the Expo Go app to scan the following QR code:
-<img width="194" alt="QR Code" src="https://github.com/user-attachments/assets/fcf1c2d6-6611-415b-a8ce-df1b78dd2906"><br/>
+<img width="194" alt="QR Code" src="https://github.com/user-attachments/assets/fcf1c2d6-6611-415b-a8ce-df1b78dd2906">
 
-Alternatively, Android users can download our APK directly: https://expo.dev/artifacts/eas/p2vaKJz1kcrXqXEY4sBgrY.apk
+<p>
+  Alternatively, Android users can download our APK directly: https://expo.dev/artifacts/eas/p2vaKJz1kcrXqXEY4sBgrY.apk
+</p>
 
 ## Tech Stack
 - Frontend: **React Native** (Expo)
@@ -53,3 +55,6 @@ Alternatively, Android users can download our APK directly: https://expo.dev/art
 
 ## Poster
 ![Snapshop Poster](https://github.com/user-attachments/assets/2e330762-1f33-40ad-9d3f-7fedc8814772)
+
+## Documentation
+Details on our thought process when creating the app: [SnapShop README](https://docs.google.com/document/d/17inlRu8nuAMDUC6uVuO2r01k9Hl4YF2PUfEm4l8u9A8/edit?usp=drive_link)
