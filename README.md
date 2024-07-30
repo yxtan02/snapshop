@@ -1,16 +1,17 @@
 # SnapShop
-SnapShop is a one-stop shopping app that offers *efficient visual product search* and *convenient price & review comparisons* to facilitate a seamless shopping experience.
+SnapShop is a one-stop shopping app that offers **efficient visual product search** and **convenient price & review comparisons** to facilitate a seamless shopping experience.
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/424fb226-41c4-4ed3-b144-4941bc16104b" alt="introduction" />
 </p>
 
-View our complete app demo here
+View our complete app demo [here](https://drive.google.com/drive/folders/1UPSkHuXsqyRNf23mb9ovW2Kb_eeHRyve)
 
 ## Key Features
 1. Visual Product Search 🔍
 - Take/upload a picture of your desired product and view relevant products available on online shopping platforms!
 - Implementation design:
+<br/>
   (A) Image Recognition
       - Accurately identifies products from user-uploaded images through the use of Microsoft Azure AI Vision's image captioning and brand detection features
   (B) Product Search
@@ -31,6 +32,9 @@ View our complete app demo here
 
 5. Product Recommendation ✨
 - View personalised product recommendations on a For You Page tailored to your personal interests!
+
+6. User Account & Authentication 🔐
+- Gain access to Snapshop's features by creating an account!
 
 ## To run Snapshop on Android / IOS
 1. Download Expo Go from Google Play Store / Apple App Store
