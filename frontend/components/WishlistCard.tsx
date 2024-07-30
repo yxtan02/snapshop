@@ -66,24 +66,23 @@ export default function WishlistCard({ item, isRefresh, setIsRefresh }: any) {
             <SmallButton
                 title="Reviews"
                 onPress={() => addToDb(item)}
-                containerStyle={{ width: 70, height: 31, backgroundColor: '#FB6542'} }
+                containerStyle={{ width: 64, height: 29, backgroundColor: '#FB6542'} }
               />
             <SmallButton
               title="Buy now!"
               onPress={() => Linking.openURL(item.url)
                             .catch((err) => console.error('Failed to open url', err))}
-              containerStyle={{ width: 70, height: 31 }}
-            />
-            <Ionicons
-              name="trash"
-              size={23}
-              color="red"
-              onPress={() => {
-                deleteFromWishlist(item.userId, item.docId)
-              }
-              }
+              containerStyle={{ width: 64, height: 29 }}
             />
           </View>
+          <Ionicons
+            name="trash"
+            size={23}
+            color="red"
+            onPress={() => {
+              deleteFromWishlist(item.userId, item.docId)
+            }}
+          />
         </View>
       </View>
     </View>
@@ -165,7 +164,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 10,
     gap: 6,
+    marginTop: 10,
+    marginBottom: 6,
   },
 });
