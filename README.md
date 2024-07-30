@@ -5,18 +5,17 @@ SnapShop is a one-stop shopping app that offers **efficient visual product searc
   <img src="https://github.com/user-attachments/assets/424fb226-41c4-4ed3-b144-4941bc16104b" alt="introduction" />
 </p>
 
-View our complete app demo [here](https://drive.google.com/drive/folders/1UPSkHuXsqyRNf23mb9ovW2Kb_eeHRyve)
+View our complete app demo [here](https://drive.google.com/file/d/1kIs7_73rGlKJBKE0b_rxvcPXOOUeGOMJ/view?usp=drive_link)
 
 ## Key Features
 1. Visual Product Search 🔍
 - Take/upload a picture of your desired product and view relevant products available on online shopping platforms!
-- Implementation design:
-<br/>
-  (A) Image Recognition
-      - Accurately identifies products from user-uploaded images through the use of Microsoft Azure AI Vision's image captioning and brand detection features
-  (B) Product Search
-      - Searches for relevant products on Amazon, Lazada and eBay based the identified product returned from image recognition
-      - Displays product listings on an user-friendly interface, with clear images, titles, prices, ratings and brief descriptions.
+- Implementation design:\
+  (A) Image Recognition\
+      - Accurately identifies products from user-uploaded images through the use of Microsoft Azure AI Vision's image captioning and brand detection features\
+  (B) Product Search\
+      - Searches for relevant products on Amazon, Lazada and eBay based the identified product returned from image recognition\
+      - Displays product listings on an user-friendly interface, with clear images, titles, prices, ratings and brief descriptions\
   
 2. Price Comparison 💰
 - Efficiently compare prices of products across different shopping platforms to find the best deals!
