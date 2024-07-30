@@ -8,7 +8,7 @@ SnapShop is a one-stop shopping app that offers **efficient visual product searc
 View our complete app demo [here](https://drive.google.com/file/d/1kIs7_73rGlKJBKE0b_rxvcPXOOUeGOMJ/view?usp=drive_link)
 
 ## Key Features
-### 1. **Visual Product Search** 🔍
+### 1. Visual Product Search 🔍
 - Take/upload a picture of your desired product and view relevant products available on online shopping platforms!
 - Implementation Design:
   
@@ -22,22 +22,22 @@ View our complete app demo [here](https://drive.google.com/file/d/1kIs7_73rGlKJB
     
     - Displays product listings on a user-friendly interface, with clear images, titles, prices, ratings, and brief descriptions
 
-2. **Price Comparison** 💰
+### 2. **Price Comparison** 💰
 - Efficiently compare prices of products across different shopping platforms to find the best deals!
 - Users can easily sort products from cheapest to most expensive, thus avoiding tedious price comparisons
 
-3. **Review Aggregation** 🔖
+### 3. **Review Aggregation** 🔖
 - To help you make informed purchasing decisions, comprehensive product reviews and ratings are consolidated and clearly displayed!
 - Users can easily sort products from highest rated to lowest rated, allowing for efficient review aggregation
 
-4. **Wishlist** 💖
+### 4. **Wishlist** 💖
 - Save your favourite products for future reference by clicking on the heart icon besides each product listing
 - Conveniently view and manage your saved products on the wishlist tab
 
-5. **Product Recommendation** ✨
+### 5. **Product Recommendation** ✨
 - View personalised product recommendations on a For You Page tailored to your personal interests!
 
-6. **User Account & Authentication** 🔐
+### 6. **User Account & Authentication** 🔐
 - Gain access to Snapshop's features by creating an account!
 
 ## To run Snapshop on Android / IOS
