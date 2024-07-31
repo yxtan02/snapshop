@@ -5,8 +5,7 @@ import { authy } from '../../../firebaseConfig.js'
 import { icons } from "../../../constants"
 import MenuTab from '../../../components/MenuTab'
 import Header from '../../../components/Header'
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import {LoginManager} from 'react-native-fbsdk-next'
+
 
 export default function profile() {
   if (!authy.currentUser) {
@@ -16,17 +15,6 @@ export default function profile() {
 
   const signOut = async () => {
     try {
-      // Sign out from Google
-      try {
-        await GoogleSignin.revokeAccess();
-        await GoogleSignin.signOut();
-      } catch (error : any) {
-        //absorb the error in case user used email sign in
-      }
-
-      // Sign out from Facebook
-      // LoginManager.logOut();
-
       // Sign out from Firebase
       await authy.signOut();
 

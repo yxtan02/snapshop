@@ -10,6 +10,8 @@ import SmallButton from '../../../../components/SmallButton';
 import Header from '../../../../components/Header';
 import ToTopButton from '../../../../components/toTopButton';
 import LoadMoreButton from '../../../../components/loadMoreButton';
+import axios from 'axios';
+
 
 let numPrice : number = 15
 let numReviews : number = 15
@@ -123,19 +125,19 @@ export default function result() {
     const api_key: string = process.env.EXPO_PUBLIC_RAPIDAPI_KEY || ''
 
     function getAmazonProducts() {
-      return fetch(`https://real-time-amazon-data.p.rapidapi.com/search?query=${item}&country=SG`, {
-        method: 'GET',
+      return axios.get(`https://real-time-amazon-data.p.rapidapi.com/search?query=${item}&country=SG`, {
         headers: {
           'X-RapidAPI-Key': api_key,
           'X-RapidAPI-Host': 'real-time-amazon-data.p.rapidapi.com'
         },
       })
       .then(res => {
-        if (!res.ok) {
-          console.error("Error fetching Amazon data")
+        if (res.status !== 200) {
+          console.error("Error fetching Amazon data");
+        } else {
+          console.log("Amazon success");
+          return res.data;
         }
-        console.log("Amazon success")
-        return res.json()
       })
       .then(data => {
         const amazonData: any[] = data["data"]["products"]
@@ -164,19 +166,19 @@ export default function result() {
     }
 
     function getLazadaProducts() {
-      return fetch(`https://lazada-api.p.rapidapi.com/lazada/search/items?keywords=${item}&site=sg&page=1`, {
-        method: 'GET',
+      return axios.get(`https://lazada-api.p.rapidapi.com/lazada/search/items?keywords=${item}&site=sg&page=1`, {
         headers: {
           'X-RapidAPI-Key': api_key,
           'X-RapidAPI-Host': 'lazada-api.p.rapidapi.com'
         },
       })
       .then(res => {
-        if (!res.ok) {
-          console.error("Error fetching Lazada data")
+        if (res.status !== 200) {
+          console.error("Error fetching Lazada data");
+        } else {
+          console.log("Lazada success");
+          return res.data;
         }
-        console.log("Lazada success")
-        return res.json()
       })
       .then(data => {
         const lazadaData: any[] = data["data"]["items"]
@@ -202,19 +204,19 @@ export default function result() {
     }
 
     function getEbayProducts() {
-      return fetch(`https://ebay-search-result.p.rapidapi.com/search/${item}`, {
-        method: 'GET',
+      return axios.get(`https://ebay-search-result.p.rapidapi.com/search/${item}`, {
         headers: {
           'X-RapidAPI-Key': api_key,
           'X-RapidAPI-Host': 'ebay-search-result.p.rapidapi.com'
         },
       })
       .then(res => {
-        if (!res.ok) {
-          console.error("Error fetching Ebay data")
+        if (res.status !== 200) {
+          console.error("Error fetching Ebay data");
+        } else {
+          console.log("Ebay success");
+          return res.data;
         }
-        console.log("Ebay success")
-        return res.json()
       })
       .then(data => {
         const ebayData: any[] = data["results"]

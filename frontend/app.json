@@ -13,30 +13,13 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.cshao02.SnapShop",
-      "infoPlist": {
-        "SKAdNetworkItems": [
-          {
-            "SKAdNetworkIdentifier": "v9wttpbfk9.skadnetwork"
-          },
-          {
-            "SKAdNetworkIdentifier": "n38lu8286q.skadnetwork"
-          }
-        ]
-      }
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/AppIcon.png",
         "backgroundColor": "#ffffff"
-      },
-      "permissions": [
-        "android.permission.RECORD_AUDIO",
-        "android.permission.INTERNET"
-      ],
-      "package": "com.cshao02.SnapShop",
-      "googleServicesFile": "./google-services.json"
+      }
     },
     "web": {
       "bundler": "metro",
@@ -45,16 +28,6 @@
     },
     "plugins": [
       "expo-router",
-      "@react-native-google-signin/google-signin",
-      [
-        "react-native-fbsdk-next",
-        {
-          "appID": "1807860166364612",
-          "clientToken": "3f71a8f74fc8542493538e6081750c63",
-          "displayName": "snapshop",
-          "scheme": "fb1807860166364612"
-        }
-      ],
       [
         "expo-image-picker",
         {
@@ -74,6 +47,10 @@
         "projectId": "5369db15-976e-452c-9d85-3b6024ce32d3"
       }
     },
-    "owner": "yxtan"
+    "owner": "yxtan",
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/5369db15-976e-452c-9d85-3b6024ce32d3"
+    }
   }
 }

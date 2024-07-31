@@ -7,6 +7,8 @@ import { authy, db } from '../../../../firebaseConfig.js';
 import { doc, getDoc } from "firebase/firestore";
 import ProductCardHorizontal from '../../../../components/ProductCardHorizontal';
 import ReviewCard from '../../../../components/ReviewCard';
+import axios from 'axios';
+
 
 export default function product() {
   const { id } = useLocalSearchParams()
@@ -60,19 +62,19 @@ export default function product() {
         //uncomment to use the actual API
         const api_key = process.env.EXPO_PUBLIC_RAPIDAPI_KEY || ''
         
-        return fetch(`https://real-time-amazon-data.p.rapidapi.com/product-reviews?asin=${id}&country=SG`, {
-          method: 'GET',
+        return axios.get(`https://real-time-amazon-data.p.rapidapi.com/product-reviews?asin=${id}&country=SG`, {
           headers: {
             'X-RapidAPI-Key': api_key,
             'X-RapidAPI-Host': 'real-time-amazon-data.p.rapidapi.com'
           },
         })
           .then(res => {
-            if (!res.ok) {
-              console.error("Error fetching review data")
+            if (res.status !== 200) {
+              console.error("Error fetching review data");
+            } else {
+              console.log("Fetch review success");
+              return res.data;
             }
-            console.log("Fetch review success")
-            return res.json()
           })
           .then(data => {
             console.log(data)

@@ -6,81 +6,13 @@ import { authy } from "../../firebaseConfig";
 import { GoogleAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword, signInWithCredential } from "firebase/auth";
 import { icons } from '../../constants';
 import Button from '../../components/Button';
-import {GoogleSignin, statusCodes, GoogleSigninButton} from '@react-native-google-signin/google-signin';
-import OR from '../../components/OR';
-//import {LoginManager, AccessToken, LoginButton} from 'react-native-fbsdk-next'
+
   
 export default function login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isSubmitting, setSubmitting] = useState(false);
 
-  GoogleSignin.configure({
-    webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID, // From Google Developer Console
-    offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-    scopes: ['profile', 'email'],
-  });
-  
-  async function onGoogleButtonPress() {
-    try {
-      console.log("Google Sign-In button pressed");
-  
-      // Check if your device supports Google Play services.
-      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-  
-      // Get the user's ID token
-      const { idToken } = await GoogleSignin.signIn();
-  
-      // Create a Google credential with the token
-      const googleCredential = GoogleAuthProvider.credential(idToken);
-  
-      // Sign-in the user with the credential
-      await signInWithCredential(authy, googleCredential)
-        .then((res) => {
-          router.replace('/snap')
-        })
-  
-      console.log("User signed in successfully!");
-      // Redirect or do other necessary actions
-    } catch (error : any) {
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // user cancelled the login flow
-        console.log("User cancelled the login flow");
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation (e.g. sign in) is in progress already
-        console.log("Sign in operation is in progress already");
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available or outdated
-        console.log("Play services not available or outdated");
-      } else {
-        // some other error happened
-        console.log("An error occurred during sign in:" + error);
-      }
-    }
-  }
-
-  // const onFacebookButtonPress = async () => {
-  //   try {
-  //     const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
-  //     if (result.isCancelled) {
-  //       alert('User cancelled login')
-  //     }
-
-  //     const data = await AccessToken.getCurrentAccessToken();
-  //     if (!data) {
-  //       alert('Something went wrong obtaining access token');
-  //       throw new Error("Something went wrong obtaining access token")
-  //     }
-
-  //     const credential = FacebookAuthProvider.credential(data.accessToken);
-  //     await signInWithCredential(authy, credential)
-  //       .then((res) => {
-  //         router.replace('/snap')
-  //       })
-  //   } catch (error : any) {
-  //     alert(error)
-  //   }
-  // }
 
   function login() {
     setSubmitting(true)
@@ -147,13 +79,6 @@ export default function login() {
               </Link>
             </View>
           </View>
-          <OR></OR>
-          <GoogleSigninButton 
-            size={GoogleSigninButton.Size.Wide}
-            color={GoogleSigninButton.Color.Dark} 
-            onPress={
-            onGoogleButtonPress}>
-          </GoogleSigninButton>
         </View>
       </ScrollView>
     </SafeAreaView>

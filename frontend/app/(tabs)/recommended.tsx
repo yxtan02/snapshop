@@ -10,7 +10,7 @@ import ProductCardHorizontal from "../../components/ProductCardHorizontal";
 import LoadMoreButton from '../../components/loadMoreButton';
 import ToTopButton from '../../components/toTopButton';
 import { images } from "../../constants"
-
+import axios from 'axios';
 
 let numRec : number = 15
 let loadMore = true
@@ -69,19 +69,19 @@ export default function recommended() {
       }
       console.log(highestCategory)
 
-      fetch(`https://real-time-amazon-data.p.rapidapi.com/products-by-category?category_id=${highestCategory}&page=1&country=SG`, {
-        method: 'GET',
+      axios.get(`https://real-time-amazon-data.p.rapidapi.com/products-by-category?category_id=${highestCategory}&page=1&country=SG`, {
         headers: {
           'X-RapidAPI-Key': process.env.EXPO_PUBLIC_RAPIDAPI_KEY || '',
           'X-RapidAPI-Host': 'real-time-amazon-data.p.rapidapi.com'
         },
       })
         .then(res => {
-          if (!res.ok) {
-            console.error("Error fetching data")
+          if (res.status !== 200) {
+            console.error("Error fetching data");
+          } else {
+            console.log("Fetch success");
+            return res.data;
           }
-          console.log("Fetch success")
-          return res.json()
         })
         .then(data => {
           console.log(data)
