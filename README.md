@@ -48,11 +48,11 @@ Check out our complete app demo [here](https://drive.google.com/file/d/1kIs7_73r
 - Gain access to Snapshop's features by creating an account!
 
 ## Screenshots
-![login](https://github.com/user-attachments/assets/6547f93c-28b5-45c7-a005-4bbf6e3e8c01)
-![snap](https://github.com/user-attachments/assets/8f0ae1ca-1789-4de5-94b9-af6a13491cb1)
-![result](https://github.com/user-attachments/assets/2e81824e-f1a6-41b3-a96c-ccbbe5484884)
-![wishlist](https://github.com/user-attachments/assets/bd661e4f-625d-44c1-836f-c328f9cae308)
-![foryou](https://github.com/user-attachments/assets/140d4778-0235-447b-b6c2-df4bebd52e4b)
+![login](https://github.com/user-attachments/assets/dc4d567f-9836-4ff7-ac28-44dd75a48770)
+![snap](https://github.com/user-attachments/assets/a074af42-57c3-4826-a392-6f517d808844)
+![result](https://github.com/user-attachments/assets/ab6a4b68-47bc-48a1-b70d-e9aa0450b06c)
+![wishlist](https://github.com/user-attachments/assets/e83d003d-d20b-4089-a44c-30ba3ba2c204)
+![foryou](https://github.com/user-attachments/assets/39a39aa3-2181-4969-84c6-1cc672622b2e)
 
 ## Tech Stack
 - Frontend: **React Native** (Expo)
