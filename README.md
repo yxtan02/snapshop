@@ -43,11 +43,9 @@ Check out our complete app demo [here](https://drive.google.com/file/d/1kIs7_73r
 ## To run Snapshop on Android / IOS
 1. Download Expo Go from Google Play Store / Apple App Store
 2. Use the Expo Go app to scan the following QR code:
-<img width="194" alt="QR Code" src="https://github.com/user-attachments/assets/fcf1c2d6-6611-415b-a8ce-df1b78dd2906">
+<img width="224" alt="snapshop qr code" src="https://github.com/user-attachments/assets/3671a859-cb0c-4af3-8cc8-f99a6911b337">
 
-<p>
-  Alternatively, Android users can download our APK directly: https://expo.dev/artifacts/eas/p2vaKJz1kcrXqXEY4sBgrY.apk
-</p>
+Alternatively, Android users can download our APK directly: https://expo.dev/artifacts/eas/p2vaKJz1kcrXqXEY4sBgrY.apk
 
 ## Tech Stack
 - Frontend: **React Native** (Expo)
